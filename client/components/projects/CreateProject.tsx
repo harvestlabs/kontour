@@ -9,11 +9,22 @@ const CREATE_PROJECT = gql`
   }
 `;
 
-function CreateProject() {
+interface CreateProjectProps {
+  onComplete: (id: string) => void;
+}
+
+function CreateProject({ onComplete }: CreateProjectProps) {
   const [createProject, { loading, error }] = useMutation(CREATE_PROJECT);
   return (
     <>
-      <Button onClick={() => createProject()}> Create Project</Button>
+      <Button
+        onClick={async () => {
+          const resp = await createProject();
+          onComplete(resp.data?.createProject?.id);
+        }}
+      >
+        Create Project
+      </Button>
     </>
   );
 }

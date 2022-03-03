@@ -4,11 +4,8 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "@styles/Home.module.css";
 
-import { withCookieAuth } from "@utils/auth";
-import { IS_SERVER } from "@utils/constants";
 import { getLocalStorageKey } from "@utils/api_client";
 import { Container } from "@chakra-ui/react";
-import CreateProject from "@components/projects/CreateProject";
 import { gql, useQuery } from "@apollo/client";
 import Project from "@components/projects/Project";
 import { useEffect } from "react";
@@ -29,7 +26,7 @@ const PROJECT = gql`
   }
 `;
 
-const BoardPage = () => {
+const ProjectPage = () => {
   const router = useRouter();
   const { project_id } = router?.query;
   const dispatch = useDispatch();
@@ -49,10 +46,9 @@ const BoardPage = () => {
         <title>Project</title>
       </Head>
       <main className={styles.main}>
-        <CreateProject />
         {data ? <Project id={data.project?.id as string} /> : null}
       </main>
     </Container>
   );
 };
-export default BoardPage;
+export default ProjectPage;

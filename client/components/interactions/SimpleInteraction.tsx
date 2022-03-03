@@ -25,10 +25,11 @@ import {
   serializeParams,
 } from "@utils/contracts";
 import { web3 } from "@utils/constants";
+import { Interaction } from "types/project";
 
 interface InteractionProps {
   id: string;
-  data: any;
+  data: Interaction;
   update: (id: string, data: any) => void;
   updatePage: (data: string[]) => void;
 }
@@ -55,7 +56,7 @@ function SimpleInteraction({ id, data, update, updatePage }: InteractionProps) {
   const previewButton = async () => {
     const datasource = datasources[data.datasource];
     if (datasource.type === "CONTRACT") {
-      const address = datasource.contract;
+      const address = datasource.contract!;
       const resp = await GraphQLClient.query({
         query: CONTRACT_ABI,
         variables: {
@@ -100,7 +101,7 @@ function SimpleInteraction({ id, data, update, updatePage }: InteractionProps) {
       {selected ? (
         <>
           <WriteContract
-            address={datasources[selected].contract}
+            address={datasources[selected].contract!}
             params={params}
             func={funcName}
             onParamsUpdate={setParams}

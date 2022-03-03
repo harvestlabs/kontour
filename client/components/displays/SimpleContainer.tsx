@@ -18,10 +18,11 @@ import {
   findABIFunction,
 } from "@utils/contracts";
 import Preview from "./Preview";
+import { Display } from "types/project";
 
 interface ContainerProps {
   id: string;
-  data: any;
+  data: Display;
   update: (id: string, data: any) => void;
   updatePage: (data: string[]) => void;
 }
@@ -56,7 +57,7 @@ function SimpleContainer({ id, data, update, updatePage }: ContainerProps) {
     });
     const datasource = datasources[data.datasource];
     if (datasource.type === "CONTRACT") {
-      const address = datasource.contract;
+      const address = datasource.contract!;
       const resp = await GraphQLClient.query({
         query: CONTRACT_ABI,
         variables: {
@@ -97,7 +98,7 @@ function SimpleContainer({ id, data, update, updatePage }: ContainerProps) {
       </Select>
       {selected ? (
         <ReadContract
-          address={datasources[selected].contract}
+          address={datasources[selected].contract!}
           params={params}
           func={funcName}
           onParamsUpdate={setParams}

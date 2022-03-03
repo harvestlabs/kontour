@@ -114,12 +114,15 @@ function Project({ id }: { id: string }) {
     };
   };
   const updatePage = async (data: string[]) => {
-    const existing = project?.page || [];
+    const existing = project?.page?.components || [];
     const resp = await update({
       variables: {
         id: id,
         data: {
-          page: [...existing, ...data],
+          page: {
+            ...project?.page,
+            components: [...existing, ...data],
+          },
         },
       },
     });

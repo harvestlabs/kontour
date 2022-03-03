@@ -1,10 +1,11 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { Button, Input, Select } from "@chakra-ui/react";
 import { useState } from "react";
+import { Datasource } from "types/project";
 
 interface ContractProps {
   id: string;
-  data: any;
+  data: Datasource;
   update: (id: string, data: any) => void;
 }
 
@@ -21,7 +22,7 @@ const CREATE_CONTRACT = gql`
 `;
 
 function Contract({ id, data, update }: ContractProps) {
-  const [address, setAddress] = useState<string>(data.contract);
+  const [address, setAddress] = useState<string>(data.contract!);
   const [createContract, other] = useMutation(CREATE_CONTRACT);
 
   const contractUpdate = async () => {
