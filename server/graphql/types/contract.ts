@@ -1,4 +1,9 @@
-import { GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import {
+  GraphQLInt,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLString,
+} from "graphql";
 import GraphQLJSON from "graphql-type-json";
 import { getConstructor, getEvents, getFunctions } from "../../utils/etherscan";
 
@@ -11,6 +16,9 @@ const ContractType = new GraphQLObjectType({
     },
     address: {
       type: new GraphQLNonNull(GraphQLString),
+    },
+    chain_id: {
+      type: new GraphQLNonNull(GraphQLInt),
     },
     abi: {
       type: GraphQLJSON,

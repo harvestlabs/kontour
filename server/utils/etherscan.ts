@@ -22,20 +22,25 @@ export interface ContractConstructor {
 }
 
 export const ENDPOINTS = {
-  mainnet: "https://api.etherscan.io",
-  goerli: "https://api-goerli.etherscan.io",
-  ropsten: "https://api-ropsten.etherscan.io",
-  kovan: "https://api-kovan.etherscan.io",
-  rinkeby: "https://api-rinkeby.etherscan.io",
+  1: { chain: "etherscan", url: "https://api.etherscan.io" },
+  2: { chain: "etherscan", url: "https://api-goerli.etherscan.io" },
+  3: { chain: "etherscan", url: "https://api-ropsten.etherscan.io" },
+  5: { chain: "etherscan", url: "https://api-kovan.etherscan.io" },
+  4: { chain: "etherscan", url: "https://api-rinkeby.etherscan.io" },
+  80001: { chain: "polygonscan", url: "https://api.polygonscan.com" },
+  137: { chain: "polygonscan", url: "https://api-testnet.polygonscan.com" },
 };
 
-const contractABIEndpoint = (address: string): string => {
-  const ep = ENDPOINTS[config.eth.ENV];
-  return `${ep}/api?module=contract&action=getabi&address=${address}&apikey=${config.etherscan.KEY}`;
+const contractABIEndpoint = (address: string, chainId: number): string => {
+  const { chain, url } = ENDPOINTS[chainId];
+  return `${url}/api?module=contract&action=getabi&address=${address}&apikey=${config[chain].KEY}`;
 };
 
-export async function getContractABI(address: string): Promise<any> {
-  const ep = contractABIEndpoint(address);
+export async function getContractABI(
+  address: string,
+  chainId: number
+): Promise<any> {
+  const ep = contractABIEndpoint(address, chainId);
   const resp = await fetch(ep);
   const data = await resp.json();
   if (data.status === "1") {

@@ -55,9 +55,9 @@ function SimpleContainer({ id, data, update, updatePage }: ContainerProps) {
       params: params,
       func: funcName,
     });
-    const datasource = datasources[data.datasource];
+    const datasource = datasources[selected!];
     if (datasource.type === "CONTRACT") {
-      const address = datasource.contract!;
+      const address = datasource.address!;
       const resp = await GraphQLClient.query({
         query: CONTRACT_ABI,
         variables: {
@@ -91,14 +91,14 @@ function SimpleContainer({ id, data, update, updatePage }: ContainerProps) {
         {Object.keys(datasources).map((id) => {
           return (
             <option key={id} value={id}>
-              {datasources[id].contract}
+              {datasources[id].address}
             </option>
           );
         })}
       </Select>
       {selected ? (
         <ReadContract
-          address={datasources[selected].contract!}
+          address={datasources[selected].address!}
           params={params}
           func={funcName}
           onParamsUpdate={setParams}

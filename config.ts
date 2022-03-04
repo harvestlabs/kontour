@@ -1,3 +1,4 @@
+require("dotenv").config();
 const env = process.env;
 
 const Config = {
@@ -54,8 +55,16 @@ const Config = {
   etherscan: {
     KEY: env.ETHERSCAN_KEY,
   },
+  polygonscan: {
+    KEY: env.POLYGONSCAN_KEY,
+  },
+  polygon: {
+    KEY: env.POLYGON_KEY,
+    GETH_URL: env.POLYGON_GETH_URL,
+  },
   eth: {
-    ENV: env.ETH_ENV,
+    GETH_URL: env.ETH_GETH_URL,
+    KEY: env.ETH_KEY,
   },
 };
 

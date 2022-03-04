@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
 	default-mysql-client \
 	lsof
 
-RUN npm i -g pm2 kill-port
+RUN npm i -g pm2 kill-port solc
 
 COPY ./package.json /usr/src/app/
 COPY ./scripts/ /usr/src/app/scripts/

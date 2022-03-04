@@ -1,11 +1,12 @@
 import {
+  GraphQLInt,
   GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLString,
 } from "graphql";
 import { GraphQLJSONObject } from "graphql-type-json";
-import Contract from "../models/Contract.model";
+import Contract, { ContractTemplate } from "../models/Contract.model";
 import ContractType from "./types/contract";
 
 const ContractQueries = {
@@ -29,9 +30,27 @@ const ContractMutations = {
       address: {
         type: new GraphQLNonNull(GraphQLString),
       },
+      chainId: {
+        type: new GraphQLNonNull(GraphQLInt),
+      },
     },
     resolve: async (parent, args, ctx, info) => {
-      return await Contract.createWithABI(args.address);
+      return await Contract.createWithABI(args.address, args.chainId);
+    },
+  },
+  createFromTemplate: {
+    type: ContractType,
+    args: {
+      chainId: {
+        type: new GraphQLNonNull(GraphQLInt),
+      },
+    },
+    resolve: async (parent, args, ctx, info) => {
+      return await Contract.createFromTemplate(
+        ContractTemplate.SIMPLE_STORAGE,
+        [{ name: "test", type: "uint256" }],
+        args.chainId
+      );
     },
   },
 };

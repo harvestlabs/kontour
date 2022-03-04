@@ -54,9 +54,9 @@ function SimpleInteraction({ id, data, update, updatePage }: InteractionProps) {
     });
   };
   const previewButton = async () => {
-    const datasource = datasources[data.datasource];
+    const datasource = datasources[selected!];
     if (datasource.type === "CONTRACT") {
-      const address = datasource.contract!;
+      const address = datasource.address!;
       const resp = await GraphQLClient.query({
         query: CONTRACT_ABI,
         variables: {
@@ -93,7 +93,7 @@ function SimpleInteraction({ id, data, update, updatePage }: InteractionProps) {
         {Object.keys(datasources).map((id) => {
           return (
             <option key={id} value={id}>
-              {datasources[id].contract}
+              {datasources[id].address}
             </option>
           );
         })}
@@ -101,7 +101,7 @@ function SimpleInteraction({ id, data, update, updatePage }: InteractionProps) {
       {selected ? (
         <>
           <WriteContract
-            address={datasources[selected].contract!}
+            address={datasources[selected].address!}
             params={params}
             func={funcName}
             onParamsUpdate={setParams}

@@ -1,6 +1,7 @@
 export interface Datasource {
   type: string;
-  contract?: string;
+  address?: string;
+  chainId?: number;
 }
 export interface Datasources {
   [id: string]: Datasource;
