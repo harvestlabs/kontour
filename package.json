@@ -1,5 +1,5 @@
 {
-  "name": "nifty-hacks-2022",
+  "name": "retool",
   "maintainer": "Boyang Niu",
   "license": "MIT",
   "version": "0.0.1",
@@ -12,17 +12,19 @@
     "restart": "pm2 restart all",
     "dev": "tsc-watch --onSuccess \"bash ./scripts/restart_dev.sh\"",
     "docker": "docker build -t retool_app:latest .",
+    "docker:contour": "docker build -t retool_contour:latest contour/",
     "migrate": "sequelize-cli db:migrate",
-    "rollback": "sequelize-cli db:migrate:undo"
+    "rollback": "sequelize-cli db:migrate:undo",
+    "compile:contracts": "truffle compile --config=truffle-config.polygon.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.36.0",
     "@discordjs/rest": "^0.2.0-canary.0",
     "@koa/cors": "^3.1.0",
     "@metaplex/arweave-cost": "^1.0.4",
-    "@openzeppelin/contracts": "^4.5.0",
     "@sentry/node": "^6.16.1",
     "@sentry/tracing": "^6.16.1",
+    "@openzeppelin/contracts": "^4.4.2",
     "apollo-server-core": "^3.5.0",
     "apollo-server-koa": "^3.5.0",
     "arweave": "^1.10.18",
@@ -35,6 +37,7 @@
     "discord.js": "^13.5.0",
     "dotenv": "^10.0.0",
     "form-data": "^4.0.0",
+    "ganache-core": "^2.13.2",
     "graphql": "^16.1.0",
     "graphql-middleware": "^6.1.13",
     "graphql-redis-subscriptions": "^2.4.2",
@@ -64,6 +67,7 @@
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.11.0",
     "sequelize-typescript": "^2.1.1",
+    "solc": "^0.8.4",
     "solc-typed-ast": "^9.0.0",
     "stripe": "^8.193.0",
     "subscriptions-transport-ws": "^0.11.0",
@@ -93,9 +97,18 @@
     "@types/passport-local": "^1.0.33",
     "@types/validator": "^13.1.0",
     "@types/winston": "^2.4.4",
+    "@maticnetwork/maticjs": "^2.0.40",
+    "@truffle/hdwallet-provider": "^1.4.2",
     "sequelize-cli": "^6.3.0",
     "ts-node": "^9.0.0",
     "tsc-watch": "^4.2.9",
     "typescript": "^4.5.4"
+  },
+  "config": {
+    "ganache": {
+      "networkId": 3431,
+      "gasPrice": 25000000000,
+      "gasLimit": 6500000
+    }
   }
 }

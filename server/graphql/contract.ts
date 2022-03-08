@@ -6,8 +6,12 @@ import {
   GraphQLString,
 } from "graphql";
 import { GraphQLJSONObject } from "graphql-type-json";
-import Contract, { ContractTemplate } from "../models/Contract.model";
+import Contract, {
+  ContractTemplate,
+  templateMapping,
+} from "../models/Contract.model";
 import ContractType from "./types/contract";
+import { TemplateType } from "./types/template";
 
 const ContractQueries = {
   contract: {
@@ -24,7 +28,7 @@ const ContractQueries = {
 };
 
 const ContractMutations = {
-  createContract: {
+  importContract: {
     type: ContractType,
     args: {
       address: {
@@ -35,7 +39,7 @@ const ContractMutations = {
       },
     },
     resolve: async (parent, args, ctx, info) => {
-      return await Contract.createWithABI(args.address, args.chainId);
+      return await Contract.importByAddressAndChain(args.address, args.chainId);
     },
   },
   createFromTemplate: {
@@ -44,13 +48,37 @@ const ContractMutations = {
       chainId: {
         type: new GraphQLNonNull(GraphQLInt),
       },
+      template: {
+        type: new GraphQLNonNull(TemplateType),
+      },
+      params: {
+        type: GraphQLJSONObject,
+      },
     },
     resolve: async (parent, args, ctx, info) => {
       return await Contract.createFromTemplate(
-        ContractTemplate.SIMPLE_STORAGE,
-        [{ name: "test", type: "uint256" }],
+        args.template,
+        args.params,
         args.chainId
       );
+    },
+  },
+  getJSONForTemplate: {
+    type: GraphQLString,
+    args: {
+      chainId: {
+        type: new GraphQLNonNull(GraphQLInt),
+      },
+      template: {
+        type: new GraphQLNonNull(TemplateType),
+      },
+      params: {
+        type: GraphQLJSONObject,
+      },
+    },
+    resolve: async (parent, args, ctx, info) => {
+      const toDeploy = new templateMapping[args.template](args.params);
+      return toDeploy.write();
     },
   },
 };

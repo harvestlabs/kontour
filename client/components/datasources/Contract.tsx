@@ -9,9 +9,9 @@ interface ContractProps {
   update: (id: string, data: any) => void;
 }
 
-const CREATE_CONTRACT = gql`
-  mutation CreateContract($address: String!, $chainId: Int!) {
-    createContract(address: $address, chainId: $chainId) {
+const IMPORT_CONTRACT = gql`
+  mutation ImportContract($address: String!, $chainId: Int!) {
+    importContract(address: $address, chainId: $chainId) {
       id
       address
       functions
@@ -21,8 +21,16 @@ const CREATE_CONTRACT = gql`
   }
 `;
 const CREATE_FROM_TEMPLATE = gql`
-  mutation CreateFromTemplate($chainId: Int!) {
-    createFromTemplate(chainId: $chainId) {
+  mutation CreateFromTemplate(
+    $chainId: Int!
+    $template: Template!
+    $params: JSONObject!
+  ) {
+    createFromTemplate(
+      chainId: $chainId
+      template: $template
+      params: $params
+    ) {
       id
       address
       functions
@@ -35,16 +43,26 @@ const CREATE_FROM_TEMPLATE = gql`
 function Contract({ id, data, update }: ContractProps) {
   const [address, setAddress] = useState<string>(data.address!);
   const [chainId, setChainId] = useState<number>(data.chainId!);
-  const [createContract, other] = useMutation(CREATE_CONTRACT);
+  const [importContract, other] = useMutation(IMPORT_CONTRACT);
   const [createFromTemplate, _other] = useMutation(CREATE_FROM_TEMPLATE);
 
   const contractUpdate = async () => {
     await update(id, { ...data, address: address, chainId: chainId });
-    await createContract({ variables: { address: address, chainId: chainId } });
+    await importContract({ variables: { address: address, chainId: chainId } });
   };
 
   const newContract = async () => {
-    const resp = await createFromTemplate({ variables: { chainId: chainId } });
+    const resp = await createFromTemplate({
+      variables: {
+        chainId: chainId,
+        template: "STORAGE",
+        params: {
+          variables: [
+            { type: "PRIMITIVE", name: "thing", data: { valueType: "uint8" } },
+          ],
+        },
+      },
+    });
     await update(id, {
       ...data,
       address: resp.data?.createFromTemplate.address,

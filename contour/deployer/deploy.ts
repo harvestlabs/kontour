@@ -1,4 +1,4 @@
-import { ethWeb3, polygonWeb3, account } from "./web3";
+import { local, polygon, eth } from "./web3";
 import { compileSol, compileSourceString } from "solc-typed-ast";
 import SimpleStorage from "../templates/SimpleStorage";
 import { exec } from "child_process";
@@ -8,10 +8,10 @@ import { ContractType } from "../templates/types";
 
 const TEMP_FILE = "temp.sol";
 const TEMP_JSON = (name: string) => {
-  return `temp_sol_${name}.abi`;
+  return `build_contour_deployer_temp_sol_${name}.abi`;
 };
 const TEMP_BIN = (name: string) => {
-  return `temp_sol_${name}.bin`;
+  return `build_contour_deployer_temp_sol_${name}.bin`;
 };
 
 export interface DeployResult {
@@ -47,10 +47,10 @@ export async function deploy(contract: ContractType): Promise<DeployResult> {
     let code = fs
       .readFileSync(`${__dirname}/../abis/${TEMP_BIN(contract.name)}`)
       .toString();
-    let Contract = new polygonWeb3.eth.Contract(abi);
+    let Contract = new local.web3.eth.Contract(abi);
     const transaction = Contract.deploy({ data: code });
 
-    const result = await sendTxAndLog(transaction, account);
+    const result = await sendTxAndLog(transaction, local.account);
     console.log("result", result);
 
     return {
@@ -64,26 +64,23 @@ export async function deploy(contract: ContractType): Promise<DeployResult> {
 
 export async function sendTxAndLog(transaction: any, account: Account) {
   console.log("sending from", account.address);
-  const gasPrice = await polygonWeb3.eth.getGasPrice();
+  const gasPrice = await local.web3.eth.getGasPrice();
   console.log("gas", gasPrice);
   const g = await transaction.estimateGas({ from: account.address });
   console.log("gas2", g);
   const tx = {
     from: account.address,
     to: transaction._parent._address,
-    gas: await transaction.estimateGas({
-      from: account.address,
-      gasPrice: gasPrice,
-    }),
+    gas: Math.round(g * 1.25),
     gasPrice: gasPrice,
     data: transaction.encodeABI(),
   };
 
-  const signed = await polygonWeb3.eth.accounts.signTransaction(
+  const signed = await local.web3.eth.accounts.signTransaction(
     tx,
     account.privateKey
   );
-  const result = await polygonWeb3.eth.sendSignedTransaction(
+  const result = await local.web3.eth.sendSignedTransaction(
     signed.rawTransaction
   );
   return result;

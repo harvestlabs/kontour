@@ -14,12 +14,11 @@ import Constructor from "../blocks/constructor";
 import SimpleWrite from "../blocks/simpleWrite";
 import { isConstructor, isContract } from "../utils/parsers";
 import { ContractType, CTVariable } from "./types";
-import SimpleStorageJSON from "../compiled/SimpleStorage.sol.json";
+import ERC721MinterJSON from "../compiled/ERC721Minter.json";
 import { serializeVariable } from "./base";
-import ReadFunction from "../blocks/read";
 
-export default class SimpleStorage implements ContractType {
-  name: string = "SimpleStorage";
+export default class ERC721Minter implements ContractType {
+  name: string = "ERC721Minter";
   variables: CTVariable[];
   sourceUnits: SourceUnit[];
   contractUnit: any;
@@ -33,7 +32,7 @@ export default class SimpleStorage implements ContractType {
 
   setup() {
     const reader = new ASTReader();
-    this.sourceUnits = reader.read(SimpleStorageJSON);
+    this.sourceUnits = reader.read(ERC721MinterJSON);
     this.contractUnit = this.sourceUnits[0].children.filter((n) =>
       isContract(n)
     )[0];
@@ -50,9 +49,6 @@ export default class SimpleStorage implements ContractType {
     const contractWriteFuncs = this.variables.map((v) => {
       return new SimpleWrite(v);
     });
-    const contractReadFuncs = this.variables.map((v) => {
-      return new ReadFunction(v);
-    });
 
     const existingConstructor = this.contractUnit.children.findIndex((c) =>
       isConstructor(c)
@@ -62,9 +58,6 @@ export default class SimpleStorage implements ContractType {
     );
 
     contractVars.forEach((v) => this.contractUnit.appendChild(v));
-    contractReadFuncs.forEach((v) =>
-      this.contractUnit.appendChild(v.render(this.factory))
-    );
     contractWriteFuncs.forEach((v) =>
       this.contractUnit.appendChild(v.render(this.factory))
     );

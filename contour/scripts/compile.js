@@ -5,12 +5,12 @@ const filename = process.argv[2];
 
 async function main() {
   const r = await ast.compileSol(
-    `${__dirname}/../templates/${filename}`,
+    `${__dirname}/../contracts/${filename}`,
     "auto",
     []
   );
   fs.writeFileSync(
-    `${__dirname}/../templates/compiled/${filename}.json`,
+    `${__dirname}/../compiled/${filename}.json`,
     JSON.stringify(r.data)
   );
   process.exit(0);

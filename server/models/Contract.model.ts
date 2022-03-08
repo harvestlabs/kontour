@@ -15,8 +15,9 @@ import { deploy } from "../../contour/deployer/deploy";
 
 export enum ContractTemplate {
   SIMPLE_STORAGE = "SimpleStorage",
+  SIMPLE_ERC721 = "ERC721",
 }
-const templateMapping = {
+export const templateMapping = {
   [ContractTemplate.SIMPLE_STORAGE]: SimpleStorage,
 };
 @Table({
@@ -43,7 +44,7 @@ export default class Contract extends Model {
   @Column(DataType.JSON)
   abi: any;
 
-  static async createWithABI(
+  static async importByAddressAndChain(
     address: string,
     chainId: number
   ): Promise<Contract> {
@@ -75,7 +76,7 @@ export default class Contract extends Model {
     const results = await deploy(toDeploy);
     return await Contract.create({
       address: results.address,
-      chainId: chainId,
+      chain_id: chainId,
       abi: results.abi,
     });
   }

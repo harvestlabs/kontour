@@ -1,0 +1,200 @@
+{
+  "contractName": "SimpleStorage",
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.11+commit.d7f03943\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/SimpleStorage.sol\":\"SimpleStorage\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/SimpleStorage.sol\":{\"keccak256\":\"0x261a02803c9f475ef7f767df88d2c9872eea689ce9a64783cfcd1695a43b0a19\",\"urls\":[\"bzz-raw://febdd044c90800ddfff747979340e72655cbeafd45587f8e945a1ecba6853ed2\",\"dweb:/ipfs/QmYa4m25aXjys4svzZ63YsoaXqKLURwhrjTfXZMdfFZ1C8\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220d094ceb9c539c2a50fde624666b988e07e9e3e3acf520a88c882066f5475470364736f6c634300080b0033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220d094ceb9c539c2a50fde624666b988e07e9e3e3acf520a88c882066f5475470364736f6c634300080b0033",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "27:49:14:-:0;;;57:16;;;;;;;;;;27:49;;;;;;",
+  "deployedSourceMap": "27:49:14:-:0;;;;;",
+  "source": "pragma solidity ^0.8.0;\r\n\r\ncontract SimpleStorage {\r\n    constructor() {}\r\n}\r\n",
+  "sourcePath": "C:\\Users\\kumquatexpress\\projects\\retool\\contour\\contracts\\SimpleStorage.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/SimpleStorage.sol",
+    "exportedSymbols": {
+      "SimpleStorage": [
+        2428
+      ]
+    },
+    "id": 2429,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2423,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:14"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "SimpleStorage",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "id": 2428,
+        "linearizedBaseContracts": [
+          2428
+        ],
+        "name": "SimpleStorage",
+        "nameLocation": "36:13:14",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 2426,
+              "nodeType": "Block",
+              "src": "71:2:14",
+              "statements": []
+            },
+            "id": 2427,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nameLocation": "-1:-1:-1",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2424,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "68:2:14"
+            },
+            "returnParameters": {
+              "id": 2425,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "71:0:14"
+            },
+            "scope": 2428,
+            "src": "57:16:14",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2429,
+        "src": "27:49:14",
+        "usedErrors": []
+      }
+    ],
+    "src": "0:78:14"
+  },
+  "legacyAST": {
+    "absolutePath": "project:/contracts/SimpleStorage.sol",
+    "exportedSymbols": {
+      "SimpleStorage": [
+        2428
+      ]
+    },
+    "id": 2429,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2423,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:14"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "SimpleStorage",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "id": 2428,
+        "linearizedBaseContracts": [
+          2428
+        ],
+        "name": "SimpleStorage",
+        "nameLocation": "36:13:14",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 2426,
+              "nodeType": "Block",
+              "src": "71:2:14",
+              "statements": []
+            },
+            "id": 2427,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nameLocation": "-1:-1:-1",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2424,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "68:2:14"
+            },
+            "returnParameters": {
+              "id": 2425,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "71:0:14"
+            },
+            "scope": 2428,
+            "src": "57:16:14",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2429,
+        "src": "27:49:14",
+        "usedErrors": []
+      }
+    ],
+    "src": "0:78:14"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.11+commit.d7f03943.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.4",
+  "updatedAt": "2022-03-07T23:31:39.342Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "db": {
+    "callBytecode": {
+      "id": "0xf5159f4abaeb7f324987f7c547263b4727db87cc96756255b931e9b2b2a4e982"
+    },
+    "createBytecode": {
+      "id": "0x2ee6486c55483da01208f2236b7d026e38678eef2d2b3435925f6102feee7ebe"
+    },
+    "contract": {
+      "id": "0xbabe6bef625495853e0c29f302f00d2348a9997ac3fcaa6335214e35a3b7c742"
+    }
+  }
+}

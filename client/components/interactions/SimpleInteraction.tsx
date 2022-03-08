@@ -64,18 +64,24 @@ function SimpleInteraction({ id, data, update, updatePage }: InteractionProps) {
         },
       });
       const accounts = await web3.eth.getAccounts();
-      console.log("data", resp.data);
       const abiFunction = findABIFunction(resp.data.contract.abi, funcName);
       setAbiFunc(abiFunction);
+
       const contract = contractFromABI([{ ...abiFunction }], address);
-      console.log("contract", contract);
       const callParams = await serializeParams(params, abiFunction.inputs);
       console.log("params", callParams);
+      const transactionParameters = {
+        to: address,
+        from: accounts[0],
+        data: contract.methods[abiFunction.name](...callParams).encodeABI(),
+      };
       try {
         const result = await contract.methods[abiFunction.name](
           ...callParams
         ).send({
           from: accounts[0],
+          gas: await web3.eth.estimateGas(transactionParameters),
+          gasPrice: await web3.eth.getGasPrice(),
         });
         console.log("result", result);
         setResult(result);

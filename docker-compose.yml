@@ -20,6 +20,17 @@ services:
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
       - REDIS_URL=${REDIS_URL}
+  contour:
+    build:
+      context: ./contour
+      dockerfile: Dockerfile
+    container_name: contour
+    ports:
+      - "8545:8545"
+    networks:
+      - webnet
+    environment:
+      - GANACHE_PK=${GANACHE_PK}
   mysql:
     container_name: mysql
     restart: always

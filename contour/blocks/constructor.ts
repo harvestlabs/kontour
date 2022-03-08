@@ -8,18 +8,14 @@ import {
   StateVariableVisibility,
 } from "solc-typed-ast";
 import FunctionBody from "../base/functionBody";
-import Variable from "../base/variable";
 import { Serializable } from "../globals/serializable";
-
-export interface ConstructorParameter {
-  name: string;
-  type: string;
-}
+import { CTVariable } from "../templates/types";
+import { serializeVariable } from "../templates/base";
 
 export default class Constructor extends Serializable {
-  params: ConstructorParameter[];
+  params: CTVariable[];
 
-  constructor(_params: ConstructorParameter[]) {
+  constructor(_params: CTVariable[]) {
     super();
     this.params = _params;
   }
@@ -32,14 +28,7 @@ export default class Constructor extends Serializable {
       visibility: FunctionVisibility.Public,
       mutability: FunctionStateMutability.NonPayable,
       functionParams: factory.makeParameterList(
-        this.params.map((p) => {
-          return new Variable({
-            name: p.name,
-            typeName: factory.makeElementaryTypeName(p.type, p.type),
-            storageLocation: DataLocation.Default,
-            visibility: StateVariableVisibility.Default,
-          }).toNode(factory);
-        })
+        this.params.map((p) => serializeVariable(p, factory))
       ),
       returnParams: factory.makeParameterList([]),
       modifiers: [],
