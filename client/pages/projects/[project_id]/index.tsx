@@ -15,7 +15,7 @@ import {
   setData,
   mergeData,
   selectData,
-} from "@redux/slices/projectSlice";
+} from "src/redux/slices/projectSlice";
 
 const PROJECT = gql`
   query Project($id: String!) {

@@ -10,7 +10,7 @@ import { setContext } from "@apollo/client/link/context";
 import { createUploadLink } from "apollo-upload-client";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { getMainDefinition } from "@apollo/client/utilities";
-import { getLocalStorageKey } from "../utils/api_client";
+import { getLocalStorageKey } from "@utils/api_client";
 import { IS_SERVER } from "@utils/constants";
 
 // TODO: fix this to not be hardcoded to localhost

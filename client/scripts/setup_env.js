@@ -8,7 +8,8 @@ const env = {
   NEXT_PUBLIC_REACT_APP_SERV_PROTOCOL: 'http://',
   NEXT_PUBLIC_REACT_APP_WS_PROTOCOL: 'ws://',
   NEXT_PUBLIC_REACT_APP_SERV_HOSTNAME: 'localhost:8080',
-  NEXT_PUBLIC_REACT_APP_JWT_KEY: 'nftoolboxjwt'
+  NEXT_PUBLIC_REACT_APP_JWT_KEY: 'nftoolboxjwt',
+  NEXT_PUBLIC_ENV: 'dev'
 };
 
 const envFilePath = currDir + "/.env.local";

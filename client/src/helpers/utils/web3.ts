@@ -1,5 +1,6 @@
 import detectEthereumProvider from "@metamask/detect-provider";
 import { eth } from "./constants";
+import logger from "./logger";
 
 export async function isMetaMaskInstalled() {
   const provider = await detectEthereumProvider();
@@ -106,4 +107,25 @@ export async function switchOrAddChain(chainName: NetworkType) {
       );
     }
   }
+}
+
+export async function handleRequestAccounts(onReject?: (err: any) => void) {
+  let accounts = [];
+  try {
+    accounts = await eth.request({
+      method: "eth_requestAccounts",
+    });
+    logger.log("[handleRequestAccounts] fetched accounts: ", accounts);
+  } catch (err: any) {
+    if (err.code === 4001) {
+      // EIP-1193 userRejectedRequest error
+      // don't do anything since we didn't successfully connect
+      onReject && onReject(err);
+    } else {
+      logger.error("[handleRequestAccounts] unknown error: ", err);
+      // unknown error
+      throw err;
+    }
+  }
+  return accounts;
 }
