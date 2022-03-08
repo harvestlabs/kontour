@@ -34,7 +34,14 @@ export default class ReadFunction extends Serializable {
           this.variable.name[0].toUpperCase() + this.variable.name.substring(1)
         }`;
         paramsList = [];
-        returnList = [serializeVariable(this.variable, factory)];
+        variable = {
+          type: ContractVariableType.PRIMITIVE,
+          name: "",
+          data: {
+            valueType: this.variable.data.valueType,
+          },
+        };
+        returnList = [serializeVariable(variable, factory)];
         statements = [
           factory.makeReturn(
             0,

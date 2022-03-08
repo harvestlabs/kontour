@@ -21,6 +21,7 @@ import {
 import SimpleContainer from "@components/displays/SimpleContainer";
 import SimpleInteraction from "@components/interactions/SimpleInteraction";
 import Page from "@components/pages/SimplePage";
+import airdrop from "@utils/airdrop";
 
 const UPDATE = gql`
   mutation UpdateProject($id: String!, $data: JSONObject!) {
@@ -135,6 +136,7 @@ function Project({ id }: { id: string }) {
     <>
       <VStack style={{ marginBottom: "64px" }}>
         <div>Data: {JSON.stringify(project)}</div>
+        <Button onClick={() => airdrop()}>Airdrop</Button>
         <HStack>
           <Button onClick={() => newContract()}>New Contract Datasource</Button>
           <Button onClick={() => newComponent("display")}>

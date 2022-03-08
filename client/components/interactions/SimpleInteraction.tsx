@@ -84,7 +84,6 @@ function SimpleInteraction({ id, data, update, updatePage }: InteractionProps) {
           gasPrice: await web3.eth.getGasPrice(),
         });
         console.log("result", result);
-        setResult(result);
       } catch (e: unknown) {
         console.error("Something went wrong:");
         console.error(e);

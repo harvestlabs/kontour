@@ -21,6 +21,7 @@ export interface DeployResult {
 
 export async function deploy(contract: ContractType): Promise<DeployResult> {
   try {
+    fs.rmSync(`${__dirname}/${TEMP_FILE}`);
     fs.writeFileSync(`${__dirname}/${TEMP_FILE}`, contract.write());
     await new Promise((resolve, reject) => {
       exec(
