@@ -16,6 +16,13 @@ const ProjectType = new GraphQLObjectType({
       type: GraphQLString,
       description: "The id of the project's user",
     },
+    node: {
+      type: GraphQLJSONObject,
+      resolve: async (parent, args, ctx, info) => {
+        const node = await parent.$get("node");
+        return node.data;
+      },
+    },
   },
 });
 

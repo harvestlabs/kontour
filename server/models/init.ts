@@ -4,7 +4,9 @@ import User from "./User.model";
 import Web3PublicKey from "./Web3PublicKey.model";
 import Project from "./Project.model";
 import Contract from "./Contract.model";
+import ContractSource from "./ContractSource.model";
 import Profile from "./Profile.model";
+import Node from "./Node.model";
 
 export default function init() {
   const sequelize = new Sequelize(
@@ -23,7 +25,15 @@ export default function init() {
     }
   );
 
-  sequelize.addModels([User, Contract, Project, Web3PublicKey, Profile]);
+  sequelize.addModels([
+    User,
+    ContractSource,
+    Contract,
+    Project,
+    Web3PublicKey,
+    Profile,
+    Node,
+  ]);
   postInit();
   return sequelize;
 }
@@ -35,4 +45,5 @@ function postInit() {
   User.PublicKey = User.hasOne(Web3PublicKey);
   User.Projects = User.hasMany(Project);
   Profile.User = Profile.belongsTo(User);
+  Node.Projects = Node.hasMany(Project);
 }

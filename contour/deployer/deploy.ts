@@ -17,50 +17,61 @@ const TEMP_BIN = (name: string) => {
 export interface DeployResult {
   address: string;
   abi: any;
+  source: string;
 }
 
-export async function deploy(contract: ContractType): Promise<DeployResult> {
+export async function deployfromTemplate(
+  contract: ContractType
+): Promise<DeployResult> {
   try {
     fs.rmSync(`${__dirname}/${TEMP_FILE}`);
-    fs.writeFileSync(`${__dirname}/${TEMP_FILE}`, contract.write());
-    await new Promise((resolve, reject) => {
-      exec(
-        `solcjs -o ${__dirname}/../abis ${__dirname}/${TEMP_FILE} --bin --abi`,
-        async (error, stdout, stderr) => {
-          if (error) {
-            console.log(`error: ${error.message}`);
-            reject(false);
-          }
-          if (stderr) {
-            console.log(`stderr: ${stderr}`);
-            reject(false);
-          }
-          console.log(`stdout: ${stdout}`);
-          resolve(true);
-        }
-      );
-    });
-    let abi = JSON.parse(
-      fs
-        .readFileSync(`${__dirname}/../abis/${TEMP_JSON(contract.name)}`)
-        .toString()
-    );
-    let code = fs
-      .readFileSync(`${__dirname}/../abis/${TEMP_BIN(contract.name)}`)
-      .toString();
-    let Contract = new local.web3.eth.Contract(abi);
-    const transaction = Contract.deploy({ data: code });
-
-    const result = await sendTxAndLog(transaction, local.account);
-    console.log("result", result);
-
-    return {
-      address: result.contractAddress,
-      abi: abi,
-    };
+    return await deployFromSource(contract.write(), contract.name);
   } catch (e) {
     console.log("err", e);
   }
+}
+
+export async function deployFromSource(
+  source: string,
+  contractName: string
+): Promise<DeployResult> {
+  fs.writeFileSync(`${__dirname}/${TEMP_FILE}`, source);
+  await new Promise((resolve, reject) => {
+    exec(
+      `solcjs -o ${__dirname}/../abis ${__dirname}/${TEMP_FILE} --bin --abi`,
+      async (error, stdout, stderr) => {
+        if (error) {
+          console.log(`error: ${error.message}`);
+          reject(false);
+        }
+        if (stderr) {
+          console.log(`stderr: ${stderr}`);
+          reject(false);
+        }
+        console.log(`stdout: ${stdout}`);
+        resolve(true);
+      }
+    );
+  });
+  let abi = JSON.parse(
+    fs
+      .readFileSync(`${__dirname}/../abis/${TEMP_JSON(contractName)}`)
+      .toString()
+  );
+  let code = fs
+    .readFileSync(`${__dirname}/../abis/${TEMP_BIN(contractName)}`)
+    .toString();
+  let Contract = new local.web3.eth.Contract(abi);
+  const transaction = Contract.deploy({ data: code });
+
+  const result = await sendTxAndLog(transaction, local.account);
+  console.log("result", result);
+
+  return {
+    address: result.contractAddress,
+    abi: abi,
+    source: source,
+  };
 }
 
 export async function sendTxAndLog(transaction: any, account: Account) {

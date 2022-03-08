@@ -6,10 +6,7 @@ import {
   GraphQLString,
 } from "graphql";
 import { GraphQLJSONObject } from "graphql-type-json";
-import Contract, {
-  ContractTemplate,
-  templateMapping,
-} from "../models/Contract.model";
+import Contract, { templateMapping } from "../models/Contract.model";
 import ContractType from "./types/contract";
 import { TemplateType } from "./types/template";
 
@@ -37,15 +34,22 @@ const ContractMutations = {
       chainId: {
         type: new GraphQLNonNull(GraphQLInt),
       },
+      projectId: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
     },
     resolve: async (parent, args, ctx, info) => {
-      return await Contract.importByAddressAndChain(args.address, args.chainId);
+      return await Contract.importByAddressAndChain(
+        args.address,
+        args.chainId,
+        args.projectId
+      );
     },
   },
   createFromTemplate: {
     type: ContractType,
     args: {
-      chainId: {
+      projectId: {
         type: new GraphQLNonNull(GraphQLInt),
       },
       template: {
@@ -59,7 +63,7 @@ const ContractMutations = {
       return await Contract.createFromTemplate(
         args.template,
         args.params,
-        args.chainId
+        args.projectId
       );
     },
   },

@@ -12,6 +12,7 @@ module.exports = {
     await queryInterface.createTable("users", {
       id: {
         type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
         allowNull: false,
       },
@@ -25,6 +26,7 @@ module.exports = {
     await queryInterface.createTable("profiles", {
       id: {
         type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
         allowNull: false,
       },
@@ -66,10 +68,22 @@ module.exports = {
       updated_at: Sequelize.DataTypes.DATE,
     });
     /* END WEB3_KEYS */
+    await queryInterface.createTable("nodes", {
+      id: {
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        primaryKey: true,
+        allowNull: false,
+      },
+      data: Sequelize.DataTypes.JSON,
+      created_at: Sequelize.DataTypes.DATE,
+      updated_at: Sequelize.DataTypes.DATE,
+    });
 
     await queryInterface.createTable("projects", {
       id: {
         type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
         allowNull: false,
       },
@@ -84,9 +98,26 @@ module.exports = {
         },
         allowNull: true,
       },
+      node_id: {
+        type: Sequelize.DataTypes.UUID,
+        references: {
+          model: {
+            tableName: "nodes",
+          },
+          key: "id",
+        },
+        allowNull: false,
+      },
       created_at: Sequelize.DataTypes.DATE,
       updated_at: Sequelize.DataTypes.DATE,
     });
+
+    if (process.env.NODE_ENV !== "production") {
+      const sequelize = queryInterface.sequelize;
+      await sequelize.query(
+        `INSERT into nodes (id, data) VALUES ('b325907e-937a-49d6-ab97-a3f44aafabf4', '{"hostUrl": "http://contour:8545", "chainId": 1337}')`
+      );
+    }
   },
 
   down: async (queryInterface, Sequelize) => {

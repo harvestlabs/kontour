@@ -36,6 +36,11 @@ const contractABIEndpoint = (address: string, chainId: number): string => {
   return `${url}/api?module=contract&action=getabi&address=${address}&apikey=${config[chain].KEY}`;
 };
 
+const contractSourceEndpoint = (address: string, chainId: number): string => {
+  const { chain, url } = ENDPOINTS[chainId];
+  return `${url}/api?module=contract&action=getsourcecode&address=${address}&apikey=${config[chain].KEY}`;
+};
+
 export async function getContractABI(
   address: string,
   chainId: number
@@ -45,6 +50,18 @@ export async function getContractABI(
   const data = await resp.json();
   if (data.status === "1") {
     return JSON.parse(data.result);
+  }
+}
+
+export async function getContractCode(
+  address: string,
+  chainId: number
+): Promise<any> {
+  const ep = contractSourceEndpoint(address, chainId);
+  const resp = await fetch(ep);
+  const data = await resp.json();
+  if (data.status === "1") {
+    return JSON.parse(data.result[0]);
   }
 }
 

@@ -9,18 +9,23 @@ import {
   Default,
   DataType,
   PrimaryKey,
+  HasMany,
 } from "sequelize-typescript";
 import { v4 } from "uuid";
-import User from "./User.model";
-import Node from "./Node.model";
+import Project from "./Project.model";
+
+export interface NodeData {
+  hostUrl: string;
+  chainId: number;
+}
 
 @Table({
   timestamps: true,
-  tableName: "projects",
+  tableName: "nodes",
   underscored: true,
 })
-export default class Project extends Model {
-  static User;
+export default class Node extends Model {
+  static Projects;
 
   @Default(v4)
   @PrimaryKey
@@ -32,18 +37,8 @@ export default class Project extends Model {
   updated_at!: Date;
 
   @Column(DataType.JSON)
-  data: any;
+  data: NodeData;
 
-  @ForeignKey(() => User)
-  @Column
-  user_id: string;
-
-  @ForeignKey(() => Node)
-  @Column
-  node_id: string;
-
-  @BelongsTo(() => User, "user_id")
-  user: User;
-  @BelongsTo(() => Node, "node_id")
-  node: Node;
+  @HasMany(() => Project, "node_id")
+  projects: Project[];
 }

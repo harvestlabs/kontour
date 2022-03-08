@@ -4,7 +4,7 @@ import {
   GraphQLObjectType,
   GraphQLString,
 } from "graphql";
-import GraphQLJSON from "graphql-type-json";
+import GraphQLJSON, { GraphQLJSONObject } from "graphql-type-json";
 import { getConstructor, getEvents, getFunctions } from "../../utils/etherscan";
 
 const ContractType = new GraphQLObjectType({
@@ -22,6 +22,19 @@ const ContractType = new GraphQLObjectType({
     },
     abi: {
       type: GraphQLJSON,
+    },
+    name: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    source: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    node: {
+      type: GraphQLJSONObject,
+      resolve: async (parent, args, ctx, info) => {
+        const node = await parent.$get("node");
+        return node.data;
+      },
     },
     functions: {
       type: new GraphQLNonNull(GraphQLJSON),
