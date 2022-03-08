@@ -1,14 +1,14 @@
 import { gql, useMutation } from "@apollo/client";
 import { Button, HStack, Input, Select } from "@chakra-ui/react";
 import ReadContract, { CONTRACT } from "@components/datasources/ReadContract";
-import { useAppSelector, useAppDispatch } from "@redux/hooks";
+import { useAppSelector, useAppDispatch } from "src/redux/hooks";
 import {
   reset,
   setData,
   mergeData,
   selectPage,
   selectDatasources,
-} from "@redux/slices/projectSlice";
+} from "src/redux/slices/projectSlice";
 import { web3 } from "@utils/constants";
 import { useState } from "react";
 import GraphQLClient from "@gql/GraphQLClient";

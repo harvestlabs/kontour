@@ -16,17 +16,15 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@utils/*": ["utils/*"],
-      "@styles/*": ["styles/*"],
-      "@gql/*": ["graphql/*"],
-      "@gqlt/*": ["graphql/__generated__/*"],
-      "@components/*": ["components/*"],
-      "@layouts/*": ["components/layouts/*"],
-      "@redux/*": ["redux/*"],
-      "@shared/*": ["shared/*"],
-      "@logos/*": ["components/logo/*"],
+      "@utils/*": ["src/helpers/utils/*"],
+      "@styles/*": ["src/pages/styles/*"],
+      "@gql/*": ["src/graphql/*"],
+      "@gqlt/*": ["src/graphql/__generated__/*"],
+      "@components/*": ["src/pages/components/*"],
+      "@layouts/*": ["src/pages/layouts/*"],
+      "@redux/*": ["src/redux/*"],
       "@imgs/*": ["public/imgs/*"],
-      "@hooks/*": ["utils/hooks/*"]
+      "@hooks/*": ["src/helpers/hooks/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

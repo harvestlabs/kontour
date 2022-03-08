@@ -12,13 +12,13 @@ import {
 import WriteContract from "@components/datasources/WriteContract";
 import { CONTRACT_ABI } from "@components/displays/SimpleContainer";
 import GraphQLClient from "@gql/GraphQLClient";
-import { useAppSelector, useAppDispatch } from "@redux/hooks";
+import { useAppSelector, useAppDispatch } from "src/redux/hooks";
 import {
   reset,
   setData,
   mergeData,
   selectDatasources,
-} from "@redux/slices/projectSlice";
+} from "src/redux/slices/projectSlice";
 import {
   contractFromABI,
   findABIFunction,

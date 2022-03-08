@@ -1,4 +1,4 @@
-import "../styles/globals.css";
+import "@styles/globals.css";
 import type { AppProps } from "next/app";
 import { ApolloProvider } from "@apollo/client";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
@@ -6,7 +6,7 @@ import GraphQLClient from "@gql/GraphQLClient";
 import { NextPageWithLayout } from "types/types";
 import { createBreakpoints } from "@chakra-ui/theme-tools";
 import { Provider } from "react-redux";
-import { store } from "@redux/store";
+import { store } from "src/redux/store";
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;

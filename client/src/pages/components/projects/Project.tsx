@@ -11,16 +11,16 @@ import {
 } from "@chakra-ui/react";
 import { v4 } from "uuid";
 import Datasource from "./Datasource";
-import { useAppSelector, useAppDispatch } from "@redux/hooks";
+import { useAppSelector, useAppDispatch } from "src/redux/hooks";
 import {
   reset,
   setData,
   mergeData,
   selectData,
-} from "@redux/slices/projectSlice";
+} from "src/redux/slices/projectSlice";
 import SimpleContainer from "@components/displays/SimpleContainer";
 import SimpleInteraction from "@components/interactions/SimpleInteraction";
-import Page from "@components/pages/SimplePage";
+import Page from "src/pages/SimplePage";
 import airdrop from "@utils/airdrop";
 
 const UPDATE = gql`
