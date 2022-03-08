@@ -41,4 +41,8 @@ export default class Node extends Model {
 
   @HasMany(() => Project, "node_id")
   projects: Project[];
+
+  static async getAvailable() {
+    return Node.findOne();
+  }
 }

@@ -6,6 +6,7 @@ import {
 } from "graphql";
 import { GraphQLJSONObject } from "graphql-type-json";
 import Project from "../models/Project.model";
+import Node from "../models/Node.model";
 import ProjectType from "./types/project";
 
 const ProjectQueries = {
@@ -26,8 +27,11 @@ const ProjectMutations = {
   createProject: {
     type: ProjectType,
     resolve: async (parent, args, ctx, info) => {
+      const node = await Node.getAvailable();
       return await Project.create({
         data: {},
+        user_id: ctx.state?.user?.id,
+        node_id: node.id,
       });
     },
   },
