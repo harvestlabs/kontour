@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Container } from "@chakra-ui/react";
 import CreateProject from "@components/projects/CreateProject";
 import { gql, useQuery } from "@apollo/client";
+import ProjectList from "@components/projects/ProjectList";
 
 const ProjectsPage = () => {
   const router = useRouter();
@@ -20,6 +21,7 @@ const ProjectsPage = () => {
       </Head>
       <main>
         <CreateProject onComplete={onCreated} />
+        <ProjectList />
       </main>
     </Container>
   );
