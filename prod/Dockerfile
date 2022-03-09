@@ -19,5 +19,8 @@ RUN yarn
 COPY . /usr/src/app/
 RUN yarn run build
 
+RUN echo 'alias mysqlsh="mysql --host=$MYSQL_HOST --user=$MYSQL_USER --port=$MYSQL_PORT --password=$MYSQL_PASSWORD $MYSQL_DATABASE"' >> ~/.bashrc
+RUN echo 'alias redissh="redis-cli -h $REDIS_HOST -p $REDIS_PORT"' >> ~/.bashrc
+
 EXPOSE 8080
 ENTRYPOINT yarn run start:prod
