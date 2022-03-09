@@ -87,10 +87,25 @@ const Heading = {
 };
 
 const Link = {
-  baseStyle: {},
+  baseStyle: {
+    color: colors.contourLink,
+    _hover: {
+      textDecoration: "underline",
+    },
+  },
 };
 
 const theme = extendTheme({
+  styles: {
+    global: {
+      // styles for the `body`
+      body: {
+        bg: colors.contourBackground,
+        color: colors.contourText,
+        fontSize: "16px",
+      },
+    },
+  },
   components: {
     Button,
     Link,

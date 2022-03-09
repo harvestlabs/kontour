@@ -23,13 +23,13 @@ function StickyHeader({}: PropsWithChildren<{}>) {
       <HStack gap="18px">
         <DiscordLink color={theme.colors.discordPurple} size={20} />
         <NextLink href="/faq">
-          <Link href="/faq">
-            <Text fontSize="20px">FAQ</Text>
+          <Link href="/faq" fontSize="1.25em">
+            FAQ
           </Link>
         </NextLink>
         <NextLink href="/explore">
-          <Link href="/explore">
-            <Text fontSize="20px">Explore</Text>
+          <Link href="/explore" fontSize="1.25em">
+            Explore
           </Link>
         </NextLink>
       </HStack>
