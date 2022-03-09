@@ -7,7 +7,7 @@
   "scripts": {
     "postinstall": "node ./scripts/setup_env.js",
     "start": "pm2 start",
-    "statt:prod": "node ./build/app.js",
+    "start:prod": "node ./build/app.js",
     "start:server": "pm2 start --name server node ./build/app.js",
     "build": "tsc --project ./",
     "restart": "pm2 restart all",
