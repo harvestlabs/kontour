@@ -23,7 +23,7 @@
     "apollo-upload-client": "^17.0.0",
     "cookie": "^0.4.1",
     "framer-motion": "^5",
-    "graphql": "^16.3.0",
+    "graphql": "^15.8.0",
     "js-cookie": "^3.0.1",
     "next": "12.0.9",
     "react": "17.0.2",
@@ -33,6 +33,9 @@
     "subscriptions-transport-ws": "^0.11.0",
     "uuid": "^8.3.2",
     "web3": "^1.7.1"
+  },
+  "resolutions": {
+    "**/graphql": "^15.8.0"
   },
   "devDependencies": {
     "@types/node": "17.0.13",
