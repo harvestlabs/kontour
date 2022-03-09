@@ -26,6 +26,10 @@ export async function deployfromTemplate(
 ): Promise<DeployResult> {
   try {
     fs.rmSync(`${__dirname}/${TEMP_FILE}`);
+  } catch (e) {
+    // do nothing
+  }
+  try {
     return await deployFromSource(contract.write(), contract.name, projectId);
   } catch (e) {
     console.log("err", e);
