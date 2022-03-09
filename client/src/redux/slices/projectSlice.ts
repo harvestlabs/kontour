@@ -15,10 +15,12 @@ const BLANK_PROJECT_DATA = {
   page: { components: [] },
 };
 export interface ProjectState {
+  id: string;
   data: ProjectData;
 }
 
 const initialState: ProjectState = {
+  id: "",
   data: BLANK_PROJECT_DATA,
 };
 
@@ -28,6 +30,10 @@ export const projectSlice = createSlice({
   reducers: {
     reset: (state, action: PayloadAction<any>) => {
       state.data = BLANK_PROJECT_DATA;
+      state.id = "";
+    },
+    setId: (state, action: PayloadAction<any>) => {
+      state.id = action.payload;
     },
     setData: (state, action: PayloadAction<any>) => {
       state.data = action.payload;
@@ -41,6 +47,7 @@ export const projectSlice = createSlice({
   },
 });
 
+export const selectId = (state: RootState): string => state.project.id;
 export const selectData = (state: RootState): ProjectData => state.project.data;
 export const selectDatasources = (state: RootState): Datasources =>
   state.project.data.datasources || {};
@@ -51,6 +58,6 @@ export const selectInteractions = (state: RootState): Interactions =>
 export const selectPage = (state: RootState): Page =>
   state.project.data.page || { components: [] };
 
-export const { reset, setData, mergeData } = projectSlice.actions;
+export const { reset, setData, setId, mergeData } = projectSlice.actions;
 
 export default projectSlice.reducer;

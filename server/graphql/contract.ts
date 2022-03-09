@@ -51,7 +51,7 @@ const ContractMutations = {
     type: ContractType,
     args: {
       projectId: {
-        type: new GraphQLNonNull(GraphQLInt),
+        type: new GraphQLNonNull(GraphQLString),
       },
       template: {
         type: new GraphQLNonNull(TemplateType),

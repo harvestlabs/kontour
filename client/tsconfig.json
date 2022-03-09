@@ -19,6 +19,7 @@
       "@utils/*": ["src/helpers/utils/*"],
       "@styles/*": ["src/pages/styles/*"],
       "@gql/*": ["src/graphql/*"],
+      "@types/*": ["types/*"],
       "@gqlt/*": ["src/graphql/__generated__/*"],
       "@components/*": ["src/pages/components/*"],
       "@layouts/*": ["src/pages/layouts/*"],

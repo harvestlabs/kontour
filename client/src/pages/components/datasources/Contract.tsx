@@ -1,5 +1,7 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { Button, Input, Select } from "@chakra-ui/react";
+import { useAppSelector } from "@redux/hooks";
+import { selectId } from "@redux/slices/projectSlice";
 import { useState } from "react";
 import { Datasource } from "types/project";
 
@@ -10,10 +12,23 @@ interface ContractProps {
 }
 
 const IMPORT_CONTRACT = gql`
-  mutation ImportContract($address: String!, $chainId: Int!) {
-    importContract(address: $address, chainId: $chainId) {
+  mutation ImportContract(
+    $address: String!
+    $chainId: Int!
+    $projectId: String!
+  ) {
+    importContract(
+      address: $address
+      chainId: $chainId
+      projectId: $projectId
+    ) {
       id
       address
+      name
+      source
+      abi
+      chain_id
+      node
       functions
       events
       constructor
@@ -22,17 +37,22 @@ const IMPORT_CONTRACT = gql`
 `;
 const CREATE_FROM_TEMPLATE = gql`
   mutation CreateFromTemplate(
-    $chainId: Int!
+    $projectId: String!
     $template: Template!
     $params: JSONObject!
   ) {
     createFromTemplate(
-      chainId: $chainId
+      projectId: $projectId
       template: $template
       params: $params
     ) {
       id
       address
+      name
+      source
+      abi
+      chain_id
+      node
       functions
       events
       constructor
@@ -41,6 +61,7 @@ const CREATE_FROM_TEMPLATE = gql`
 `;
 
 function Contract({ id, data, update }: ContractProps) {
+  const projectId = useAppSelector(selectId);
   const [address, setAddress] = useState<string>(data.address!);
   const [chainId, setChainId] = useState<number>(data.chainId!);
   const [importContract, other] = useMutation(IMPORT_CONTRACT);
@@ -54,7 +75,7 @@ function Contract({ id, data, update }: ContractProps) {
   const newContract = async () => {
     const resp = await createFromTemplate({
       variables: {
-        chainId: chainId,
+        projectId: projectId,
         template: "STORAGE",
         params: {
           variables: [

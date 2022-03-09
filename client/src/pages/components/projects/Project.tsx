@@ -15,6 +15,7 @@ import { useAppSelector, useAppDispatch } from "src/redux/hooks";
 import {
   reset,
   setData,
+  setId,
   mergeData,
   selectData,
 } from "src/redux/slices/projectSlice";
@@ -35,6 +36,8 @@ const UPDATE = gql`
 function Project({ id }: { id: string }) {
   const project = useAppSelector(selectData);
   const dispatch = useAppDispatch();
+  dispatch(setId(id));
+
   const [update, { loading, error }] = useMutation(UPDATE);
   const datasources = project?.datasources || [];
   const displays = project?.displays || [];
@@ -136,7 +139,7 @@ function Project({ id }: { id: string }) {
     <>
       <VStack style={{ marginBottom: "64px" }}>
         <div>Data: {JSON.stringify(project)}</div>
-        <Button onClick={() => airdrop()}>Airdrop</Button>
+        <Button onClick={() => airdrop(id)}>Airdrop</Button>
         <HStack>
           <Button onClick={() => newContract()}>New Contract Datasource</Button>
           <Button onClick={() => newComponent("display")}>

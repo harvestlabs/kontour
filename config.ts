@@ -59,12 +59,10 @@ const Config = {
     KEY: env.POLYGONSCAN_KEY,
   },
   polygon: {
-    KEY: env.POLYGON_KEY,
     GETH_URL: env.POLYGON_GETH_URL,
   },
   eth: {
     GETH_URL: env.ETH_GETH_URL,
-    KEY: env.ETH_KEY,
   },
   ganache: {
     PK: env.GANACHE_PK,
