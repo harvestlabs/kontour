@@ -4,13 +4,13 @@ import theme from "src/theme";
 import NextLink from "next/link";
 import { useAppSelector } from "src/redux/hooks";
 import { selectTwitterHandle } from "@redux/slices/userSlice";
-import { useLoggedInUser } from "@hooks/index";
 import DiscordLink from "@components/buttons/DiscordLink";
 import Logo from "@components/logo/Logo";
+import SignInButton from "@components/buttons/SignInButton";
+import colors from "src/theme/colors";
+import MetamaskButton from "@components/buttons/MetamaskButton";
 
 function StickyHeader({}: PropsWithChildren<{}>) {
-  const { loggedInUserId } = useLoggedInUser();
-  const handle = useAppSelector(selectTwitterHandle);
   return (
     <Flex sx={styles.sticky}>
       <NextLink href={`/`} passHref>
@@ -22,16 +22,8 @@ function StickyHeader({}: PropsWithChildren<{}>) {
 
       <HStack gap="18px">
         <DiscordLink color={theme.colors.discordPurple} size={20} />
-        <NextLink href="/faq">
-          <Link href="/faq">
-            <Text fontSize="20px">FAQ</Text>
-          </Link>
-        </NextLink>
-        <NextLink href="/explore">
-          <Link href="/explore">
-            <Text fontSize="20px">Explore</Text>
-          </Link>
-        </NextLink>
+        <SignInButton />
+        <MetamaskButton />
       </HStack>
     </Flex>
   );
@@ -55,7 +47,7 @@ const styles = {
       base: "52px",
       md: "80px",
     },
-    backgroundColor: theme.colors.bountyHeaderGreen,
+    backgroundColor: colors.contourBackground,
   },
 };
 

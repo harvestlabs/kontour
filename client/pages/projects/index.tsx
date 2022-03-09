@@ -2,7 +2,6 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import Image from "next/image";
-import styles from "@styles/Home.module.css";
 
 import { Container } from "@chakra-ui/react";
 import CreateProject from "@components/projects/CreateProject";
@@ -19,7 +18,7 @@ const ProjectsPage = () => {
       <Head>
         <title>Create a Project</title>
       </Head>
-      <main className={styles.main}>
+      <main>
         <CreateProject onComplete={onCreated} />
       </main>
     </Container>

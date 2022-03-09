@@ -1,4 +1,3 @@
-import "@styles/globals.css";
 import type { AppProps } from "next/app";
 import { ApolloProvider } from "@apollo/client";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
@@ -7,21 +6,11 @@ import { NextPageWithLayout } from "types/types";
 import { createBreakpoints } from "@chakra-ui/theme-tools";
 import { Provider } from "react-redux";
 import { store } from "src/redux/store";
+import theme from "src/theme";
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
-
-const theme = extendTheme({
-  // mobile
-  sm: "768px",
-  // tablet
-  md: "1024px",
-  // desktop
-  lg: "1216px",
-  // fullhd
-  xl: "1408px",
-});
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available
@@ -29,7 +18,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <Provider store={store}>
       <ApolloProvider client={GraphQLClient}>
-        <ChakraProvider>
+        <ChakraProvider theme={theme}>
           {getLayout(<Component {...pageProps} />)}
         </ChakraProvider>
       </ApolloProvider>

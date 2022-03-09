@@ -7,7 +7,7 @@ export interface EventContractProps {
 }
 
 const CONTRACT = gql`
-  query Contract($address: String!) {
+  query ContractQuery($address: String!) {
     contract(address: $address) {
       id
       address

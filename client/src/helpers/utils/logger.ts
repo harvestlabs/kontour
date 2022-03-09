@@ -1,7 +1,9 @@
+import { IS_SERVER } from "./constants";
+
 function log(...args: any) {
   if (process.env.NEXT_PUBLIC_ENV === "dev") {
     console.log(...args);
-  } else {
+  } else if (!IS_SERVER) {
     // in prod only log if you have query param
     const params = new URLSearchParams(window.location.search);
     if (params.has("debug")) {
@@ -12,7 +14,7 @@ function log(...args: any) {
 function error(...args: any) {
   if (process.env.NEXT_PUBLIC_ENV === "dev") {
     console.error(...args);
-  } else {
+  } else if (!IS_SERVER) {
     // in prod only log if you have query param
     const params = new URLSearchParams(window.location.search);
     if (params.has("debug")) {

@@ -11,7 +11,7 @@ export interface ReadContractProps {
 }
 
 export const CONTRACT = gql`
-  query Contract($address: String!) {
+  query ContractReadQuery($address: String!) {
     contract(address: $address) {
       id
       address

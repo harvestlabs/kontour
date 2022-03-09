@@ -7,7 +7,26 @@ const Button = {
     lineHeight: "initial",
   },
   // Two sizes: sm and md
-  sizes: {},
+  sizes: {
+    xs: {
+      borderRadius: "12px",
+    },
+    sm: {
+      borderRadius: "16px",
+    },
+    md: {
+      borderRadius: "20px",
+    },
+    lg: {
+      borderRadius: "24px",
+    },
+    xl: {
+      h: "56px",
+      borderRadius: "28px",
+      fontSize: "lg",
+      px: "32px",
+    },
+  },
   // Two variants: outline and solid
   variants: {
     reject: {
@@ -19,10 +38,7 @@ const Button = {
       // borderColor: "purple.500",
       // color: "purple.500",
     },
-    solid: {
-      bg: "bountyGreen",
-      color: "white",
-    },
+    solid: {},
     ghost: {},
     link: {},
   },
@@ -87,10 +103,30 @@ const Heading = {
 };
 
 const Link = {
-  baseStyle: {},
+  baseStyle: {
+    color: colors.contourLink,
+    _hover: {
+      textDecoration: "none",
+    },
+  },
 };
 
 const theme = extendTheme({
+  styles: {
+    global: {
+      // styles for the `body`
+      body: {
+        padding: 0,
+        margin: 0,
+        bg: colors.contourBackground,
+        color: colors.contourText,
+        fontSize: "16px",
+      },
+      "*": {
+        boxSizing: "border-box",
+      },
+    },
+  },
   components: {
     Button,
     Link,

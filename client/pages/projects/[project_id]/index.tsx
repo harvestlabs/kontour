@@ -2,7 +2,6 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import Image from "next/image";
-import styles from "@styles/Home.module.css";
 
 import { getLocalStorageKey } from "@utils/api_client";
 import { Container } from "@chakra-ui/react";
@@ -45,9 +44,7 @@ const ProjectPage = () => {
       <Head>
         <title>Project</title>
       </Head>
-      <main className={styles.main}>
-        {data ? <Project id={data.project?.id as string} /> : null}
-      </main>
+      <main>{data ? <Project id={data.project?.id as string} /> : null}</main>
     </Container>
   );
 };

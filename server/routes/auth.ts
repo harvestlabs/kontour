@@ -7,6 +7,7 @@ import { Next } from "koa";
 import User from "../models/User.model";
 import Profile from "../models/Profile.model";
 import LoginData from "../models/LoginData.model";
+import config from "../../config";
 
 const authRouter = new Router({
   prefix: "/auth",
@@ -100,7 +101,8 @@ authRouter.get("/twitter_callback", async (ctx: RouterContext, next: Next) => {
       }
       ctx.status = 200;
       setJwtHeaderOnLogin(ctx, user);
-      return;
+
+      ctx.redirect(config.app.CLIENT_HOSTNAME);
     }
   )(ctx, next);
 });
