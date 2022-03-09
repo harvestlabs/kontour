@@ -11,7 +11,7 @@ export interface WriteContractProps {
 }
 
 const CONTRACT = gql`
-  query Contract($address: String!) {
+  query ContractWriteQuery($address: String!) {
     contract(address: $address) {
       id
       address

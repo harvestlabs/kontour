@@ -9,6 +9,7 @@
     "lint": "next lint",
     "schema": "apollo service:download --endpoint=http://localhost:8080/graphql graphql-schema.json",
     "generate-types": "apollo codegen:generate --localSchemaFile=graphql-schema.json --target=typescript --tagName=gql --globalTypesFile globalTypes.d.ts --outputFlat ./src/graphql/__generated__"
+
   },
   "dependencies": {
     "@apollo/client": "^3.5.8",
