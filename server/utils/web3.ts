@@ -10,7 +10,6 @@ const polygonWeb3 = new Web3(config.polygon.GETH_URL);
 const ethWeb3 = new Web3(config.eth.GETH_URL);
 export const polygon = {
   web3: polygonWeb3,
-  account: polygonWeb3.eth.accounts.privateKeyToAccount(config.polygon.KEY),
 };
 export const local = async (projectId: string) => {
   const project = await Project.findByPk(projectId, { include: Node });
@@ -23,5 +22,4 @@ export const local = async (projectId: string) => {
 };
 export const eth = {
   web3: ethWeb3,
-  account: ethWeb3.eth.accounts.privateKeyToAccount(config.eth.KEY),
 };
