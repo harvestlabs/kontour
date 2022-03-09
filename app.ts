@@ -55,7 +55,7 @@ export class LoggerStream {
 app.use(
   cors({
     origin: async (ctx: Context) => {
-      if (ctx.request.origin.match(config.auth.CLIENT_ORIGIN)) {
+      if (ctx.request.origin.match(new RegExp(config.auth.CLIENT_ORIGIN))) {
         return ctx.request.origin;
       }
       // This is useful for local dev, we expect localhost:3000
