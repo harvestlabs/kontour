@@ -6,11 +6,13 @@ export default function SignInButton() {
     <Button
       size="lg"
       onClick={async () => {
-        // log in here
+        window.location.assign(
+          `${process.env.NEXT_PUBLIC_LINK_TWITTER_ENDPOINT}`
+        );
       }}
       leftIcon={<Icons.User />}
     >
-      Sign in
+      Sign in with Twitter
     </Button>
   );
 }
