@@ -7,6 +7,8 @@ import { selectTwitterHandle } from "@redux/slices/userSlice";
 import { useLoggedInUser } from "@hooks/index";
 import DiscordLink from "@components/buttons/DiscordLink";
 import Logo from "@components/logo/Logo";
+import SignInButton from "@components/buttons/SignInButton";
+import colors from "src/theme/colors";
 
 function StickyHeader({}: PropsWithChildren<{}>) {
   const { loggedInUserId } = useLoggedInUser();
@@ -22,16 +24,7 @@ function StickyHeader({}: PropsWithChildren<{}>) {
 
       <HStack gap="18px">
         <DiscordLink color={theme.colors.discordPurple} size={20} />
-        <NextLink href="/faq">
-          <Link href="/faq" fontSize="1.25em">
-            FAQ
-          </Link>
-        </NextLink>
-        <NextLink href="/explore">
-          <Link href="/explore" fontSize="1.25em">
-            Explore
-          </Link>
-        </NextLink>
+        <SignInButton />
       </HStack>
     </Flex>
   );
@@ -55,7 +48,7 @@ const styles = {
       base: "52px",
       md: "80px",
     },
-    backgroundColor: theme.colors.bountyHeaderGreen,
+    backgroundColor: colors.contourBackground,
   },
 };
 

@@ -16,7 +16,7 @@ export default function DiscordLink({
   return button ? (
     <Button
       mr="12px"
-      aria-label="Reject Bounty"
+      aria-label="Discord button"
       bg="#5865F2"
       onClick={(e) => {
         window.open("https://discord.gg/rFghjfWMKY", "_blank");
