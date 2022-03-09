@@ -1,5 +1,3 @@
-import { useAppSelector } from "@redux/hooks";
-import { selectAddress, selectUserId } from "@redux/slices/userSlice";
 import { useLayoutEffect, useState } from "react";
 
 export function useWindowResize(onWindowResize: () => void, deps?: any[]) {
@@ -12,19 +10,6 @@ export function useWindowResize(onWindowResize: () => void, deps?: any[]) {
     window.addEventListener("resize", updateSize);
     updateSize();
     return () => window.removeEventListener("resize", updateSize);
-  }, deps);
+  }, [onWindowResize, ...(deps || [])]);
   return size;
-}
-
-export function useLoggedInUser(id?: string | null) {
-  const loggedInUserId = useAppSelector(selectUserId);
-  const loggedInUserAddress = useAppSelector(selectAddress);
-  const loggedIn = loggedInUserId !== "";
-
-  return {
-    loggedIn,
-    loggedInUserId,
-    loggedInUserAddress,
-    isUser: id === loggedInUserId,
-  };
 }

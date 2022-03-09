@@ -38,9 +38,7 @@ const Button = {
       // borderColor: "purple.500",
       // color: "purple.500",
     },
-    solid: {
-      color: "white",
-    },
+    solid: {},
     ghost: {},
     link: {},
   },
