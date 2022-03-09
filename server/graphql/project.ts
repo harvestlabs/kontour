@@ -1,7 +1,7 @@
 import {
+  GraphQLInt,
   GraphQLList,
   GraphQLNonNull,
-  GraphQLObjectType,
   GraphQLString,
 } from "graphql";
 import { GraphQLJSONObject } from "graphql-type-json";
@@ -19,6 +19,35 @@ const ProjectQueries = {
     },
     resolve: async (parent, args, ctx, info) => {
       return await Project.findByPk(args.id);
+    },
+  },
+
+  projects: {
+    type: new GraphQLList(ProjectType),
+
+    args: {
+      limit: {
+        type: GraphQLInt,
+      },
+      order: {
+        type: GraphQLString,
+      },
+      userId: {
+        type: GraphQLString,
+      },
+    },
+
+    resolve: async (parent, args, ctx, info) => {
+      const params = {
+        limit: args.limit,
+        order: args.order,
+      };
+      if (args.userId) {
+        params["where"] = {
+          user_id: args.userId,
+        };
+      }
+      return await Project.findAll(params);
     },
   },
 };
