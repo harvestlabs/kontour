@@ -67,19 +67,28 @@ export async function deployFromSource(
   let code = fs
     .readFileSync(`${__dirname}/../abis/${TEMP_BIN(contractName)}`)
     .toString();
+  const address = await deployBinaryAndABI(projectId, code, abi);
+  return {
+    address: address,
+    abi: abi,
+    source: source,
+  };
+}
+
+export async function deployBinaryAndABI(
+  projectId: string,
+  binary: string,
+  abi: any
+): Promise<string> {
   const { web3, account } = await local(projectId);
 
   let Contract = new web3.eth.Contract(abi);
-  const transaction = Contract.deploy({ data: code });
+  const transaction = Contract.deploy({ data: binary });
 
   const result = await sendTxAndLog(web3, transaction, account);
   console.log("result", result);
 
-  return {
-    address: result.contractAddress,
-    abi: abi,
-    source: source,
-  };
+  return result.contractAddress;
 }
 
 export async function sendTxAndLog(

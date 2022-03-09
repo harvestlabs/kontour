@@ -8,6 +8,7 @@ import {
 import { GraphQLJSONObject } from "graphql-type-json";
 import Contract, { templateMapping } from "../models/Contract.model";
 import ContractSource from "../models/ContractSource.model";
+import S3ContractSource from "../models/S3ContractSource.model";
 import ContractType from "./types/contract";
 import { TemplateType } from "./types/template";
 
@@ -68,7 +69,7 @@ const ContractMutations = {
       );
     },
   },
-  getJSONForTemplate: {
+  getSourceForTemplate: {
     type: GraphQLString,
     args: {
       chainId: {
@@ -114,6 +115,24 @@ const ContractMutations = {
         match[1],
         args.projectId
       );
+    },
+  },
+  deployFromS3Source: {
+    type: ContractType,
+    args: {
+      sourceId: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+      projectId: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+    },
+    resolve: async (parent, args, ctx, info) => {
+      const source = await S3ContractSource.findByPk(args.sourceId);
+      if (source.user_id && source.user_id !== ctx.state.user.id) {
+        return null;
+      }
+      return await Contract.importFromS3Source(source, args.projectId);
     },
   },
 };

@@ -16,7 +16,7 @@
     "docker:contour": "docker build -t retool_contour:latest contour/",
     "migrate": "sequelize-cli db:migrate",
     "rollback": "sequelize-cli db:migrate:undo",
-    "compile:contracts": "truffle compile --config=truffle-config.polygon.js"
+    "compile:contracts": "truffle compile --config=truffle.config.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.36.0",

@@ -29,6 +29,8 @@ module.exports = {
         },
         allowNull: false,
       },
+      contract_source_type: Sequelize.DataTypes.INTEGER,
+      contract_source_id: Sequelize.DataTypes.STRING,
       created_at: Sequelize.DataTypes.DATE,
       updated_at: Sequelize.DataTypes.DATE,
     });
@@ -44,6 +46,42 @@ module.exports = {
       chain_id: Sequelize.DataTypes.INTEGER,
       name: Sequelize.DataTypes.STRING,
       source: Sequelize.DataTypes.STRING,
+      user_id: {
+        type: Sequelize.DataTypes.UUID,
+        references: {
+          model: {
+            tableName: "users",
+          },
+          key: "id",
+        },
+        allowNull: true,
+      },
+      created_at: Sequelize.DataTypes.DATE,
+      updated_at: Sequelize.DataTypes.DATE,
+    });
+
+    await queryInterface.createTable("s3_contract_sources", {
+      id: {
+        type: Sequelize.DataTypes.UUID,
+        primaryKey: true,
+        allowNull: false,
+      },
+      name: Sequelize.DataTypes.STRING,
+      source: Sequelize.DataTypes.STRING,
+      compiler: Sequelize.DataTypes.JSON,
+      db: Sequelize.DataTypes.JSON,
+      abi: Sequelize.DataTypes.JSON,
+      version: Sequelize.DataTypes.STRING,
+      user_id: {
+        type: Sequelize.DataTypes.UUID,
+        references: {
+          model: {
+            tableName: "users",
+          },
+          key: "id",
+        },
+        allowNull: true,
+      },
       created_at: Sequelize.DataTypes.DATE,
       updated_at: Sequelize.DataTypes.DATE,
     });
@@ -57,6 +95,7 @@ module.exports = {
      * await queryInterface.dropTable('users');
      */
     await queryInterface.dropTable("contract_sources");
+    await queryInterface.dropTable("s3_contract_sources");
     await queryInterface.dropTable("contracts");
   },
 };

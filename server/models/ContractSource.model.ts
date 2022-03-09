@@ -48,6 +48,9 @@ export default class ContractSource extends Model {
   @Column(DataType.STRING)
   name: string;
 
+  @Column(DataType.STRING)
+  user_id: string;
+
   @Column(DataType.JSON)
   abi: any;
 

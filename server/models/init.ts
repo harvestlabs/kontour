@@ -1,12 +1,18 @@
 import { Sequelize } from "sequelize-typescript";
 import config from "../../config";
+
 import User from "./User.model";
 import Web3PublicKey from "./Web3PublicKey.model";
-import Project from "./Project.model";
-import Contract from "./Contract.model";
-import ContractSource from "./ContractSource.model";
 import Profile from "./Profile.model";
 import LoginData from "./LoginData.model";
+
+import Project from "./Project.model";
+import ProjectVersion from "./ProjectVersion.model";
+
+import Contract from "./Contract.model";
+import ContractSource from "./ContractSource.model";
+import S3ContractSource from "./S3ContractSource.model";
+
 import Node from "./Node.model";
 
 export default function init() {
@@ -28,12 +34,14 @@ export default function init() {
 
   sequelize.addModels([
     User,
-    ContractSource,
-    Contract,
-    Project,
     Web3PublicKey,
     LoginData,
     Profile,
+    S3ContractSource,
+    ContractSource,
+    Contract,
+    Project,
+    ProjectVersion,
     Node,
   ]);
   postInit();
@@ -43,10 +51,12 @@ export default function init() {
 // This sucks, what even is this
 function postInit() {
   Project.User = Project.belongsTo(User);
+  Project.Versions = Project.hasMany(ProjectVersion);
   User.Profile = User.hasOne(Profile);
   User.PublicKey = User.hasOne(Web3PublicKey);
   User.Projects = User.hasMany(Project);
   Profile.User = Profile.belongsTo(User);
   LoginData.User = LoginData.belongsTo(User);
   Node.Projects = Node.hasMany(Project);
+  Node.Contracts = Node.hasMany(Contract);
 }

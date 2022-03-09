@@ -9,10 +9,13 @@ import {
   Default,
   DataType,
   PrimaryKey,
+  AfterCreate,
+  HasMany,
 } from "sequelize-typescript";
 import { v4 } from "uuid";
 import User from "./User.model";
 import Node from "./Node.model";
+import ProjectVersion from "./ProjectVersion.model";
 
 @Table({
   timestamps: true,
@@ -21,6 +24,7 @@ import Node from "./Node.model";
 })
 export default class Project extends Model {
   static User;
+  static Versions;
 
   @Default(v4)
   @PrimaryKey
@@ -46,4 +50,6 @@ export default class Project extends Model {
   user: User;
   @BelongsTo(() => Node, "node_id")
   node: Node;
+  @HasMany(() => ProjectVersion, "project_id")
+  versions: ProjectVersion[];
 }

@@ -15,6 +15,7 @@ import { v4 } from "uuid";
 import Web3PublicKey from "./Web3PublicKey.model";
 import Profile from "./Profile.model";
 import Project from "./Project.model";
+import { createFolder } from "../utils/s3";
 
 @Table({
   timestamps: true,
@@ -56,5 +57,10 @@ export default class User extends Model {
         user_id: instance.id,
       });
     }
+  }
+
+  @AfterCreate
+  static async createS3Folder(instance: Project) {
+    await createFolder(instance.id);
   }
 }

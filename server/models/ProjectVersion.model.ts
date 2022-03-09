@@ -9,25 +9,24 @@ import {
   Default,
   DataType,
   PrimaryKey,
-  HasMany,
+  AfterCreate,
 } from "sequelize-typescript";
 import { v4 } from "uuid";
-import Contract from "./Contract.model";
 import Project from "./Project.model";
 
-export interface NodeData {
-  hostUrl: string;
-  chainId: number;
+export enum ProjectVersionStatus {
+  UNKNOWN = 0,
+  DRAFT = 1,
+  PUBLISHED = 2,
 }
 
 @Table({
   timestamps: true,
-  tableName: "nodes",
+  tableName: "project_versions",
   underscored: true,
 })
-export default class Node extends Model {
-  static Projects;
-  static Contracts;
+export default class ProjectVersion extends Model {
+  static Project;
 
   @Default(v4)
   @PrimaryKey
@@ -39,15 +38,17 @@ export default class Node extends Model {
   updated_at!: Date;
 
   @Column(DataType.JSON)
-  data: NodeData;
+  data: any;
 
-  @HasMany(() => Project, "node_id")
-  projects: Project[];
+  @Column(DataType.STRING)
+  name: string;
 
-  @HasMany(() => Contract, "node_id")
-  contracts: Contract[];
+  @Column(DataType.INTEGER)
+  status: ProjectVersionStatus;
 
-  static async getAvailable() {
-    return Node.findOne();
-  }
+  @Column(DataType.STRING)
+  project_id: string;
+
+  @BelongsTo(() => Project, "project_id")
+  project: Project;
 }
