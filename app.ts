@@ -74,7 +74,11 @@ app.use(
 );
 // This does JWT auth on every POST request to the API and graphql API
 app.use(async (ctx, next) => {
-  if (ctx.request.method !== "POST") {
+  if (ctx.cookies.get("auth_token")) {
+    ctx.request.headers["authorization"] =
+      "Bearer " + ctx.cookies.get("auth_token");
+  }
+  if (ctx.request.method == "OPTIONS") {
     return next();
   }
   if (ctx.path.indexOf("/graphql") === -1 && ctx.path.indexOf("/api") === -1) {
