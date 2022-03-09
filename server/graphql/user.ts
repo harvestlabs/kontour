@@ -63,24 +63,28 @@ const UserMutations = {
       key: {
         type: new GraphQLNonNull(GraphQLString),
       },
+      projectId: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
     },
     resolve: async (parent, args, ctx, info) => {
+      const { web3, account } = await local(args.projectId);
       const transaction = {
-        from: local.account.address,
+        from: account.address,
         to: args.key,
-        value: local.web3.utils.toWei("1", "ether"),
+        value: web3.utils.toWei("1", "ether"),
       };
-      const signed = await local.web3.eth.accounts.signTransaction(
+      const signed = await web3.eth.accounts.signTransaction(
         {
-          from: local.account.address,
+          from: account.address,
           to: args.key,
-          value: local.web3.utils.toWei("1", "ether"),
-          gas: await local.web3.eth.estimateGas(transaction),
-          gasPrice: await local.web3.eth.getGasPrice(),
+          value: web3.utils.toWei("1", "ether"),
+          gas: await web3.eth.estimateGas(transaction),
+          gasPrice: await web3.eth.getGasPrice(),
         },
-        local.account.privateKey
+        account.privateKey
       );
-      const result = await local.web3.eth.sendSignedTransaction(
+      const result = await web3.eth.sendSignedTransaction(
         signed.rawTransaction
       );
       return Boolean(result);

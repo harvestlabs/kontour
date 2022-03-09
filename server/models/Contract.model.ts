@@ -99,7 +99,7 @@ export default class Contract extends Model {
   ): Promise<Contract> {
     const project = await Project.findByPk(projectId, { include: Node });
     const toDeploy = new templateMapping[templateName](templateArgs);
-    const results = await deployfromTemplate(toDeploy);
+    const results = await deployfromTemplate(toDeploy, projectId);
     const contract = await Contract.create({
       address: results.address,
       chain_id: project.node.data.chainId,
@@ -123,7 +123,7 @@ export default class Contract extends Model {
     projectId: string
   ): Promise<Contract> {
     const project = await Project.findByPk(projectId, { include: Node });
-    const results = await deployFromSource(cs.source, cs.name);
+    const results = await deployFromSource(cs.source, cs.name, projectId);
     const contract = await Contract.create({
       address: results.address,
       chain_id: project.node.data.chainId,
@@ -131,6 +131,31 @@ export default class Contract extends Model {
       source: results.source,
       node_id: project.node.id,
       name: cs.name,
+    });
+    return contract;
+  }
+
+  static async createFromSourceString(
+    source: string,
+    name: string,
+    projectId: string
+  ): Promise<Contract> {
+    const project = await Project.findByPk(projectId, { include: Node });
+    const results = await deployFromSource(source, name, projectId);
+    const contract = await Contract.create({
+      address: results.address,
+      chain_id: project.node.data.chainId,
+      abi: results.abi,
+      source: results.source,
+      node_id: project.node.id,
+      name: name,
+    });
+    await ContractSource.create({
+      address: contract.address,
+      chain_id: contract.chain_id,
+      abi: contract.abi,
+      source: contract.source,
+      name: name,
     });
     return contract;
   }

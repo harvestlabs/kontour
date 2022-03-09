@@ -16,6 +16,7 @@ module.exports = {
       },
       address: Sequelize.DataTypes.STRING,
       name: Sequelize.DataTypes.STRING,
+      source: Sequelize.DataTypes.STRING,
       abi: Sequelize.DataTypes.JSON,
       chain_id: Sequelize.DataTypes.INTEGER,
       node_id: {

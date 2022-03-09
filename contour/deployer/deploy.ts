@@ -1,6 +1,6 @@
-import { local, polygon, eth } from "./web3";
 import { compileSol, compileSourceString } from "solc-typed-ast";
 import SimpleStorage from "../templates/SimpleStorage";
+import { local, polygon, eth } from "../../server/utils/web3";
 import { exec } from "child_process";
 import fs from "fs";
 import { Account } from "web3-core";
@@ -21,11 +21,12 @@ export interface DeployResult {
 }
 
 export async function deployfromTemplate(
-  contract: ContractType
+  contract: ContractType,
+  projectId: string
 ): Promise<DeployResult> {
   try {
     fs.rmSync(`${__dirname}/${TEMP_FILE}`);
-    return await deployFromSource(contract.write(), contract.name);
+    return await deployFromSource(contract.write(), contract.name, projectId);
   } catch (e) {
     console.log("err", e);
   }
@@ -33,7 +34,8 @@ export async function deployfromTemplate(
 
 export async function deployFromSource(
   source: string,
-  contractName: string
+  contractName: string,
+  projectId: string
 ): Promise<DeployResult> {
   fs.writeFileSync(`${__dirname}/${TEMP_FILE}`, source);
   await new Promise((resolve, reject) => {
@@ -61,10 +63,12 @@ export async function deployFromSource(
   let code = fs
     .readFileSync(`${__dirname}/../abis/${TEMP_BIN(contractName)}`)
     .toString();
-  let Contract = new local.web3.eth.Contract(abi);
+  const { web3, account } = await local(projectId);
+
+  let Contract = new web3.eth.Contract(abi);
   const transaction = Contract.deploy({ data: code });
 
-  const result = await sendTxAndLog(transaction, local.account);
+  const result = await sendTxAndLog(web3, transaction, account);
   console.log("result", result);
 
   return {
@@ -74,9 +78,13 @@ export async function deployFromSource(
   };
 }
 
-export async function sendTxAndLog(transaction: any, account: Account) {
+export async function sendTxAndLog(
+  web3: any,
+  transaction: any,
+  account: Account
+) {
   console.log("sending from", account.address);
-  const gasPrice = await local.web3.eth.getGasPrice();
+  const gasPrice = await web3.eth.getGasPrice();
   console.log("gas", gasPrice);
   const g = await transaction.estimateGas({ from: account.address });
   console.log("gas2", g);
@@ -88,12 +96,10 @@ export async function sendTxAndLog(transaction: any, account: Account) {
     data: transaction.encodeABI(),
   };
 
-  const signed = await local.web3.eth.accounts.signTransaction(
+  const signed = await web3.eth.accounts.signTransaction(
     tx,
     account.privateKey
   );
-  const result = await local.web3.eth.sendSignedTransaction(
-    signed.rawTransaction
-  );
+  const result = await web3.eth.sendSignedTransaction(signed.rawTransaction);
   return result;
 }

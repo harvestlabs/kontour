@@ -7,6 +7,7 @@ import {
 } from "graphql";
 import { GraphQLJSONObject } from "graphql-type-json";
 import Contract, { templateMapping } from "../models/Contract.model";
+import ContractSource from "../models/ContractSource.model";
 import ContractType from "./types/contract";
 import { TemplateType } from "./types/template";
 
@@ -83,6 +84,36 @@ const ContractMutations = {
     resolve: async (parent, args, ctx, info) => {
       const toDeploy = new templateMapping[args.template](args.params);
       return toDeploy.write();
+    },
+  },
+  tryCompileSource: {
+    type: GraphQLJSONObject,
+    args: {
+      source: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+    },
+    resolve: async (parent, args, ctx, info) => {
+      return await ContractSource.tryCompile(args.source);
+    },
+  },
+  compileAndDeployFromSource: {
+    type: ContractType,
+    args: {
+      source: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+      projectId: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+    },
+    resolve: async (parent, args, ctx, info) => {
+      const match = args.source.match(/contract +([a-zA-Z0-9]+) *{/);
+      return await Contract.createFromSourceString(
+        args.source,
+        match[1],
+        args.projectId
+      );
     },
   },
 };

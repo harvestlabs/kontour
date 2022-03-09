@@ -68,8 +68,6 @@ const Config = {
   },
   ganache: {
     PK: env.GANACHE_PK,
-    PORT: env.GANACHE_PORT,
-    HOST: env.GANACHE_HOST,
   },
 };
 
