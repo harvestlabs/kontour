@@ -1,20 +1,16 @@
 "use strict";
 import Router, { RouterContext } from "koa-router";
-import nacl from "tweetnacl";
-import Base58 from "base-58";
-import { TextEncoder } from "util";
 
 import passport from "../utils/passport";
 import { setJwtHeaderOnLogin } from "../utils/jwt";
 import { Next } from "koa";
 import User from "../models/User.model";
-import Web3PublicKey from "../models/Web3PublicKey.model";
-import logger from "../utils/logger";
+import Profile from "../models/Profile.model";
+import LoginData from "../models/LoginData.model";
 
 const authRouter = new Router({
   prefix: "/auth",
 });
-const ENCRYPTED_MSG = `Open sesame!`;
 
 /* AUTH */
 const _authFunc = (strat: string) => {
@@ -42,45 +38,113 @@ authRouter.get("/current_user", async (ctx, next) => {
     next();
   })(ctx, next);
 });
+authRouter.post("/login", passport.authenticate("local"));
 authRouter.post("/create", async (ctx, next) => {
-  // password is a Buffer, key is a base58 encoded string
-  const { password, key } = ctx.request.body;
-  const enc = new TextEncoder();
-  if (
-    nacl.sign.detached.verify(
-      enc.encode(ENCRYPTED_MSG),
-      new Uint8Array(password.data),
-      Base58.decode(key)
-    )
-  ) {
-    try {
-      return await Web3PublicKey.findByPk(key).then(async (account) => {
-        if (account) {
-          return _authFunc("local")(ctx, next);
-        } else {
-          // Create account object
-          const newUser = await User.create();
-          await Web3PublicKey.create({
-            key: key,
-            user_id: newUser.id,
-          });
-          return _authFunc("local")(ctx, next);
-        }
-      });
-    } catch (err) {
-      logger.error("/create", [err]);
-    }
-  } else {
-    ctx.throw(401);
+  const { email, password } = ctx.request.body;
+  const maybeLogin = await LoginData.findOne({
+    where: {
+      email: email,
+    },
+  });
+  if (maybeLogin) {
+    ctx.status = 400;
+    ctx.body = { message: "A user with this email already exists" };
+    return;
   }
+  const user = await User.create({});
+  await LoginData.create({
+    email: email,
+    password: password,
+    user_id: user.id,
+  });
+  ctx.status = 200;
+  setJwtHeaderOnLogin(ctx, user);
+  return;
 });
-authRouter.post("/facebook", _authFunc("facebook-token"));
-authRouter.get(
-  "/auth/facebook",
-  passport.authenticate("facebook", {
-    scope: ["email"],
-  })
-);
-authRouter.get("/facebook/callback", _authFunc("facebook"));
+
+authRouter.get("/twitter", passport.authenticate("twitter"));
+authRouter.get("/twitter_callback", async (ctx: RouterContext, next: Next) => {
+  return passport.authenticate(
+    "twitter",
+    async (err: Error, { id, handle, image_url }) => {
+      const largeImgUrl = image_url.replace("_normal.jpg", ".jpg");
+      const maybeLogin = await LoginData.findOne({
+        where: {
+          twitter_id: id,
+        },
+        include: [
+          {
+            model: User,
+            include: [Profile],
+          },
+        ],
+      });
+      let user = maybeLogin?.user;
+      if (!user) {
+        user = await User.create({});
+        await LoginData.create({
+          twitter_handle: handle,
+          twitter_id: id,
+          user_id: user.id,
+        });
+        const profile = await Profile.findOne({
+          where: {
+            user_id: user.id,
+          },
+        });
+        profile.image_url = largeImgUrl;
+        await profile.save();
+      } else {
+        user.profile.image_url = largeImgUrl;
+        await user.profile.save();
+      }
+      ctx.status = 200;
+      setJwtHeaderOnLogin(ctx, user);
+      return;
+    }
+  )(ctx, next);
+});
+
+authRouter.get("/github", passport.authenticate("github"));
+authRouter.get("/github_callback", async (ctx: RouterContext, next: Next) => {
+  return passport.authenticate(
+    "github",
+    async (err: Error, { id, email, handle, image_url }) => {
+      const maybeLogin = await LoginData.findOne({
+        where: {
+          github_id: id,
+        },
+        include: [
+          {
+            model: User,
+            include: [Profile],
+          },
+        ],
+      });
+      let user = maybeLogin?.user;
+      if (!user) {
+        user = await User.create({});
+        await LoginData.create({
+          github_id: id,
+          github_handle: handle,
+          user_id: user.id,
+        });
+        const profile = await Profile.findOne({
+          where: {
+            user_id: user.id,
+          },
+        });
+        profile.image_url = image_url;
+        await profile.save();
+      } else {
+        user.profile.image_url = image_url;
+        await user.profile.save();
+      }
+      ctx.status = 200;
+      setJwtHeaderOnLogin(ctx, user);
+      return;
+    }
+  )(ctx, next);
+});
 
 export default authRouter;

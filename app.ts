@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 import Koa, { Context } from "koa";
+import session from "koa-session";
 import cors from "@koa/cors";
 import morgan from "koa-morgan";
 import passport from "koa-passport";
@@ -28,6 +29,22 @@ Sentry.init({
 });
 
 const app = new Koa();
+app.keys = [config.auth.JWT_SECRET];
+app.proxy = true;
+app.use(
+  session(
+    {
+      key: "koa.sess",
+      maxAge: 86400000,
+      autoCommit: true,
+      overwrite: true,
+      httpOnly: true,
+      secure: config.app.IS_PROD,
+      sameSite: config.app.IS_PROD ? "none" : "lax",
+    },
+    app
+  )
+);
 
 app.use(bodyParser());
 export class LoggerStream {

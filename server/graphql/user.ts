@@ -47,7 +47,6 @@ const UserMutations = {
       const user: User = await User.findByPk(ctx.state.user?.id, {
         include: [{ model: Profile }],
       });
-      await user.createProfileIfNotExists();
       if (args.imageUrl) {
         user.profile.image_url = args.imageUrl;
       }

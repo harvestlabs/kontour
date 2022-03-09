@@ -31,9 +31,6 @@ export default class Profile extends Model {
   updated_at!: Date;
 
   @Column(DataType.STRING)
-  twitter_handle: string;
-
-  @Column(DataType.STRING)
   image_url: string;
 
   @ForeignKey(() => User)

@@ -45,6 +45,16 @@ const Config = {
     REGION: env.UPLOAD_REGION || "us-west-1",
     UPLOAD_BUCKET: env.UPLOAD_BUCKET || "badger-uploads",
   },
+  twitter: {
+    CONSUMER_KEY: env.TWITTER_CONSUMER_KEY,
+    CONSUMER_SECRET: env.TWITTER_CONSUMER_SECRET,
+    CALLBACK_URL: env.TWITTER_CALLBACK_URL,
+  },
+  github: {
+    CLIENT_ID: env.GITHUB_CLIENT_ID,
+    CLIENT_SECRET: env.GITHUB_CLIENT_SECRET,
+    CALLBACK_URL: env.GITHUB_CALLBACK_URL,
+  },
   stripe: {
     SECRET_KEY: env.STRIPE_SECRET_KEY,
   },

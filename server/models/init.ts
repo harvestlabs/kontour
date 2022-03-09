@@ -6,6 +6,7 @@ import Project from "./Project.model";
 import Contract from "./Contract.model";
 import ContractSource from "./ContractSource.model";
 import Profile from "./Profile.model";
+import LoginData from "./LoginData.model";
 import Node from "./Node.model";
 
 export default function init() {
@@ -31,6 +32,7 @@ export default function init() {
     Contract,
     Project,
     Web3PublicKey,
+    LoginData,
     Profile,
     Node,
   ]);
@@ -45,5 +47,6 @@ function postInit() {
   User.PublicKey = User.hasOne(Web3PublicKey);
   User.Projects = User.hasMany(Project);
   Profile.User = Profile.belongsTo(User);
+  LoginData.User = LoginData.belongsTo(User);
   Node.Projects = Node.hasMany(Project);
 }

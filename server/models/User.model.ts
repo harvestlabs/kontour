@@ -9,6 +9,7 @@ import {
   DataType,
   PrimaryKey,
   HasOne,
+  AfterCreate,
 } from "sequelize-typescript";
 import { v4 } from "uuid";
 import Web3PublicKey from "./Web3PublicKey.model";
@@ -48,12 +49,12 @@ export default class User extends Model {
   @HasOne(() => Web3PublicKey, "user_id")
   public_key: Web3PublicKey;
 
-  async createProfileIfNotExists() {
-    if (!this.profile) {
+  @AfterCreate
+  static async createProfileIfNotExists(instance) {
+    if (!instance.profile) {
       await Profile.create({
-        user_id: this.id,
+        user_id: instance.id,
       });
-      await this.reload({ include: [{ model: Profile }] });
     }
   }
 }
