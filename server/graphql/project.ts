@@ -32,7 +32,7 @@ const ProjectQueries = {
       order: {
         type: GraphQLString,
       },
-      userId: {
+      user_id: {
         type: GraphQLString,
       },
     },
@@ -42,9 +42,9 @@ const ProjectQueries = {
         limit: args.limit,
         order: args.order,
       };
-      if (args.userId) {
+      if (args.user_id) {
         params["where"] = {
-          user_id: args.userId,
+          user_id: args.user_id,
         };
       }
       return await Project.findAll(params);
