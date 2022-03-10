@@ -203,7 +203,7 @@ async function startApolloServer() {
 
   await server.start();
   // @ts-ignore
-  server.applyMiddleware({ app, path: "/graphql" });
+  server.applyMiddleware({ app, path: "/graphql", cors: false });
   httpServer.on("request", app.callback());
   await new Promise<void>((resolve) =>
     httpServer.listen({ port: config.app.PORT }, resolve)
