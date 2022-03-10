@@ -7,11 +7,5 @@ type Props = {};
 export default function ProjectEditorLayout({
   children,
 }: React.PropsWithChildren<Props>) {
-  return (
-    <Flex as="main" flexDirection="column" width="100vw" height="100vh">
-      <ProjectEditorNavbar />
-      <Box flexGrow="1">{children}</Box>
-      <Footer />
-    </Flex>
-  );
+  return <>{children}</>;
 }

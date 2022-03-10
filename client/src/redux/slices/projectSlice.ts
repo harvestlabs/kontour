@@ -16,11 +16,17 @@ const BLANK_PROJECT_DATA = {
 };
 export interface ProjectState {
   id: string;
+  selectedContractData: any;
   data: ProjectData;
 }
 
 const initialState: ProjectState = {
   id: "",
+  selectedContractData: {
+    id: "0",
+    name: "Fake.sol",
+    methods: ["fkcreate", "join", "withdraw", "negotiate"],
+  },
   data: BLANK_PROJECT_DATA,
 };
 
@@ -44,10 +50,15 @@ export const projectSlice = createSlice({
         ...action.payload,
       };
     },
+    setSelectedContractData: (state, action: PayloadAction<any>) => {
+      state.selectedContractData = action.payload;
+    },
   },
 });
 
 export const selectId = (state: RootState): string => state.project.id;
+export const selectSelectedContractData = (state: RootState): any =>
+  state.project.selectedContractData;
 export const selectData = (state: RootState): ProjectData => state.project.data;
 export const selectDatasources = (state: RootState): Datasources =>
   state.project.data.datasources || {};
@@ -58,6 +69,7 @@ export const selectInteractions = (state: RootState): Interactions =>
 export const selectPage = (state: RootState): Page =>
   state.project.data.page || { components: [] };
 
-export const { reset, setData, setId, mergeData } = projectSlice.actions;
+export const { reset, setData, setId, mergeData, setSelectedContractData } =
+  projectSlice.actions;
 
 export default projectSlice.reducer;

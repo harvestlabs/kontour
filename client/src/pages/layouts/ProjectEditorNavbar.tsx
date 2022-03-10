@@ -1,18 +1,53 @@
-import { Text, Flex, Spacer, Link, HStack } from "@chakra-ui/react";
-import { PropsWithChildren } from "react";
+import {
+  Text,
+  Flex,
+  Spacer,
+  Link,
+  HStack,
+  Select,
+  Box,
+} from "@chakra-ui/react";
+import { PropsWithChildren, useState } from "react";
 import theme from "src/theme";
 import NextLink from "next/link";
-import { useAppSelector } from "src/redux/hooks";
-import { selectTwitterHandle } from "@redux/slices/userSlice";
 import DiscordLink from "@components/buttons/DiscordLink";
 import Logo from "@components/logo/Logo";
 import SignInButton from "@components/buttons/SignInButton";
 import colors from "src/theme/colors";
 import MetamaskButton from "@components/buttons/MetamaskButton";
+import { gql } from "@apollo/client";
+import { ProjectEditorNavbarFragment } from "@gql/__generated__/ProjectEditorNavbarFragment";
 
-function ProjectEditorNavbar({}: PropsWithChildren<{}>) {
+type Props = {
+  project: ProjectEditorNavbarFragment;
+};
+function ProjectEditorNavbar({
+  project: { versions },
+}: PropsWithChildren<Props>) {
+  const [selectedVersionIndex, setSelectedVersionIndex] = useState(0);
+
+  if (versions?.length === 0) {
+    throw new Error("Something went wrong. No versions found for this project");
+  }
+
   return (
     <Flex sx={styles.navbar}>
+      <Box flexGrow="0">
+        <Select
+          placeholder={
+            (versions && versions[selectedVersionIndex])?.name || "ERROR"
+          }
+        >
+          {versions?.map((v) => {
+            return (
+              <option value="option1" key={v?.id}>
+                {v?.name}
+              </option>
+            );
+          })}
+        </Select>
+      </Box>
+      <Spacer />
       <NextLink href={`/`} passHref>
         <Link>
           <Logo type="dynamic" />
@@ -28,6 +63,17 @@ function ProjectEditorNavbar({}: PropsWithChildren<{}>) {
     </Flex>
   );
 }
+
+ProjectEditorNavbar.fragments = {
+  project: gql`
+    fragment ProjectEditorNavbarFragment on Project {
+      versions {
+        id
+        name
+      }
+    }
+  `,
+};
 
 const styles = {
   navbar: {

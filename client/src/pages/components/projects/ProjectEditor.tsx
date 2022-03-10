@@ -9,14 +9,16 @@ import {
   ProjectQuery,
   ProjectQueryVariables,
 } from "@gql/__generated__/ProjectQuery";
+import ProjectEditorNavbar from "@layouts/ProjectEditorNavbar";
+import Footer from "@components/Footer";
+import ProjectContractsSidebar from "./version/VersionContractsList";
+import EditorContractView from "./editor/EditorContractView";
 
 const sizeOfGutter = "30px";
 
 function ProjectEditor({ id }: { id: string }) {
-  const project = useAppSelector(selectData);
   const [sidebarWidth, setSidebarWidth] = useState(20);
 
-  const dispatch = useAppDispatch();
   console.log("id", id);
 
   const { data, loading, error } = useQuery<
@@ -31,15 +33,25 @@ function ProjectEditor({ id }: { id: string }) {
   console.log("data", data, id);
 
   return (
-    <Flex width="100%" height="100%" bgColor="white">
-      <Box width={`${sidebarWidth}%`} height="100%" bgColor="white"></Box>
-      <Box
-        width={sizeOfGutter}
-        height="100%"
-        bgColor="black"
-        cursor="col-resize"
-      ></Box>
-      <Box height="100%" bgColor="yellow" flexGrow="1"></Box>
+    <Flex flexDirection="column" width="100vw" height="100vh">
+      {!loading && data?.project != null ? (
+        <ProjectEditorNavbar project={data?.project} />
+      ) : null}
+      <Flex bgColor="white" flexGrow="1">
+        <Box width={`${sidebarWidth}%`} height="100%" bgColor="white">
+          <ProjectContractsSidebar />
+        </Box>
+        <Box
+          width={sizeOfGutter}
+          height="100%"
+          bgColor="black"
+          cursor="col-resize"
+        />
+        <Box height="100%" bgColor="yellow" flexGrow="1">
+          <EditorContractView />
+        </Box>
+      </Flex>
+      <Footer />
     </Flex>
   );
 }
@@ -50,9 +62,12 @@ export const PROJECT = gql`
       id
       versions {
         id
+        name
       }
+      ...ProjectEditorNavbarFragment
     }
   }
+  ${ProjectEditorNavbar.fragments.project}
 `;
 
 export default ProjectEditor;
