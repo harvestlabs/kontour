@@ -6,8 +6,10 @@ import {
   GraphQLString,
 } from "graphql";
 import { GraphQLUpload } from "graphql-upload";
+import ApiKey from "../models/ApiKey.model";
 import ContractSource from "../models/ContractSource.model";
 import S3ContractSource from "../models/S3ContractSource.model";
+import { uploadFile } from "../utils/s3";
 import ContractSourceType from "./types/contractSource";
 
 const ContractSourceQueries = {
@@ -90,8 +92,31 @@ const ContractSourceMutations = {
       file: {
         type: GraphQLUpload,
       },
+      apiKey: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
     },
-    resolve: async (parent, args, ctx, info) => {},
+    resolve: async (parent, args, ctx, info) => {
+      const apiKey = await ApiKey.findByPk(args.apiKey);
+
+      const { filename, mimetype, createReadStream, encoding } =
+        await args.file;
+      const fileChunks = [];
+      const stream = createReadStream();
+      stream.on("readable", () => {
+        let chunk;
+        while (null !== (chunk = stream.read())) {
+          fileChunks.push(chunk);
+        }
+      });
+      await new Promise<void>((resolve) =>
+        stream.on("end", async () => {
+          const imageBuffer = Buffer.concat(fileChunks);
+          await uploadFile(apiKey.user_id, filename, mimetype, imageBuffer);
+          resolve();
+        })
+      );
+    },
   },
 };
 

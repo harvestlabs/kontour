@@ -16,7 +16,7 @@ module.exports = {
       },
       address: Sequelize.DataTypes.STRING,
       name: Sequelize.DataTypes.STRING,
-      source: Sequelize.DataTypes.STRING,
+      source: Sequelize.DataTypes.TEXT("medium"),
       abi: Sequelize.DataTypes.JSON,
       chain_id: Sequelize.DataTypes.INTEGER,
       node_id: {
@@ -45,7 +45,7 @@ module.exports = {
       abi: Sequelize.DataTypes.JSON,
       chain_id: Sequelize.DataTypes.INTEGER,
       name: Sequelize.DataTypes.STRING,
-      source: Sequelize.DataTypes.STRING,
+      source: Sequelize.DataTypes.TEXT("medium"),
       user_id: {
         type: Sequelize.DataTypes.UUID,
         references: {
@@ -67,7 +67,7 @@ module.exports = {
         allowNull: false,
       },
       name: Sequelize.DataTypes.STRING,
-      source: Sequelize.DataTypes.STRING,
+      source: Sequelize.DataTypes.TEXT("medium"),
       compiler: Sequelize.DataTypes.JSON,
       db: Sequelize.DataTypes.JSON,
       abi: Sequelize.DataTypes.JSON,

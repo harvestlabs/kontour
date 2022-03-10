@@ -2,6 +2,7 @@ import { Sequelize } from "sequelize-typescript";
 import config from "../../config";
 
 import User from "./User.model";
+import ApiKey from "./ApiKey.model";
 import Web3PublicKey from "./Web3PublicKey.model";
 import Profile from "./Profile.model";
 import LoginData from "./LoginData.model";
@@ -36,6 +37,7 @@ export default function init() {
   sequelize.addModels([
     User,
     Web3PublicKey,
+    ApiKey,
     LoginData,
     Profile,
     S3ContractSource,

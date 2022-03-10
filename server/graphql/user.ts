@@ -11,6 +11,7 @@ import Profile from "../models/Profile.model";
 import User from "../models/User.model";
 import UserType from "./types/user";
 import { local } from "../utils/web3";
+import ApiKey from "../models/ApiKey.model";
 
 const AIRDROP = "Airdrop Me!";
 
@@ -87,6 +88,24 @@ const UserMutations = {
         signed.rawTransaction
       );
       return Boolean(result);
+    },
+  },
+  requestApiKey: {
+    type: GraphQLString,
+    resolve: async (parent, args, ctx, info) => {
+      if (!ctx.state?.user?.id) {
+        return null;
+      }
+      const user = await User.findByPk(ctx.state.user.id, {
+        include: [ApiKey],
+      });
+      if (user.api_key) {
+        return user.api_key.key;
+      }
+      const apiKey = await ApiKey.create({
+        user_id: user.id,
+      });
+      return apiKey.key;
     },
   },
 };

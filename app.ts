@@ -2,10 +2,10 @@ require("dotenv").config();
 
 import Koa, { Context } from "koa";
 import session from "koa-session";
+import koaBody from "koa-body";
 import cors from "@koa/cors";
 import morgan from "koa-morgan";
 import passport from "koa-passport";
-import bodyParser from "koa-bodyparser";
 import { ApolloServer } from "apollo-server-koa";
 import { graphqlUploadKoa } from "graphql-upload";
 import {
@@ -46,7 +46,7 @@ app.use(
   )
 );
 
-app.use(bodyParser());
+app.use(koaBody({ multipart: true }));
 export class LoggerStream {
   write(message: string) {
     logger.info(message.substring(0, message.lastIndexOf("\n")));

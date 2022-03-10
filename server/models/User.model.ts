@@ -16,6 +16,7 @@ import Web3PublicKey from "./Web3PublicKey.model";
 import Profile from "./Profile.model";
 import Project from "./Project.model";
 import { createFolder } from "../utils/s3";
+import ApiKey from "./ApiKey.model";
 
 @Table({
   timestamps: true,
@@ -49,6 +50,9 @@ export default class User extends Model {
 
   @HasOne(() => Web3PublicKey, "user_id")
   public_key: Web3PublicKey;
+
+  @HasOne(() => ApiKey, "user_id")
+  api_key: ApiKey;
 
   @AfterCreate
   static async createProfileIfNotExists(instance) {
