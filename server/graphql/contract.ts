@@ -24,34 +24,6 @@ const ContractQueries = {
       return await Contract.findOne({ where: { address: args.address } });
     },
   },
-  contractsForProject: {
-    type: new GraphQLList(ContractType),
-
-    args: {
-      limit: {
-        type: GraphQLInt,
-      },
-      order: {
-        type: GraphQLString,
-      },
-      project_id: {
-        type: new GraphQLNonNull(GraphQLString),
-      },
-    },
-
-    resolve: async (parent, args, ctx, info) => {
-      const params = {
-        limit: args.limit,
-        order: args.order,
-      };
-      if (args.user_id) {
-        params["where"] = {
-          user_id: args.user_id,
-        };
-      }
-      return await Project.findAll(params);
-    },
-  },  }
 };
 
 const ContractMutations = {

@@ -10,24 +10,17 @@ import {
   DataType,
   PrimaryKey,
   AfterCreate,
-  HasMany,
 } from "sequelize-typescript";
 import { v4 } from "uuid";
-import Instance from "./Instance.model";
 import Project from "./Project.model";
-
-export enum ProjectVersionStatus {
-  UNKNOWN = 0,
-  DRAFT = 1,
-  PUBLISHED = 2,
-}
+import ProjectVersion from "./ProjectVersion.model";
 
 @Table({
   timestamps: true,
-  tableName: "project_versions",
+  tableName: "instances",
   underscored: true,
 })
-export default class ProjectVersion extends Model {
+export default class Instance extends Model {
   static Project;
 
   @Default(v4)
@@ -45,14 +38,15 @@ export default class ProjectVersion extends Model {
   @Column(DataType.STRING)
   name: string;
 
-  @Column(DataType.INTEGER)
-  status: ProjectVersionStatus;
-
   @Column(DataType.STRING)
   project_id: string;
 
+  @Column(DataType.STRING)
+  project_version_id: string;
+
   @BelongsTo(() => Project, "project_id")
   project: Project;
-  @HasMany(() => Instance, "project_version_id")
-  instances: Instance[];
+
+  @BelongsTo(() => ProjectVersion, "project_version_id")
+  project_version: ProjectVersion;
 }

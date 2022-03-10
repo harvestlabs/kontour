@@ -16,6 +16,7 @@ import { v4 } from "uuid";
 import User from "./User.model";
 import Node from "./Node.model";
 import ProjectVersion, { ProjectVersionStatus } from "./ProjectVersion.model";
+import Instance from "./Instance.model";
 
 @Table({
   timestamps: true,
@@ -52,6 +53,8 @@ export default class Project extends Model {
   node: Node;
   @HasMany(() => ProjectVersion, "project_id")
   versions: ProjectVersion[];
+  @HasMany(() => Instance, "project_id")
+  instances: Instance[];
 
   // Publishes to blockchain and returns address as well as saves to db
   static async createProjectWithDefaultVersion({
@@ -66,7 +69,7 @@ export default class Project extends Model {
       metadata: project_metadata,
     });
     // create a default version
-    const projectVersion = await ProjectVersion.create({
+    await ProjectVersion.create({
       project_id: project.id,
       data: version_metadata,
       status: ProjectVersionStatus.DRAFT,

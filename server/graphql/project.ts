@@ -21,7 +21,6 @@ const ProjectQueries = {
       return await Project.findByPk(args.id);
     },
   },
-
   projects: {
     type: new GraphQLList(ProjectType),
 
@@ -36,7 +35,6 @@ const ProjectQueries = {
         type: GraphQLString,
       },
     },
-
     resolve: async (parent, args, ctx, info) => {
       const params = {
         limit: args.limit,

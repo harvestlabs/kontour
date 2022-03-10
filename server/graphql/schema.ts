@@ -1,6 +1,7 @@
 import { GraphQLObjectType, GraphQLSchema } from "graphql";
 import { UserQueries, UserMutations } from "./user";
 import { ProjectQueries, ProjectMutations } from "./project";
+import { InstanceQueries, InstanceMutations } from "./instance";
 import { ContractQueries, ContractMutations } from "./contract";
 import {
   ContractSourceQueries,
@@ -13,7 +14,8 @@ const rootQuery = new GraphQLObjectType({
     UserQueries,
     ContractQueries,
     ProjectQueries,
-    ContractSourceQueries
+    ContractSourceQueries,
+    InstanceQueries
   ),
 });
 const rootMutation = new GraphQLObjectType({
@@ -22,7 +24,8 @@ const rootMutation = new GraphQLObjectType({
     UserMutations,
     ContractMutations,
     ProjectMutations,
-    ContractSourceMutations
+    ContractSourceMutations,
+    InstanceMutations
   ),
 });
 

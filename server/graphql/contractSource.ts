@@ -5,8 +5,7 @@ import {
   GraphQLObjectType,
   GraphQLString,
 } from "graphql";
-import { GraphQLJSONObject } from "graphql-type-json";
-import Contract, { templateMapping } from "../models/Contract.model";
+import { GraphQLUpload } from "graphql-upload";
 import ContractSource from "../models/ContractSource.model";
 import S3ContractSource from "../models/S3ContractSource.model";
 import ContractSourceType from "./types/contractSource";
@@ -84,6 +83,15 @@ const ContractSourceMutations = {
     resolve: async (parent, args, ctx, info) => {
       return await S3ContractSource.importFromS3(args.key, ctx.state.user.id);
     },
+  },
+  ingestFromQuikdraw: {
+    type: ContractSourceType,
+    args: {
+      file: {
+        type: GraphQLUpload,
+      },
+    },
+    resolve: async (parent, args, ctx, info) => {},
   },
 };
 

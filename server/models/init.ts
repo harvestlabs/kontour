@@ -8,6 +8,7 @@ import LoginData from "./LoginData.model";
 
 import Project from "./Project.model";
 import ProjectVersion from "./ProjectVersion.model";
+import Instance from "./Instance.model";
 
 import Contract from "./Contract.model";
 import ContractSource from "./ContractSource.model";
@@ -42,6 +43,7 @@ export default function init() {
     Contract,
     Project,
     ProjectVersion,
+    Instance,
     Node,
   ]);
   postInit();
