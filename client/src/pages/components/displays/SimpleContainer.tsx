@@ -32,7 +32,16 @@ export const CONTRACT_ABI = gql`
     contract(address: $address) {
       id
       address
-      abi
+      contractSource {
+        name
+        source
+        abi
+        chain_id
+        functions
+        events
+        constructor
+      }
+      node
     }
   }
 `;

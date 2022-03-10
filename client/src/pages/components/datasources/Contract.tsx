@@ -24,14 +24,16 @@ const IMPORT_CONTRACT = gql`
     ) {
       id
       address
-      name
-      source
-      abi
-      chain_id
+      contractSource {
+        name
+        source
+        abi
+        chain_id
+        functions
+        events
+        constructor
+      }
       node
-      functions
-      events
-      constructor
     }
   }
 `;
@@ -48,14 +50,16 @@ const CREATE_FROM_TEMPLATE = gql`
     ) {
       id
       address
-      name
-      source
-      abi
-      chain_id
+      contractSource {
+        name
+        source
+        abi
+        chain_id
+        functions
+        events
+        constructor
+      }
       node
-      functions
-      events
-      constructor
     }
   }
 `;

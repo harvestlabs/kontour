@@ -5,7 +5,10 @@ import {
   GraphQLString,
 } from "graphql";
 import GraphQLJSON, { GraphQLJSONObject } from "graphql-type-json";
-import { getConstructor, getEvents, getFunctions } from "../../utils/etherscan";
+import ContractSource from "../../models/ContractSource.model";
+import { ContractSourceType as SourceType } from "../../models/Contract.model";
+import ContractSourceType from "./contractSource";
+import S3ContractSource from "../../models/S3ContractSource.model";
 
 const ContractType = new GraphQLObjectType({
   name: "Contract",
@@ -17,18 +20,6 @@ const ContractType = new GraphQLObjectType({
     address: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    chain_id: {
-      type: new GraphQLNonNull(GraphQLInt),
-    },
-    abi: {
-      type: GraphQLJSON,
-    },
-    name: {
-      type: new GraphQLNonNull(GraphQLString),
-    },
-    source: {
-      type: new GraphQLNonNull(GraphQLString),
-    },
     node: {
       type: GraphQLJSONObject,
       resolve: async (parent, args, ctx, info) => {
@@ -36,22 +27,21 @@ const ContractType = new GraphQLObjectType({
         return node.data;
       },
     },
-    functions: {
-      type: new GraphQLNonNull(GraphQLJSON),
-      resolve: (parent, args, ctx, info) => {
-        return getFunctions(parent.abi);
-      },
-    },
-    events: {
-      type: new GraphQLNonNull(GraphQLJSON),
-      resolve: (parent, args, ctx, info) => {
-        return getEvents(parent.abi);
-      },
-    },
-    constructor: {
-      type: GraphQLJSON,
-      resolve: (parent, args, ctx, info) => {
-        return getConstructor(parent.abi);
+    contractSource: {
+      type: new GraphQLNonNull(ContractSourceType),
+      resolve: async (parent, args, ctx, info) => {
+        let model: any = ContractSource;
+        switch (parent.contract_source_type) {
+          case SourceType.S3_IMPORT:
+            model = S3ContractSource;
+          default:
+            break;
+        }
+        return await model.findOne({
+          where: {
+            id: parent.contract_source_id,
+          },
+        });
       },
     },
   },

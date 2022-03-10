@@ -57,20 +57,8 @@ export default class Contract extends Model {
   @Column(DataType.STRING)
   address: string;
 
-  @Column(DataType.INTEGER)
-  chain_id: number;
-
   @Column(DataType.STRING)
   node_id: string;
-
-  @Column(DataType.STRING)
-  source: string;
-
-  @Column(DataType.STRING)
-  name: string;
-
-  @Column(DataType.JSON)
-  abi: any;
 
   @Column(DataType.INTEGER)
   contract_source_type: ContractSourceType;
@@ -120,17 +108,14 @@ export default class Contract extends Model {
     const results = await deployfromTemplate(toDeploy, projectId);
     const contract = await Contract.create({
       address: results.address,
-      chain_id: project.node.data.chainId,
-      abi: results.abi,
-      source: results.source,
       node_id: project.node.id,
       name: toDeploy.name,
     });
     await ContractSource.create({
       address: contract.address,
-      chain_id: contract.chain_id,
-      abi: contract.abi,
-      source: contract.source,
+      chain_id: project.node.data.chainId,
+      abi: results.abi,
+      source: results.source,
       name: toDeploy.name,
       user_id: project.user_id,
     });
@@ -145,10 +130,6 @@ export default class Contract extends Model {
     const results = await deployFromSource(cs.source, cs.name, projectId);
     const contract = await Contract.create({
       address: results.address,
-      chain_id: project.node.data.chainId,
-      abi: results.abi,
-      source: results.source,
-      node_id: project.node.id,
       name: cs.name,
       contract_source_type: ContractSourceType.FROM_CHAIN,
       contract_source_id: cs.id,
@@ -173,11 +154,7 @@ export default class Contract extends Model {
     });
     const contract = await Contract.create({
       address: results.address,
-      chain_id: project.node.data.chainId,
-      abi: results.abi,
-      source: results.source,
       node_id: project.node.id,
-      name: name,
       contract_source_type: ContractSourceType.TEMPLATE,
       contract_source_id: contractSource.id,
     });
@@ -200,11 +177,7 @@ export default class Contract extends Model {
     );
     return await Contract.create({
       address: address,
-      chain_id: project.node.data.chainId,
-      abi: jsonData.abi,
-      source: jsonData.source,
       node_id: project.node.id,
-      name: jsonData.contractName,
       contract_source_type: ContractSourceType.S3_IMPORT,
       contract_source_id: source.id,
     });

@@ -16,6 +16,9 @@ const ContractSourceType = new GraphQLObjectType({
     name: {
       type: new GraphQLNonNull(GraphQLString),
     },
+    chain_id: {
+      type: GraphQLInt,
+    },
     source: {
       type: new GraphQLNonNull(GraphQLString),
     },

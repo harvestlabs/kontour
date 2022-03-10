@@ -15,9 +15,16 @@ const CONTRACT = gql`
     contract(address: $address) {
       id
       address
-      functions
-      events
-      constructor
+      contractSource {
+        name
+        source
+        abi
+        chain_id
+        functions
+        events
+        constructor
+      }
+      node
     }
   }
 `;
