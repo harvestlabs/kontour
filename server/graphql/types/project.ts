@@ -1,5 +1,11 @@
-import { GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import {
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLString,
+} from "graphql";
 import GraphQLJSONObject from "graphql-type-json";
+import ProjectVersionType from "./projectVersion";
 
 const ProjectType = new GraphQLObjectType({
   name: "Project",
@@ -21,6 +27,12 @@ const ProjectType = new GraphQLObjectType({
       resolve: async (parent, args, ctx, info) => {
         const node = await parent.$get("node");
         return node.data;
+      },
+    },
+    versions: {
+      type: new GraphQLList(ProjectVersionType),
+      resolve: async (parent, args, ctx, info) => {
+        return await parent.$get("versions");
       },
     },
   },

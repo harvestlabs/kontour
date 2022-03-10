@@ -73,6 +73,7 @@ const Text = {
 
 const Container = {
   variants: {
+    editor: { width: "100%", height: "100%" },
     base: {
       padding: {
         sm: "52px",

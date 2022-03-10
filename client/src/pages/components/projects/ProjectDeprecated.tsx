@@ -33,7 +33,7 @@ const UPDATE = gql`
   }
 `;
 
-function Project({ id }: { id: string }) {
+function ProjectDeprecated({ id }: { id: string }) {
   const project = useAppSelector(selectData);
   const dispatch = useAppDispatch();
   dispatch(setId(id));
@@ -218,4 +218,4 @@ function Project({ id }: { id: string }) {
   );
 }
 
-export default Project;
+export default ProjectDeprecated;

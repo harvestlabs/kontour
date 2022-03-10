@@ -27,6 +27,5 @@ const colors = {
   contourGreyLight,
   discordPurple,
 };
-console.log(colors);
 
 export default colors;

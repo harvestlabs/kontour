@@ -5,7 +5,6 @@ import { NetworkType } from "./web3";
 
 export const IS_SERVER = typeof window === "undefined";
 
-console.log(process.env.NEXT_PUBLIC_ENV);
 export const ETH_CHAIN: NetworkType =
   process.env.NEXT_PUBLIC_ENV === "prod" ? "ropsten" : "ropsten";
 

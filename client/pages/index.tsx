@@ -5,10 +5,10 @@ import { Link } from "@chakra-ui/react";
 
 import { withCookieAuth } from "@utils/auth";
 import Layout from "src/pages/layouts/Layout";
-import { NextPageWithLayout } from "types/types";
 import { Container } from "@chakra-ui/react";
+import { NextPageWithLayout } from "types/next";
 
-const Home: NextPageWithLayout = () => {
+const Home: NextPageWithLayout = (props) => {
   return (
     <Container maxW="container.lg" variant="base">
       <Head>
@@ -26,4 +26,4 @@ Home.getLayout = function getLayout(page) {
   return <Layout>{page}</Layout>;
 };
 
-export default withCookieAuth(Home);
+export default Home;

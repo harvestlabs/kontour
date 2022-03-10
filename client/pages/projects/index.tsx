@@ -7,9 +7,14 @@ import { Container } from "@chakra-ui/react";
 import CreateProject from "@components/projects/CreateProject";
 import { gql, useQuery } from "@apollo/client";
 import ProjectList from "@components/projects/ProjectList";
+import { useAppSelector } from "@redux/hooks";
+import { selectUserId } from "@redux/slices/userSlice";
+import { NextPageWithLayout } from "types/next";
+import Layout from "@layouts/Layout";
 
-const ProjectsPage = () => {
+const ProjectsPage: NextPageWithLayout = () => {
   const router = useRouter();
+  const user_id = useAppSelector(selectUserId);
 
   const onCreated = (id: string) => {
     window.location.href = `/projects/${id}`;
@@ -20,10 +25,15 @@ const ProjectsPage = () => {
         <title>Create a Project</title>
       </Head>
       <main>
+        <ProjectList user_id={user_id} />
         <CreateProject onComplete={onCreated} />
-        <ProjectList />
       </main>
     </Container>
   );
 };
+
+ProjectsPage.getLayout = function getLayout(page) {
+  return <Layout>{page}</Layout>;
+};
+
 export default ProjectsPage;

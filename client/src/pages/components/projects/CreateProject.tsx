@@ -23,7 +23,7 @@ function CreateProject({ onComplete }: CreateProjectProps) {
           onComplete(resp.data?.createProject?.id);
         }}
       >
-        Create Project
+        New Project
       </Button>
     </>
   );
