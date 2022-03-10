@@ -1,5 +1,6 @@
 import React from "react";
 import Footer from "@components/Footer";
+import ProjectEditorNavbar from "./ProjectEditorNavbar";
 import {
   Text,
   Accordion,
