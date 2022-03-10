@@ -9,7 +9,6 @@
     "lint": "next lint",
     "schema": "apollo service:download --endpoint=http://localhost:8080/graphql graphql-schema.json",
     "generate-types": "apollo codegen:generate --localSchemaFile=graphql-schema.json --target=typescript --tagName=gql --globalTypesFile globalTypes.d.ts --outputFlat ./src/graphql/__generated__/"
-
   },
   "dependencies": {
     "@apollo/client": "^3.5.8",
@@ -22,6 +21,7 @@
     "@types/cookie": "^0.4.1",
     "@types/uuid": "^8.3.4",
     "apollo-upload-client": "^17.0.0",
+    "axios": "^0.26.1",
     "cookie": "^0.4.1",
     "framer-motion": "^5",
     "graphql": "^15.8.0",
