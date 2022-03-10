@@ -7,7 +7,7 @@ export default function Layout({ children }: React.PropsWithChildren<Props>) {
   return (
     <>
       <Nav />
-      <main>{children}</main>
+      {children}
       <Footer />
     </>
   );

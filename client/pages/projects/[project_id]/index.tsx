@@ -6,7 +6,6 @@ import Image from "next/image";
 import { getLocalStorageKey } from "@utils/api_client";
 import { Container } from "@chakra-ui/react";
 import { gql, useQuery } from "@apollo/client";
-import Project from "@components/projects/Project";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import {
@@ -17,41 +16,27 @@ import {
 } from "src/redux/slices/projectSlice";
 import Layout from "@layouts/Layout";
 import { NextPageWithLayout } from "types/next";
-
-const PROJECT = gql`
-  query Project($id: String!) {
-    project(id: $id) {
-      id
-      data
-    }
-  }
-`;
+import ProjectDeprecated from "@components/projects/ProjectDeprecated";
+import ProjectEditor from "@components/projects/ProjectEditor";
+import ProjectEditorLayout from "@layouts/ProjectEditorLayout";
 
 const ProjectPage: NextPageWithLayout = () => {
   const router = useRouter();
   const { project_id } = router?.query;
   const dispatch = useDispatch();
 
-  const { data, loading, error } = useQuery(PROJECT, {
-    variables: { id: project_id },
-  });
-  useEffect(() => {
-    if (data) {
-      dispatch(setData(data.project?.data));
-    }
-  }, [data, dispatch]);
-
   return (
-    <Container maxW="container.lg" variant="base">
+    <>
       <Head>
         <title>Project</title>
       </Head>
-      <main>{data ? <Project id={data.project?.id as string} /> : null}</main>
-    </Container>
+      {/* data ? <ProjectDeprecated id={data.project?.id as string} /> : null */}
+      {project_id ? <ProjectEditor id={project_id as string} /> : "no project"}
+    </>
   );
 };
 
 ProjectPage.getLayout = function getLayout(page) {
-  return <Layout>{page}</Layout>;
+  return <ProjectEditorLayout>{page}</ProjectEditorLayout>;
 };
 export default ProjectPage;
