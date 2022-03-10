@@ -15,6 +15,8 @@ import {
   mergeData,
   selectData,
 } from "src/redux/slices/projectSlice";
+import Layout from "@layouts/Layout";
+import { NextPageWithLayout } from "types/next";
 
 const PROJECT = gql`
   query Project($id: String!) {
@@ -25,7 +27,7 @@ const PROJECT = gql`
   }
 `;
 
-const ProjectPage = () => {
+const ProjectPage: NextPageWithLayout = () => {
   const router = useRouter();
   const { project_id } = router?.query;
   const dispatch = useDispatch();
@@ -47,5 +49,9 @@ const ProjectPage = () => {
       <main>{data ? <Project id={data.project?.id as string} /> : null}</main>
     </Container>
   );
+};
+
+ProjectPage.getLayout = function getLayout(page) {
+  return <Layout>{page}</Layout>;
 };
 export default ProjectPage;

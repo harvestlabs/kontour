@@ -1,7 +1,7 @@
 import React from "react";
 import cookie from "cookie";
 import { NextPage } from "next";
-import { NextPageWithLayout } from "types/types";
+import { NextPageWithLayout } from "types/next";
 
 type ComponentWithAuthProps = {
   auth_token: string;
