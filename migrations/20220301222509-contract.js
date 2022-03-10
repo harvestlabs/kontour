@@ -15,10 +15,6 @@ module.exports = {
         allowNull: false,
       },
       address: Sequelize.DataTypes.STRING,
-      name: Sequelize.DataTypes.STRING,
-      source: Sequelize.DataTypes.TEXT("medium"),
-      abi: Sequelize.DataTypes.JSON,
-      chain_id: Sequelize.DataTypes.INTEGER,
       node_id: {
         type: Sequelize.DataTypes.UUID,
         references: {
