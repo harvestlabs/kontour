@@ -16,6 +16,7 @@ import { IS_SERVER } from "@utils/constants";
 // TODO: fix this to not be hardcoded to localhost
 const uploadLink = createUploadLink({
   uri: `${process.env.NEXT_PUBLIC_REACT_APP_SERV_PROTOCOL}${process.env.NEXT_PUBLIC_REACT_APP_SERV_HOSTNAME}/graphql`,
+  credentials: "include",
 });
 
 // TODO: only do this during development

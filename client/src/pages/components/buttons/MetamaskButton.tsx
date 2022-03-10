@@ -74,7 +74,12 @@ export default function MetaMaskButton() {
   }, [dispatch, ethProviderAvailable]);
 
   return (
-    <Button size="lg" onClick={requestUserAccounts}>
+    <Button
+      size="lg"
+      onClick={requestUserAccounts}
+      // ethProvider hydrates differently on server since it doesn't exist
+      suppressHydrationWarning={true}
+    >
       {ethProviderAvailable
         ? selectedAddress
           ? "Connected"

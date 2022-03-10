@@ -18,3 +18,7 @@ export interface ProjectsQuery_projects {
 export interface ProjectsQuery {
   projects: (ProjectsQuery_projects | null)[] | null;
 }
+
+export interface ProjectsQueryVariables {
+  user_id?: string | null;
+}

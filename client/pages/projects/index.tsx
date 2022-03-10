@@ -7,9 +7,12 @@ import { Container } from "@chakra-ui/react";
 import CreateProject from "@components/projects/CreateProject";
 import { gql, useQuery } from "@apollo/client";
 import ProjectList from "@components/projects/ProjectList";
+import { useAppSelector } from "@redux/hooks";
+import { selectUserId } from "@redux/slices/userSlice";
 
 const ProjectsPage = () => {
   const router = useRouter();
+  const user_id = useAppSelector(selectUserId);
 
   const onCreated = (id: string) => {
     window.location.href = `/projects/${id}`;
@@ -21,7 +24,7 @@ const ProjectsPage = () => {
       </Head>
       <main>
         <CreateProject onComplete={onCreated} />
-        <ProjectList />
+        <ProjectList user_id={user_id} />
       </main>
     </Container>
   );
