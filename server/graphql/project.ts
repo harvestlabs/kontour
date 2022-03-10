@@ -57,8 +57,10 @@ const ProjectMutations = {
     type: ProjectType,
     resolve: async (parent, args, ctx, info) => {
       const node = await Node.getAvailable();
-      return await Project.create({
-        data: {},
+
+      return Project.createProjectWithDefaultVersion({
+        project_metadata: {},
+        version_metadata: {},
         user_id: ctx.state?.user?.id,
         node_id: node.id,
       });
