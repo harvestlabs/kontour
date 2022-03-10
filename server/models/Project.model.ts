@@ -73,6 +73,7 @@ export default class Project extends Model {
       project_id: project.id,
       data: version_metadata,
       status: ProjectVersionStatus.DRAFT,
+      name: "V0",
     });
     return project;
   }

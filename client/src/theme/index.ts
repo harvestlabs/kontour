@@ -1,4 +1,4 @@
-import { extendTheme } from "@chakra-ui/react";
+import { extendTheme, theme as defaultTheme } from "@chakra-ui/react";
 import colors from "./colors";
 
 const Button = {
@@ -39,8 +39,14 @@ const Button = {
       // color: "purple.500",
     },
     solid: {},
-    ghost: {},
     link: {},
+    listItem: {
+      ...defaultTheme.components.Button.variants.ghost,
+      width: "100%",
+      textAlign: "left",
+      justifyContent: "flex-start",
+      borderRadius: "0",
+    },
   },
   // The default size and variant values
   defaultProps: {

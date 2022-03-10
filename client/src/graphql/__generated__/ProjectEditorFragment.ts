@@ -4,10 +4,10 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: ProjectQuery
+// GraphQL fragment: ProjectEditorFragment
 // ====================================================
 
-export interface ProjectQuery_project_versions {
+export interface ProjectEditorFragment_versions {
   __typename: "ProjectVersion";
   /**
    * The uuid of this project
@@ -19,19 +19,7 @@ export interface ProjectQuery_project_versions {
   name: string | null;
 }
 
-export interface ProjectQuery_project {
+export interface ProjectEditorFragment {
   __typename: "Project";
-  /**
-   * The uuid of this project
-   */
-  id: string;
-  versions: (ProjectQuery_project_versions | null)[] | null;
-}
-
-export interface ProjectQuery {
-  project: ProjectQuery_project | null;
-}
-
-export interface ProjectQueryVariables {
-  project_id: string;
+  versions: (ProjectEditorFragment_versions | null)[] | null;
 }
