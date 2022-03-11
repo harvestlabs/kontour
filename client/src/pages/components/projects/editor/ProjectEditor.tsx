@@ -3,8 +3,13 @@ import { Spacer, HStack, Box, Flex, Divider } from "@chakra-ui/react";
 import { v4 } from "uuid";
 import Datasource from "../Datasource";
 import { useAppSelector, useAppDispatch } from "src/redux/hooks";
-import { setId, mergeData, selectData } from "src/redux/slices/projectSlice";
-import { useCallback, useState } from "react";
+import {
+  setId,
+  mergeData,
+  selectData,
+  setSelectedContractData,
+} from "src/redux/slices/projectSlice";
+import { useCallback, useEffect, useState } from "react";
 import {
   ProjectQuery,
   ProjectQueryVariables,
@@ -17,6 +22,7 @@ import {
   ProjectVersionQuery,
   ProjectVersionQueryVariables,
 } from "@gql/__generated__/ProjectVersionQuery";
+import { useDispatch } from "react-redux";
 
 const sizeOfGutter = "30px";
 
@@ -33,12 +39,24 @@ function ProjectEditor({ project_id, version_id }: Props) {
       version_id: version_id,
     },
   });
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const sources = data?.projectVersion?.contract_sources || [];
+    if (data?.projectVersion?.contract_sources) {
+      dispatch(setSelectedContractData(sources[0]));
+    }
+  }, [data, dispatch]);
 
   return (
     <Flex flexDirection="column" width="100vw" height="100vh">
       <ProjectEditorNavbar project_id={project_id} version_id={version_id} />
-      <Flex bgColor="white" flexGrow="1">
-        <Box width={`${sidebarWidth}%`} height="100%" bgColor="white">
+      <Flex bgColor="white" flexGrow="1" minHeight="1px">
+        <Box
+          width={`${sidebarWidth}%`}
+          height="100%"
+          bgColor="white"
+          flexShrink="0"
+        >
           <VersionContractsList
             contract_sources={data?.projectVersion?.contract_sources || []}
           />
@@ -48,6 +66,7 @@ function ProjectEditor({ project_id, version_id }: Props) {
           height="100%"
           bgColor="black"
           cursor="col-resize"
+          flexShrink="0"
         />
         <Box height="100%" bgColor="yellow" flexGrow="1">
           <EditorContractView />

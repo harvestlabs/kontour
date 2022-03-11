@@ -46,7 +46,7 @@ const mockSandboxes = [
 
 export default function VersionContractsList({ contract_sources }: Props) {
   return (
-    <Flex width="100%" height="100%" flexDirection="column">
+    <Flex width="100%" height="100%" flexDirection="column" overflow="scroll">
       <Heading py="24px" justifySelf="center" textAlign="center">
         Contracts
       </Heading>
