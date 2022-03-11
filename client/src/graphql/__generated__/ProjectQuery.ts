@@ -25,7 +25,7 @@ export interface ProjectQuery_project {
    * The uuid of this project
    */
   id: string;
-  versions: (ProjectQuery_project_versions | null)[] | null;
+  versions: ProjectQuery_project_versions[] | null;
 }
 
 export interface ProjectQuery {

@@ -1,7 +1,7 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { Spacer, HStack, Box, Flex, Divider } from "@chakra-ui/react";
 import { v4 } from "uuid";
-import Datasource from "./Datasource";
+import Datasource from "../Datasource";
 import { useAppSelector, useAppDispatch } from "src/redux/hooks";
 import { setId, mergeData, selectData } from "src/redux/slices/projectSlice";
 import { useCallback, useState } from "react";
@@ -11,35 +11,37 @@ import {
 } from "@gql/__generated__/ProjectQuery";
 import ProjectEditorNavbar from "@layouts/ProjectEditorNavbar";
 import Footer from "@components/Footer";
-import ProjectContractsSidebar from "./version/VersionContractsList";
-import EditorContractView from "./editor/EditorContractView";
+import VersionContractsList from "../version/VersionContractsList";
+import EditorContractView from "./EditorContractView";
+import {
+  ProjectVersionQuery,
+  ProjectVersionQueryVariables,
+} from "@gql/__generated__/ProjectVersionQuery";
 
 const sizeOfGutter = "30px";
 
-function ProjectEditor({ id }: { id: string }) {
+type Props = { project_id: string; version_id: string };
+function ProjectEditor({ project_id, version_id }: Props) {
   const [sidebarWidth, setSidebarWidth] = useState(20);
 
-  console.log("id", id);
-
   const { data, loading, error } = useQuery<
-    ProjectQuery,
-    ProjectQueryVariables
-  >(PROJECT, {
+    ProjectVersionQuery,
+    ProjectVersionQueryVariables
+  >(PROJECT_VERSION, {
     fetchPolicy: "network-only",
     variables: {
-      project_id: id,
+      version_id: version_id,
     },
   });
-  console.log("data", data, id);
 
   return (
     <Flex flexDirection="column" width="100vw" height="100vh">
-      {!loading && data?.project != null ? (
-        <ProjectEditorNavbar project={data?.project} />
-      ) : null}
+      <ProjectEditorNavbar project_id={project_id} version_id={version_id} />
       <Flex bgColor="white" flexGrow="1">
         <Box width={`${sidebarWidth}%`} height="100%" bgColor="white">
-          <ProjectContractsSidebar />
+          <VersionContractsList
+            contract_sources={data?.projectVersion?.contract_sources || []}
+          />
         </Box>
         <Box
           width={sizeOfGutter}
@@ -56,18 +58,16 @@ function ProjectEditor({ id }: { id: string }) {
   );
 }
 
-export const PROJECT = gql`
-  query ProjectQuery($project_id: String!) {
-    project(id: $project_id) {
-      id
-      versions {
-        id
-        name
+export const PROJECT_VERSION = gql`
+  query ProjectVersionQuery($version_id: String!) {
+    projectVersion(id: $version_id) {
+      name
+      contract_sources {
+        ...VersionContractsListFragment
       }
-      ...ProjectEditorNavbarFragment
     }
   }
-  ${ProjectEditorNavbar.fragments.project}
+  ${VersionContractsList.fragments.contract}
 `;
 
 export default ProjectEditor;

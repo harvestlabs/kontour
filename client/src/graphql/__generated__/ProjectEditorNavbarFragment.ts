@@ -21,5 +21,5 @@ export interface ProjectEditorNavbarFragment_versions {
 
 export interface ProjectEditorNavbarFragment {
   __typename: "Project";
-  versions: (ProjectEditorNavbarFragment_versions | null)[] | null;
+  versions: ProjectEditorNavbarFragment_versions[] | null;
 }

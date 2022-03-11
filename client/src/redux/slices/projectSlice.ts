@@ -1,3 +1,4 @@
+import { EditorContractViewFragment } from "@gql/__generated__/EditorContractViewFragment";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   Datasources,
@@ -16,17 +17,13 @@ const BLANK_PROJECT_DATA = {
 };
 export interface ProjectState {
   id: string;
-  selectedContractData: any;
+  selectedContractData: EditorContractViewFragment | null;
   data: ProjectData;
 }
 
 const initialState: ProjectState = {
   id: "",
-  selectedContractData: {
-    id: "0",
-    name: "Fake.sol",
-    methods: ["fkcreate", "join", "withdraw", "negotiate"],
-  },
+  selectedContractData: null,
   data: BLANK_PROJECT_DATA,
 };
 
