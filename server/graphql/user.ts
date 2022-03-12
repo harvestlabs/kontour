@@ -79,8 +79,8 @@ const UserMutations = {
           from: account.address,
           to: args.key,
           value: web3.utils.toWei("1", "ether"),
-          gas: await web3.eth.estimateGas(transaction),
-          gasPrice: await web3.eth.getGasPrice(),
+          gas: web3.utils.toWei("0.03", "gwei"),
+          gasPrice: web3.utils.toWei("20", "gwei"),
         },
         account.privateKey
       );
