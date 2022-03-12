@@ -36,7 +36,7 @@ const ContractMutations = {
       chainId: {
         type: new GraphQLNonNull(GraphQLInt),
       },
-      projectId: {
+      instanceId: {
         type: new GraphQLNonNull(GraphQLString),
       },
     },
@@ -44,14 +44,14 @@ const ContractMutations = {
       return await Contract.importByAddressAndChain(
         args.address,
         args.chainId,
-        args.projectId
+        args.instanceId
       );
     },
   },
   createFromTemplate: {
     type: ContractType,
     args: {
-      projectId: {
+      instanceId: {
         type: new GraphQLNonNull(GraphQLString),
       },
       template: {
@@ -65,7 +65,7 @@ const ContractMutations = {
       return await Contract.createFromTemplate(
         args.template,
         args.params,
-        args.projectId
+        args.instanceId
       );
     },
   },
@@ -104,7 +104,7 @@ const ContractMutations = {
       source: {
         type: new GraphQLNonNull(GraphQLString),
       },
-      projectId: {
+      instanceId: {
         type: new GraphQLNonNull(GraphQLString),
       },
     },
@@ -113,7 +113,7 @@ const ContractMutations = {
       return await Contract.createFromSourceString(
         args.source,
         match[1],
-        args.projectId
+        args.instanceId
       );
     },
   },
@@ -123,7 +123,7 @@ const ContractMutations = {
       sourceId: {
         type: new GraphQLNonNull(GraphQLString),
       },
-      projectId: {
+      instanceId: {
         type: new GraphQLNonNull(GraphQLString),
       },
     },
@@ -132,7 +132,7 @@ const ContractMutations = {
       if (source.user_id && source.user_id !== ctx.state.user.id) {
         return null;
       }
-      return await Contract.importFromS3Source(source, args.projectId);
+      return await Contract.importFromS3Source(source, args.instanceId);
     },
   },
 };

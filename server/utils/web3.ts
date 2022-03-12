@@ -2,7 +2,6 @@
 import Web3 from "web3";
 import config from "../../config";
 import Node from "../../server/models/Node.model";
-import Project from "../../server/models/Project.model";
 
 console.log("polygon", config.polygon.GETH_URL);
 console.log("ethereum", config.eth.GETH_URL);
@@ -11,10 +10,10 @@ const ethWeb3 = new Web3(config.eth.GETH_URL);
 export const polygon = {
   web3: polygonWeb3,
 };
-export const local = async (projectId: string) => {
-  const project = await Project.findByPk(projectId, { include: Node });
-  console.log("local", project.node.data.hostUrl);
-  const localWeb3 = new Web3(project.node.data.hostUrl);
+export const local = async (nodeId: string) => {
+  const node = await Node.findByPk(nodeId);
+  console.log("local", node.data.hostUrl);
+  const localWeb3 = new Web3(node.data.hostUrl);
   return {
     web3: localWeb3,
     account: localWeb3.eth.accounts.privateKeyToAccount(config.ganache.PK),

@@ -24,6 +24,7 @@ import Project from "./Project.model";
 import S3ContractSource, {
   TruffleContractJSON,
 } from "./S3ContractSource.model";
+import Instance from "./Instance.model";
 
 export enum ContractSourceType {
   TEMPLATE = 1,
@@ -72,9 +73,12 @@ export default class Contract extends Model {
   static async importByAddressAndChain(
     address: string,
     chainId: number,
-    projectId: string // The project that we are importing into
+    instanceId: string
   ): Promise<Contract> {
-    const project = await Project.findByPk(projectId, { include: Node });
+    const instance = await Instance.findByPk(instanceId, {
+      include: Project,
+    });
+
     let source = await ContractSource.findOne({
       where: {
         address: address,
@@ -92,42 +96,49 @@ export default class Contract extends Model {
         abi: ABI,
         source: SourceCode,
         name: ContractName,
-        user_id: project.user_id,
+        user_id: instance.project.user_id,
       });
     }
-    return await Contract.createFromSource(source, projectId);
+    return await Contract.createFromSource(source, instanceId);
   }
 
   static async createFromTemplate(
     templateName: ContractTemplate,
     templateArgs: any,
-    projectId: string
+    instanceId: string
   ): Promise<Contract> {
-    const project = await Project.findByPk(projectId, { include: Node });
+    const instance = await Instance.findByPk(instanceId, {
+      include: { model: Project, include: [Node] },
+    });
+    const nodeId = instance.project.node.id;
     const toDeploy = new templateMapping[templateName](templateArgs);
-    const results = await deployfromTemplate(toDeploy, projectId);
+    const results = await deployfromTemplate(toDeploy, nodeId);
     const contract = await Contract.create({
       address: results.address,
-      node_id: project.node.id,
+      node_id: nodeId,
       name: toDeploy.name,
     });
     await ContractSource.create({
       address: contract.address,
-      chain_id: project.node.data.chainId,
+      chain_id: instance.project.node.data.chainId,
       abi: results.abi,
       source: results.source,
       name: toDeploy.name,
-      user_id: project.user_id,
+      user_id: instance.project.user_id,
     });
     return contract;
   }
 
   static async createFromSource(
     cs: ContractSource,
-    projectId: string
+    instanceId: string
   ): Promise<Contract> {
-    const project = await Project.findByPk(projectId, { include: Node });
-    const results = await deployFromSource(cs.source, cs.name, projectId);
+    const instance = await Instance.findByPk(instanceId, {
+      include: { model: Project, include: [Node] },
+    });
+    const nodeId = instance.project.node.id;
+
+    const results = await deployFromSource(cs.source, cs.name, nodeId);
     const contract = await Contract.create({
       address: results.address,
       name: cs.name,
@@ -140,21 +151,24 @@ export default class Contract extends Model {
   static async createFromSourceString(
     source: string,
     name: string,
-    projectId: string
+    instanceId: string
   ): Promise<Contract> {
-    const project = await Project.findByPk(projectId, { include: Node });
-    const results = await deployFromSource(source, name, projectId);
+    const instance = await Instance.findByPk(instanceId, {
+      include: { model: Project, include: [Node] },
+    });
+    const nodeId = instance.project.node.id;
+    const results = await deployFromSource(source, name, nodeId);
     const contractSource = await ContractSource.create({
       address: results.address,
-      chain_id: project.node.data.chainId,
+      chain_id: instance.project.node.data.chainId,
       abi: results.abi,
       source: results.source,
       name: name,
-      user_id: project.user_id,
+      user_id: instance.project.user_id,
     });
     const contract = await Contract.create({
       address: results.address,
-      node_id: project.node.id,
+      node_id: nodeId,
       contract_source_type: ContractSourceType.TEMPLATE,
       contract_source_id: contractSource.id,
     });
@@ -164,20 +178,23 @@ export default class Contract extends Model {
 
   static async importFromS3Source(
     source: S3ContractSource,
-    projectId: string
+    instanceId: string
   ): Promise<Contract> {
-    const project = await Project.findByPk(projectId, { include: Node });
+    const instance = await Instance.findByPk(instanceId, {
+      include: { model: Project, include: [Node] },
+    });
+    const nodeId = instance.project.node.id;
     const data = await source.fromS3();
     const jsonData: TruffleContractJSON = JSON.parse(data.toString());
 
     const address = await deployBinaryAndABI(
-      projectId,
+      nodeId,
       jsonData.bytecode,
       jsonData.abi
     );
     return await Contract.create({
       address: address,
-      node_id: project.node.id,
+      node_id: nodeId,
       contract_source_type: ContractSourceType.S3_IMPORT,
       contract_source_id: source.id,
     });

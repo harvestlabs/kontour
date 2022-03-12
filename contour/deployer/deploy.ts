@@ -22,7 +22,7 @@ export interface DeployResult {
 
 export async function deployfromTemplate(
   contract: ContractType,
-  projectId: string
+  nodeId: string
 ): Promise<DeployResult> {
   try {
     fs.rmSync(`${__dirname}/${TEMP_FILE}`);
@@ -30,7 +30,7 @@ export async function deployfromTemplate(
     // do nothing
   }
   try {
-    return await deployFromSource(contract.write(), contract.name, projectId);
+    return await deployFromSource(contract.write(), contract.name, nodeId);
   } catch (e) {
     console.log("err", e);
   }
@@ -39,7 +39,7 @@ export async function deployfromTemplate(
 export async function deployFromSource(
   source: string,
   contractName: string,
-  projectId: string
+  nodeId: string
 ): Promise<DeployResult> {
   fs.writeFileSync(`${__dirname}/${TEMP_FILE}`, source);
   await new Promise((resolve, reject) => {
@@ -67,7 +67,7 @@ export async function deployFromSource(
   let code = fs
     .readFileSync(`${__dirname}/../abis/${TEMP_BIN(contractName)}`)
     .toString();
-  const address = await deployBinaryAndABI(projectId, code, abi);
+  const address = await deployBinaryAndABI(nodeId, code, abi);
   return {
     address: address,
     abi: abi,
@@ -76,11 +76,11 @@ export async function deployFromSource(
 }
 
 export async function deployBinaryAndABI(
-  projectId: string,
+  nodeId: string,
   binary: string,
   abi: any
 ): Promise<string> {
-  const { web3, account } = await local(projectId);
+  const { web3, account } = await local(nodeId);
 
   let Contract = new web3.eth.Contract(abi);
   const transaction = Contract.deploy({ data: binary });
