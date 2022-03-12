@@ -11,9 +11,10 @@ import {
   PrimaryKey,
   AfterCreate,
   HasMany,
+  BeforeCreate,
 } from "sequelize-typescript";
 import { v4 } from "uuid";
-import Instance from "./Instance.model";
+import Instance, { InstanceStatus } from "./Instance.model";
 import Project from "./Project.model";
 
 export enum ProjectVersionStatus {
@@ -60,4 +61,16 @@ export default class ProjectVersion extends Model {
   project: Project;
   @HasMany(() => Instance, "project_version_id")
   instances: Instance[];
+
+  async createBlankHeadInstance() {
+    if (this.status === ProjectVersionStatus.DRAFT) {
+      const instance = await Instance.create({
+        project_version_id: this.id,
+        project_id: this.project_id,
+        data: {},
+        status: InstanceStatus.HEAD,
+      });
+      await instance.makeHead();
+    }
+  }
 }

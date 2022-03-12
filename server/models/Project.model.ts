@@ -11,6 +11,7 @@ import {
   PrimaryKey,
   AfterCreate,
   HasMany,
+  BeforeCreate,
 } from "sequelize-typescript";
 import { v4 } from "uuid";
 import User from "./User.model";
@@ -56,17 +57,23 @@ export default class Project extends Model {
   @HasMany(() => Instance, "project_id")
   instances: Instance[];
 
+  @BeforeCreate
+  static async assignToNode(instance: Project) {
+    if (!instance.node_id) {
+      const node = await Node.getAvailable();
+      instance.node_id = node.id;
+    }
+  }
+
   // Publishes to blockchain and returns address as well as saves to db
   static async createProjectWithDefaultVersion({
     user_id,
-    node_id,
     project_metadata = {},
     version_metadata = {},
   }): Promise<Project> {
     const project = await Project.create({
       user_id: user_id,
-      node_id: node_id,
-      metadata: project_metadata,
+      data: project_metadata,
     });
     // create a default version
     await ProjectVersion.create({
@@ -76,5 +83,14 @@ export default class Project extends Model {
       name: "V0",
     });
     return project;
+  }
+
+  async generateNewDraft(): Promise<ProjectVersion> {
+    return await ProjectVersion.create({
+      project_id: this.id,
+      data: {},
+      status: ProjectVersionStatus.DRAFT,
+      name: "Untitled",
+    });
   }
 }

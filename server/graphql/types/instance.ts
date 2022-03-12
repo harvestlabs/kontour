@@ -18,15 +18,18 @@ const InstanceType = new GraphQLObjectType({
       type: GraphQLString,
       description: "The name of the instance",
     },
+    status: {
+      type: new GraphQLNonNull(GraphQLInt),
+    },
     data: {
       type: GraphQLJSONObject,
     },
     project_id: {
-      type: GraphQLString,
+      type: new GraphQLNonNull(GraphQLString),
       description: "The id of the project this instance belongs to",
     },
     project_version_id: {
-      type: GraphQLString,
+      type: new GraphQLNonNull(GraphQLString),
       description:
         "The id of the project version this instance branched off of",
     },

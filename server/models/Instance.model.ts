@@ -15,6 +15,11 @@ import { v4 } from "uuid";
 import Project from "./Project.model";
 import ProjectVersion from "./ProjectVersion.model";
 
+export enum InstanceStatus {
+  HEAD = 1,
+  OLD = 2,
+}
+
 @Table({
   timestamps: true,
   tableName: "instances",
@@ -38,6 +43,9 @@ export default class Instance extends Model {
   @Column(DataType.STRING)
   name: string;
 
+  @Column(DataType.INTEGER)
+  status: InstanceStatus;
+
   @Column(DataType.STRING)
   project_id: string;
 
@@ -49,4 +57,20 @@ export default class Instance extends Model {
 
   @BelongsTo(() => ProjectVersion, "project_version_id")
   project_version: ProjectVersion;
+
+  async makeHead(): Promise<Instance> {
+    // Makes this instance the ONLY head of all instances of this version, marks everything else old
+    this.status = InstanceStatus.HEAD;
+    await Instance.update(
+      {
+        status: InstanceStatus.OLD,
+      },
+      {
+        where: {
+          project_version_id: this.project_version_id,
+        },
+      }
+    );
+    return await this.save();
+  }
 }
