@@ -6,8 +6,10 @@ import {
 } from "graphql";
 import { GraphQLJSONObject } from "graphql-type-json";
 import InstanceType from "./types/instance";
-import ProjectVersion from "../models/ProjectVersion.model";
-import Instance from "../models/Instance.model";
+import ProjectVersion, {
+  ProjectVersionStatus,
+} from "../models/ProjectVersion.model";
+import Instance, { InstanceStatus } from "../models/Instance.model";
 
 const InstanceQueries = {
   instance: {
@@ -48,9 +50,14 @@ const InstanceMutations = {
     },
     resolve: async (parent, args, ctx, info) => {
       const version = await ProjectVersion.findByPk(args.projectVersionId);
+      if (version.status !== ProjectVersionStatus.PUBLISHED) {
+        return null;
+      }
       return await Instance.create({
         project_id: version.project_id,
         project_version_id: version.id,
+        data: {},
+        status: InstanceStatus.HEAD,
         name: args.name || "Untitled",
       });
     },

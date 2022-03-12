@@ -9,7 +9,9 @@ import Project from "../models/Project.model";
 import Node from "../models/Node.model";
 import ProjectType from "./types/project";
 import ProjectVersionType from "./types/projectVersion";
-import ProjectVersion from "../models/ProjectVersion.model";
+import ProjectVersion, {
+  ProjectVersionStatus,
+} from "../models/ProjectVersion.model";
 
 const ProjectQueries = {
   project: {
@@ -74,6 +76,28 @@ const ProjectMutations = {
       });
     },
   },
+  createDraftVersion: {
+    type: ProjectVersionType,
+    args: {
+      projectId: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+    },
+    resolve: async (parent, args, ctx, info) => {
+      const project = await Project.findByPk(args.projectId);
+      if (project.user_id !== ctx.state?.user?.id) {
+        return null;
+      }
+      const newVersion = await ProjectVersion.create({
+        data: {},
+        status: ProjectVersionStatus.DRAFT,
+        name: "New Draft",
+        project_Id: project.id,
+      });
+      await newVersion.createBlankHeadInstance();
+      return newVersion;
+    },
+  },
   updateProject: {
     type: ProjectType,
     args: {
@@ -86,6 +110,9 @@ const ProjectMutations = {
     },
     resolve: async (parent, args, ctx, info) => {
       const project = await Project.findByPk(args.id);
+      if (project.user_id !== ctx.state?.user?.id) {
+        return null;
+      }
       project.data = {
         ...project.data,
         ...args.data,
