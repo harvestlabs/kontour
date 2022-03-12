@@ -11,6 +11,7 @@ import {
   PrimaryKey,
   AfterCreate,
 } from "sequelize-typescript";
+import Op from "sequelize/lib/operators";
 import { v4 } from "uuid";
 import Project from "./Project.model";
 import ProjectVersion from "./ProjectVersion.model";
@@ -60,7 +61,6 @@ export default class Instance extends Model {
 
   async makeHead(): Promise<Instance> {
     // Makes this instance the ONLY head of all instances of this version, marks everything else old
-    this.status = InstanceStatus.HEAD;
     await Instance.update(
       {
         status: InstanceStatus.OLD,
@@ -68,9 +68,14 @@ export default class Instance extends Model {
       {
         where: {
           project_version_id: this.project_version_id,
+          status: InstanceStatus.HEAD,
+          id: {
+            [Op.ne]: this.id,
+          },
         },
       }
     );
+    this.status = InstanceStatus.HEAD;
     return await this.save();
   }
 }

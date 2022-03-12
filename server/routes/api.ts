@@ -86,7 +86,7 @@ apiRouter.post("/ingestQuikdraw", async (ctx, next) => {
   ctx.status = 200;
   next();
 });
-apiRouter.post("/ingestQuickdraw/end", async (ctx, next) => {
+apiRouter.post("/ingestQuikdraw/end", async (ctx, next) => {
   const { apiKey: key, projectId, versionId } = ctx.request.body;
 
   const apiKey = await ApiKey.findByPk(key);
@@ -100,6 +100,7 @@ apiRouter.post("/ingestQuickdraw/end", async (ctx, next) => {
     next();
   }
   const allSources = await redis.redisClient.smembers(versionId);
+  await redis.redisClient.del(versionId);
   const version = await ProjectVersion.findByPk(versionId);
   version.data = {
     ...version.data,
