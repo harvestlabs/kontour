@@ -16,6 +16,7 @@ import ContractSource from "./ContractSource.model";
 import S3ContractSource from "./S3ContractSource.model";
 
 import Node from "./Node.model";
+import NodeAccount from "./NodeAccount.model";
 
 export default function init() {
   const sequelize = new Sequelize(
@@ -47,6 +48,7 @@ export default function init() {
     ProjectVersion,
     Instance,
     Node,
+    NodeAccount,
   ]);
   postInit();
   return sequelize;
@@ -63,4 +65,6 @@ function postInit() {
   LoginData.User = LoginData.belongsTo(User);
   Node.Projects = Node.hasMany(Project);
   Node.Contracts = Node.hasMany(Contract);
+  NodeAccount.Node = NodeAccount.belongsTo(Node);
+  NodeAccount.User = NodeAccount.belongsTo(User);
 }

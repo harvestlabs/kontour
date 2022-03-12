@@ -5,15 +5,13 @@ import {
   GraphQLObjectType,
   GraphQLString,
 } from "graphql";
-import nacl from "tweetnacl";
-import Base58 from "base-58";
 import Profile from "../models/Profile.model";
 import User from "../models/User.model";
 import UserType from "./types/user";
-import { local } from "../utils/web3";
 import ApiKey from "../models/ApiKey.model";
-
-const AIRDROP = "Airdrop Me!";
+import NodeAccountType from "./types/nodeAccount";
+import NodeAccount from "../models/NodeAccount.model";
+import Node from "../models/Node.model";
 
 const UserQueries = {
   user: {
@@ -32,6 +30,23 @@ const UserQueries = {
     description: "The current logged in user",
     resolve: (parent, args, ctx, info) => {
       return ctx.state.user;
+    },
+  },
+  nodeAccounts: {
+    type: new GraphQLNonNull(
+      new GraphQLList(new GraphQLNonNull(NodeAccountType))
+    ),
+    args: {
+      nodeId: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+    },
+    resolve: async (parent, args, ctx, info) => {
+      const userId = ctx.state?.user?.id;
+      if (!userId) {
+        return [];
+      }
+      return await NodeAccount.getAll(userId, args.nodeId);
     },
   },
 };
@@ -63,30 +78,12 @@ const UserMutations = {
       key: {
         type: new GraphQLNonNull(GraphQLString),
       },
-      projectId: {
+      nodeId: {
         type: new GraphQLNonNull(GraphQLString),
       },
     },
     resolve: async (parent, args, ctx, info) => {
-      const { web3, account } = await local(args.projectId);
-      const transaction = {
-        from: account.address,
-        to: args.key,
-        value: web3.utils.toWei("1", "ether"),
-      };
-      const signed = await web3.eth.accounts.signTransaction(
-        {
-          from: account.address,
-          to: args.key,
-          value: web3.utils.toWei("1", "ether"),
-          gas: web3.utils.toWei("0.03", "gwei"),
-          gasPrice: web3.utils.toWei("20", "gwei"),
-        },
-        account.privateKey
-      );
-      const result = await web3.eth.sendSignedTransaction(
-        signed.rawTransaction
-      );
+      const result = await Node.airdropAddress(args.nodeId, args.key, 1);
       return Boolean(result);
     },
   },
@@ -106,6 +103,21 @@ const UserMutations = {
         user_id: user.id,
       });
       return apiKey.key;
+    },
+  },
+  requestNodeAccount: {
+    type: NodeAccountType,
+    args: {
+      nodeId: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+    },
+    resolve: async (parent, args, ctx, info) => {
+      const userId = ctx.state?.user?.id;
+      if (!userId) {
+        return [];
+      }
+      return await NodeAccount.generateNew(userId, args.nodeId);
     },
   },
 };
