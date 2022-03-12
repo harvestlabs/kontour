@@ -30,7 +30,7 @@ const ProjectType = new GraphQLObjectType({
       },
     },
     versions: {
-      type: new GraphQLList(ProjectVersionType),
+      type: new GraphQLList(new GraphQLNonNull(ProjectVersionType)),
       resolve: async (parent, args, ctx, info) => {
         return await parent.$get("versions");
       },

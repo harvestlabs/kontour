@@ -8,6 +8,8 @@ import { GraphQLJSONObject } from "graphql-type-json";
 import Project from "../models/Project.model";
 import Node from "../models/Node.model";
 import ProjectType from "./types/project";
+import ProjectVersionType from "./types/projectVersion";
+import ProjectVersion from "../models/ProjectVersion.model";
 
 const ProjectQueries = {
   project: {
@@ -19,6 +21,17 @@ const ProjectQueries = {
     },
     resolve: async (parent, args, ctx, info) => {
       return await Project.findByPk(args.id);
+    },
+  },
+  projectVersion: {
+    type: ProjectVersionType,
+    args: {
+      id: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+    },
+    resolve: async (parent, args, ctx, info) => {
+      return await ProjectVersion.findByPk(args.id);
     },
   },
   projects: {

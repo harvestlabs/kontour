@@ -7,13 +7,23 @@
 // GraphQL query operation: ContractReadQuery
 // ====================================================
 
+export interface ContractReadQuery_contract_contractSource {
+  __typename: "ContractSource";
+  name: string;
+  source: string;
+  abi: any | null;
+  chain_id: number | null;
+  functions: any;
+  events: any;
+  constructor: any | null;
+}
+
 export interface ContractReadQuery_contract {
   __typename: "Contract";
   id: string;
   address: string;
-  functions: any;
-  events: any;
-  constructor: any | null;
+  contractSource: ContractReadQuery_contract_contractSource;
+  node: any | null;
 }
 
 export interface ContractReadQuery {

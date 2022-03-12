@@ -15,12 +15,13 @@ import {
   Spacer,
 } from "@chakra-ui/react";
 import VersionContractsListItem from "./VersionContractListItem";
-import VersionContractsCreateItemButton from "./VersionContractsCreateItemButton";
 import * as Icons from "react-feather";
+import { gql } from "@apollo/client";
+import { VersionContractsListFragment } from "@gql/__generated__/VersionContractsListFragment";
 
-type Props = {};
+type Props = { contract_sources: VersionContractsListFragment[] };
 
-const mockInstances = [
+const mockSandboxes = [
   {
     id: "0",
     name: "Instance 1",
@@ -42,42 +43,20 @@ const mockInstances = [
     name: "Instance 5",
   },
 ];
-const mock = [
-  {
-    id: "1",
-    name: "Machine.sol",
-    methods: ["macreate", "join", "withdraw", "negotiate"],
-  },
-  {
-    id: "2",
-    name: "Bounty.sol",
-    methods: ["bcreate", "join", "withdraw", "negotiate"],
-  },
-  {
-    id: "3",
-    name: "Treasury.sol",
-    methods: ["tcreate", "join", "withdraw", "negotiate"],
-  },
-  {
-    id: "4",
-    name: "Mint.sol",
-    methods: ["mcreate", "join", "withdraw", "negotiate"],
-  },
-];
 
-export default function VersionContractsList({
-  children,
-}: React.PropsWithChildren<Props>) {
+export default function VersionContractsList({ contract_sources }: Props) {
   return (
-    <Flex width="100%" height="100%" flexDirection="column">
+    <Flex width="100%" height="100%" flexDirection="column" overflow="scroll">
       <Heading py="24px" justifySelf="center" textAlign="center">
         Contracts
       </Heading>
-      <VersionContractsCreateItemButton />
       <Accordion allowToggle={true}>
-        {mock.map((contract) => {
+        {contract_sources.map((source) => {
           return (
-            <VersionContractsListItem key={contract.id} contract={contract} />
+            <VersionContractsListItem
+              key={source.id}
+              contract_source={source}
+            />
           );
         })}
       </Accordion>
@@ -88,13 +67,13 @@ export default function VersionContractsList({
           <h2>
             <AccordionButton>
               <Box flex="1" textAlign="left">
-                Deployed Instances
+                Sandboxes
               </Box>
             </AccordionButton>
           </h2>
           <AccordionPanel pr={0} pb={4}>
             <List spacing={3}>
-              {mockInstances.map((instance) => {
+              {mockSandboxes.map((instance) => {
                 return (
                   <ListItem
                     key={instance.id}
@@ -120,3 +99,13 @@ export default function VersionContractsList({
     </Flex>
   );
 }
+
+VersionContractsList.fragments = {
+  contract: gql`
+    fragment VersionContractsListFragment on ContractSource {
+      id
+      ...VersionContractsListItemFragment
+    }
+    ${VersionContractsListItem.fragments.contract}
+  `,
+};

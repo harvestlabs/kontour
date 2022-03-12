@@ -39,6 +39,11 @@ export default class ProjectVersion extends Model {
   @UpdatedAt
   updated_at!: Date;
 
+  /*
+   * {
+   *   contract_source_ids: id[]
+   * }
+   */
   @Column(DataType.JSON)
   data: any;
 
