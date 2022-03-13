@@ -11,7 +11,7 @@ module.exports = {
     await queryInterface.addColumn(
       "s3_contract_sources",
       "bytecode",
-      Sequelize.DataTypes.STRING
+      Sequelize.DataTypes.TEXT("medium")
     );
   },
 

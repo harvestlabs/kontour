@@ -6,8 +6,12 @@ import {
   GraphQLString,
 } from "graphql";
 import GraphQLJSON, { GraphQLJSONObject } from "graphql-type-json";
-import Contract, { templateMapping } from "../models/Contract.model";
+import Contract, {
+  ContractSourceType,
+  templateMapping,
+} from "../models/Contract.model";
 import ContractSource from "../models/ContractSource.model";
+import Instance from "../models/Instance.model";
 import S3ContractSource from "../models/S3ContractSource.model";
 import ContractType from "./types/contract";
 import { TemplateType } from "./types/template";
@@ -115,6 +119,30 @@ const ContractMutations = {
         match[1],
         args.instanceId
       );
+    },
+  },
+  deployedContractToInstance: {
+    type: ContractType,
+    args: {
+      sourceId: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+      instanceId: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+      address: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+    },
+    resolve: async (parent, args, ctx, info) => {
+      const source = await ContractSource.findByPk(args.sourceId);
+      const instance = await Instance.findByPk(args.instanceId);
+      return await Contract.create({
+        address: args.address,
+        node_id: await instance.getNodeId(),
+        contract_source_type: ContractSourceType.S3_IMPORT,
+        contract_source_id: source.id,
+      });
     },
   },
   deployFromS3Source: {

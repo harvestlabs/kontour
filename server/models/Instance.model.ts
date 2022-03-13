@@ -13,6 +13,7 @@ import {
 } from "sequelize-typescript";
 import Op from "sequelize/lib/operators";
 import { v4 } from "uuid";
+import Node from "./Node.model";
 import Project from "./Project.model";
 import ProjectVersion from "./ProjectVersion.model";
 
@@ -77,5 +78,10 @@ export default class Instance extends Model {
     );
     this.status = InstanceStatus.HEAD;
     return await this.save();
+  }
+
+  async getNodeId(): Promise<string> {
+    const project = await this.$get("project");
+    return project.node_id;
   }
 }
