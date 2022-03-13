@@ -62,6 +62,8 @@ export default class S3ContractSource extends Model {
   compiler: any;
   @Column(DataType.JSON)
   abi: any;
+  @Column(DataType.STRING)
+  bytecode: string;
   @Column(DataType.JSON)
   db: any;
 
@@ -83,6 +85,7 @@ export default class S3ContractSource extends Model {
       name: data.contractName,
       abi: data.abi,
       source: data.source,
+      bytecode: data.bytecode,
       compiler: data.compiler,
       db: data.db,
       user_id: userId,

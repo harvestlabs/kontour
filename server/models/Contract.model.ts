@@ -178,7 +178,8 @@ export default class Contract extends Model {
 
   static async importFromS3Source(
     source: S3ContractSource,
-    instanceId: string
+    instanceId: string,
+    params: any[]
   ): Promise<Contract> {
     const instance = await Instance.findByPk(instanceId, {
       include: { model: Project, include: [Node] },

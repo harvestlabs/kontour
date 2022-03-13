@@ -21,7 +21,11 @@ const ContractSourceQueries = {
       },
     },
     resolve: async (parent, args, ctx, info) => {
-      return await ContractSource.findByPk(args.id);
+      const source = await ContractSource.findByPk(args.id);
+      if (source.user_id !== ctx.state?.user?.id) {
+        return null;
+      }
+      return source;
     },
   },
   s3ContractSource: {
@@ -32,7 +36,11 @@ const ContractSourceQueries = {
       },
     },
     resolve: async (parent, args, ctx, info) => {
-      return await S3ContractSource.findByPk(args.id);
+      const source = await S3ContractSource.findByPk(args.id);
+      if (source.user_id !== ctx.state?.user?.id) {
+        return null;
+      }
+      return source;
     },
   },
   myContractSources: {

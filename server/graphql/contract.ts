@@ -5,7 +5,7 @@ import {
   GraphQLObjectType,
   GraphQLString,
 } from "graphql";
-import { GraphQLJSONObject } from "graphql-type-json";
+import GraphQLJSON, { GraphQLJSONObject } from "graphql-type-json";
 import Contract, { templateMapping } from "../models/Contract.model";
 import ContractSource from "../models/ContractSource.model";
 import S3ContractSource from "../models/S3ContractSource.model";
@@ -126,13 +126,20 @@ const ContractMutations = {
       instanceId: {
         type: new GraphQLNonNull(GraphQLString),
       },
+      params: {
+        type: new GraphQLNonNull(GraphQLJSON),
+      },
     },
     resolve: async (parent, args, ctx, info) => {
       const source = await S3ContractSource.findByPk(args.sourceId);
       if (source.user_id && source.user_id !== ctx.state.user.id) {
         return null;
       }
-      return await Contract.importFromS3Source(source, args.instanceId);
+      return await Contract.importFromS3Source(
+        source,
+        args.instanceId,
+        args.params
+      );
     },
   },
 };

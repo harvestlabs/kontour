@@ -25,6 +25,9 @@ const ContractSourceType = new GraphQLObjectType({
     abi: {
       type: GraphQLJSON,
     },
+    bytecode: {
+      type: GraphQLString,
+    },
     type: {
       type: new GraphQLNonNull(GraphQLString),
       resolve: (parent, args, ctx, info) => {
