@@ -23,6 +23,7 @@ import {
   ProjectVersionQueryVariables,
 } from "@gql/__generated__/ProjectVersionQuery";
 import { useDispatch } from "react-redux";
+import EditorInteractionView from "./EditorInteractionView";
 
 const sizeOfGutter = "30px";
 
@@ -69,7 +70,7 @@ function ProjectEditor({ project_id, version_id }: Props) {
           flexShrink="0"
         />
         <Box height="100%" bgColor="yellow" flexGrow="1">
-          <EditorContractView />
+          <EditorInteractionView />
         </Box>
       </Flex>
       <Footer />

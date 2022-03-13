@@ -39,9 +39,6 @@ let link = IS_SERVER
       uri: `${process.env.NEXT_PUBLIC_REACT_APP_WS_PROTOCOL}${process.env.NEXT_PUBLIC_REACT_APP_SERV_HOSTNAME}/graphql`,
       options: {
         reconnect: true,
-        connectionParams: {
-          Authorization: localStorage.getItem(getLocalStorageKey()),
-        },
       },
     });
 

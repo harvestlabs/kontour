@@ -21,6 +21,7 @@ import { useDispatch } from "react-redux";
 import { gql } from "@apollo/client";
 import { VersionContractsListItemFragment } from "@gql/__generated__/VersionContractsListItemFragment";
 import EditorContractView from "../editor/EditorContractView";
+import EditorInteractionView from "../editor/EditorInteractionView";
 
 type Props = { contract_source: VersionContractsListItemFragment };
 export default function VersionContractsListItem({ contract_source }: Props) {
@@ -103,7 +104,9 @@ VersionContractsListItem.fragments = {
       events
       functions
       ...EditorContractViewFragment
+      ...EditorInteractionViewFragment
     }
     ${EditorContractView.fragments.contract}
+    ${EditorInteractionView.fragments.contract}
   `,
 };
