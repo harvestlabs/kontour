@@ -13,12 +13,6 @@ module.exports = {
       "bytecode",
       Sequelize.DataTypes.TEXT("medium")
     );
-    /**
-     * Add altering commands here.
-     *
-     * Example:
-     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     */
     await queryInterface.addColumn(
       "remote_contract_sources",
       "bytecode",

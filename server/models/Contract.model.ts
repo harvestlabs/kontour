@@ -11,35 +11,17 @@ import {
 } from "sequelize-typescript";
 import { v4 } from "uuid";
 import Node from "./Node.model";
-import { getContractCode } from "../utils/etherscan";
-import SimpleStorage from "../../contour/templates/SimpleStorage";
-import {
-  deployBinaryAndABI,
-  deployFromSource,
-  deployfromTemplate,
-} from "../../contour/deployer/deploy";
-import ERC721Minter from "../../contour/templates/ERC721";
+import { deployBinaryAndABI } from "../../contour/deployer/deploy";
 import RemoteContractSource from "./RemoteContractSource.model";
 import Project from "./Project.model";
-import LocalContractSource, {
-  TruffleContractJSON,
-} from "./LocalContractSource.model";
+import LocalContractSource from "./LocalContractSource.model";
 import Instance from "./Instance.model";
 
 export enum ContractSourceType {
-  TEMPLATE = 1,
-  FROM_CHAIN = 2,
-  S3_IMPORT = 3,
+  REMOTE = 1,
+  LOCAL = 2,
 }
 
-export enum ContractTemplate {
-  SIMPLE_STORAGE = "SimpleStorage",
-  SIMPLE_ERC721 = "ERC721",
-}
-export const templateMapping = {
-  [ContractTemplate.SIMPLE_STORAGE]: SimpleStorage,
-  [ContractTemplate.SIMPLE_ERC721]: ERC721Minter,
-};
 @Table({
   timestamps: true,
   tableName: "contracts",
@@ -70,114 +52,9 @@ export default class Contract extends Model {
   @BelongsTo(() => Node, "node_id")
   node: Node;
 
-  static async importByAddressAndChain(
-    address: string,
-    chainId: number,
-    instanceId: string
-  ): Promise<Contract> {
-    const instance = await Instance.findByPk(instanceId, {
-      include: Project,
-    });
-
-    let source = await RemoteContractSource.findOne({
-      where: {
-        address: address,
-        chain_id: chainId,
-      },
-    });
-    if (!source) {
-      const { SourceCode, ABI, ContractName } = await getContractCode(
-        address,
-        chainId
-      );
-      source = await RemoteContractSource.create({
-        address: address,
-        chain_id: chainId,
-        abi: ABI,
-        source: SourceCode,
-        name: ContractName,
-        user_id: instance.project.user_id,
-      });
-    }
-    return await Contract.createFromSource(source, instanceId);
-  }
-
-  static async createFromTemplate(
-    templateName: ContractTemplate,
-    templateArgs: any,
-    instanceId: string
-  ): Promise<Contract> {
-    const instance = await Instance.findByPk(instanceId, {
-      include: { model: Project, include: [Node] },
-    });
-    const nodeId = instance.project.node.id;
-    const toDeploy = new templateMapping[templateName](templateArgs);
-    const results = await deployfromTemplate(toDeploy, nodeId);
-    const contract = await Contract.create({
-      address: results.address,
-      node_id: nodeId,
-      name: toDeploy.name,
-    });
-    await RemoteContractSource.create({
-      address: contract.address,
-      chain_id: instance.project.node.data.chainId,
-      abi: results.abi,
-      source: results.source,
-      name: toDeploy.name,
-      user_id: instance.project.user_id,
-    });
-    return contract;
-  }
-
-  static async createFromSource(
-    cs: RemoteContractSource,
-    instanceId: string
-  ): Promise<Contract> {
-    const instance = await Instance.findByPk(instanceId, {
-      include: { model: Project, include: [Node] },
-    });
-    const nodeId = instance.project.node.id;
-
-    const results = await deployFromSource(cs.source, cs.name, nodeId);
-    const contract = await Contract.create({
-      address: results.address,
-      name: cs.name,
-      contract_source_type: ContractSourceType.FROM_CHAIN,
-      contract_source_id: cs.id,
-    });
-    return contract;
-  }
-
-  static async createFromSourceString(
-    source: string,
-    name: string,
-    instanceId: string
-  ): Promise<Contract> {
-    const instance = await Instance.findByPk(instanceId, {
-      include: { model: Project, include: [Node] },
-    });
-    const nodeId = instance.project.node.id;
-    const results = await deployFromSource(source, name, nodeId);
-    const contractSource = await RemoteContractSource.create({
-      address: results.address,
-      chain_id: instance.project.node.data.chainId,
-      abi: results.abi,
-      source: results.source,
-      name: name,
-      user_id: instance.project.user_id,
-    });
-    const contract = await Contract.create({
-      address: results.address,
-      node_id: nodeId,
-      contract_source_type: ContractSourceType.TEMPLATE,
-      contract_source_id: contractSource.id,
-    });
-
-    return contract;
-  }
-
-  static async importFromS3Source(
-    source: LocalContractSource,
+  static async importFromSource(
+    source: LocalContractSource | RemoteContractSource,
+    type: ContractSourceType,
     instanceId: string,
     params: any[]
   ): Promise<Contract> {
@@ -185,18 +62,17 @@ export default class Contract extends Model {
       include: { model: Project, include: [Node] },
     });
     const nodeId = instance.project.node.id;
-    const data = await source.fromS3();
-    const jsonData: TruffleContractJSON = JSON.parse(data.toString());
 
     const address = await deployBinaryAndABI(
       nodeId,
-      jsonData.bytecode,
-      jsonData.abi
+      source.bytecode,
+      source.abi,
+      params
     );
     return await Contract.create({
       address: address,
       node_id: nodeId,
-      contract_source_type: ContractSourceType.S3_IMPORT,
+      contract_source_type: type,
       contract_source_id: source.id,
     });
   }

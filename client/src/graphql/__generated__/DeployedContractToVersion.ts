@@ -18,6 +18,7 @@ export interface DeployedContractToVersion {
 
 export interface DeployedContractToVersionVariables {
   sourceId: string;
+  sourceType: number;
   versionId: string;
   address: string;
 }

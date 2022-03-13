@@ -1,5 +1,5 @@
 import { GraphQLEnumType } from "graphql";
-import { ContractTemplate } from "../../models/Contract.model";
+import { ContractTemplate } from "../../models/RemoteContractSource.model";
 
 export const TemplateType = new GraphQLEnumType({
   name: "Template",

@@ -1,4 +1,4 @@
-import React, { constructor } from "react";
+import React from "react";
 import {
   Text,
   Accordion,

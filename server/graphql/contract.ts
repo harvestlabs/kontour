@@ -6,11 +6,10 @@ import {
   GraphQLString,
 } from "graphql";
 import GraphQLJSON, { GraphQLJSONObject } from "graphql-type-json";
-import Contract, {
-  ContractSourceType,
+import Contract, { ContractSourceType } from "../models/Contract.model";
+import RemoteContractSource, {
   templateMapping,
-} from "../models/Contract.model";
-import RemoteContractSource from "../models/RemoteContractSource.model";
+} from "../models/RemoteContractSource.model";
 import Instance from "../models/Instance.model";
 import ProjectVersion from "../models/ProjectVersion.model";
 import LocalContractSource from "../models/LocalContractSource.model";
@@ -32,48 +31,6 @@ const ContractQueries = {
 };
 
 const ContractMutations = {
-  importContract: {
-    type: ContractType,
-    args: {
-      address: {
-        type: new GraphQLNonNull(GraphQLString),
-      },
-      chainId: {
-        type: new GraphQLNonNull(GraphQLInt),
-      },
-      instanceId: {
-        type: new GraphQLNonNull(GraphQLString),
-      },
-    },
-    resolve: async (parent, args, ctx, info) => {
-      return await Contract.importByAddressAndChain(
-        args.address,
-        args.chainId,
-        args.instanceId
-      );
-    },
-  },
-  createFromTemplate: {
-    type: ContractType,
-    args: {
-      instanceId: {
-        type: new GraphQLNonNull(GraphQLString),
-      },
-      template: {
-        type: new GraphQLNonNull(TemplateType),
-      },
-      params: {
-        type: GraphQLJSONObject,
-      },
-    },
-    resolve: async (parent, args, ctx, info) => {
-      return await Contract.createFromTemplate(
-        args.template,
-        args.params,
-        args.instanceId
-      );
-    },
-  },
   getSourceForTemplate: {
     type: GraphQLString,
     args: {
@@ -92,41 +49,14 @@ const ContractMutations = {
       return toDeploy.write();
     },
   },
-  tryCompileSource: {
-    type: GraphQLJSONObject,
-    args: {
-      source: {
-        type: new GraphQLNonNull(GraphQLString),
-      },
-    },
-    resolve: async (parent, args, ctx, info) => {
-      return await RemoteContractSource.tryCompile(args.source);
-    },
-  },
-  compileAndDeployFromSource: {
-    type: ContractType,
-    args: {
-      source: {
-        type: new GraphQLNonNull(GraphQLString),
-      },
-      instanceId: {
-        type: new GraphQLNonNull(GraphQLString),
-      },
-    },
-    resolve: async (parent, args, ctx, info) => {
-      const match = args.source.match(/contract +([a-zA-Z0-9]+) *{/);
-      return await Contract.createFromSourceString(
-        args.source,
-        match[1],
-        args.instanceId
-      );
-    },
-  },
   deployedContractToVersion: {
     type: ContractType,
     args: {
       sourceId: {
         type: new GraphQLNonNull(GraphQLString),
+      },
+      sourceType: {
+        type: new GraphQLNonNull(GraphQLInt),
       },
       versionId: {
         type: new GraphQLNonNull(GraphQLString),
@@ -137,19 +67,21 @@ const ContractMutations = {
     },
     resolve: async (parent, args, ctx, info) => {
       const [source, version] = await Promise.all([
-        LocalContractSource.findByPk(args.sourceId),
+        args.sourceType === ContractSourceType.LOCAL
+          ? LocalContractSource.findByPk(args.sourceId)
+          : RemoteContractSource.findByPk(args.sourceId),
         ProjectVersion.findByPk(args.versionId),
       ]);
       const instance = await version.getHead();
       return await Contract.create({
         address: args.address,
         node_id: await instance.getNodeId(),
-        contract_source_type: ContractSourceType.S3_IMPORT,
+        contract_source_type: ContractSourceType.LOCAL,
         contract_source_id: source.id,
       });
     },
   },
-  deployFromS3Source: {
+  deployFromLocalSource: {
     type: ContractType,
     args: {
       sourceId: {
@@ -167,8 +99,9 @@ const ContractMutations = {
       if (source.user_id && source.user_id !== ctx.state.user.id) {
         return null;
       }
-      return await Contract.importFromS3Source(
+      return await Contract.importFromSource(
         source,
+        ContractSourceType.LOCAL,
         args.instanceId,
         args.params
       );

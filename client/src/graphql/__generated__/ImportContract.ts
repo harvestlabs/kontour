@@ -7,7 +7,7 @@
 // GraphQL mutation operation: ImportContract
 // ====================================================
 
-export interface ImportContract_importContract_contractSource {
+export interface ImportContract_importContract {
   __typename: "ContractSource";
   name: string;
   source: string;
@@ -18,14 +18,6 @@ export interface ImportContract_importContract_contractSource {
   constructor: any | null;
 }
 
-export interface ImportContract_importContract {
-  __typename: "Contract";
-  id: string;
-  address: string;
-  contractSource: ImportContract_importContract_contractSource;
-  node: any | null;
-}
-
 export interface ImportContract {
   importContract: ImportContract_importContract | null;
 }
@@ -33,5 +25,5 @@ export interface ImportContract {
 export interface ImportContractVariables {
   address: string;
   chainId: number;
-  instanceId: string;
+  userId: string;
 }

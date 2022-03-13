@@ -12,54 +12,32 @@ interface ContractProps {
 }
 
 const IMPORT_CONTRACT = gql`
-  mutation ImportContract(
-    $address: String!
-    $chainId: Int!
-    $instanceId: String!
-  ) {
-    importContract(
-      address: $address
-      chainId: $chainId
-      instanceId: $instanceId
-    ) {
-      id
-      address
-      contractSource {
-        name
-        source
-        abi
-        chain_id
-        functions
-        events
-        constructor
-      }
-      node
+  mutation ImportContract($address: String!, $chainId: Int!, $userId: String!) {
+    importContract(address: $address, chainId: $chainId, userId: $userId) {
+      name
+      source
+      abi
+      chain_id
+      functions
+      events
+      constructor
     }
   }
 `;
 const CREATE_FROM_TEMPLATE = gql`
   mutation CreateFromTemplate(
-    $instanceId: String!
+    $userId: String!
     $template: Template!
     $params: JSONObject!
   ) {
-    createFromTemplate(
-      instanceId: $instanceId
-      template: $template
-      params: $params
-    ) {
-      id
-      address
-      contractSource {
-        name
-        source
-        abi
-        chain_id
-        functions
-        events
-        constructor
-      }
-      node
+    createFromTemplate(userId: $userId, template: $template, params: $params) {
+      name
+      source
+      abi
+      chain_id
+      functions
+      events
+      constructor
     }
   }
 `;

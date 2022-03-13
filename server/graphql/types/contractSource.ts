@@ -5,6 +5,7 @@ import {
   GraphQLString,
 } from "graphql";
 import GraphQLJSON, { GraphQLJSONObject } from "graphql-type-json";
+import { ContractSourceType as ModelContractSourceType } from "../../models/Contract.model";
 import { getConstructor, getEvents, getFunctions } from "../../utils/etherscan";
 
 const ContractSourceType = new GraphQLObjectType({
@@ -29,9 +30,11 @@ const ContractSourceType = new GraphQLObjectType({
       type: GraphQLString,
     },
     type: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: new GraphQLNonNull(GraphQLInt),
       resolve: (parent, args, ctx, info) => {
-        return parent.constructor.name;
+        return parent.constructor.name === "RemoteContractSource"
+          ? ModelContractSourceType.REMOTE
+          : ModelContractSourceType.LOCAL;
       },
     },
     functions: {

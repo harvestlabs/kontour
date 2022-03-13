@@ -9,7 +9,7 @@ import { Template } from "./../../../globalTypes.d";
 // GraphQL mutation operation: CreateFromTemplate
 // ====================================================
 
-export interface CreateFromTemplate_createFromTemplate_contractSource {
+export interface CreateFromTemplate_createFromTemplate {
   __typename: "ContractSource";
   name: string;
   source: string;
@@ -20,20 +20,12 @@ export interface CreateFromTemplate_createFromTemplate_contractSource {
   constructor: any | null;
 }
 
-export interface CreateFromTemplate_createFromTemplate {
-  __typename: "Contract";
-  id: string;
-  address: string;
-  contractSource: CreateFromTemplate_createFromTemplate_contractSource;
-  node: any | null;
-}
-
 export interface CreateFromTemplate {
   createFromTemplate: CreateFromTemplate_createFromTemplate | null;
 }
 
 export interface CreateFromTemplateVariables {
-  instanceId: string;
+  userId: string;
   template: Template;
   params: any;
 }

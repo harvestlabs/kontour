@@ -10,6 +10,7 @@
 export interface ProjectVersionQuery_projectVersion_contract_sources {
   __typename: "ContractSource";
   id: string;
+  type: number;
   name: string;
   constructor: any | null;
   events: any;

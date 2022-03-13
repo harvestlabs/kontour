@@ -56,11 +56,12 @@ export default function VersionContractsList({
   const [deployedContractToVersion, meta] = useMutation(
     DEPLOY_CONTRACT_TO_VERSION
   );
-  const onDeploy = (sourceId: string) => {
+  const onDeploy = (sourceId: string, sourceType: number) => {
     return async (address: string) => {
       await deployedContractToVersion({
         variables: {
           sourceId: sourceId,
+          sourceType: sourceType,
           address: address,
           versionId: versionId,
         },
@@ -78,7 +79,7 @@ export default function VersionContractsList({
             <VersionContractsListItem
               key={source.id}
               contract_source={source}
-              onDeploy={onDeploy(source.id)}
+              onDeploy={onDeploy(source.id, source.type)}
             />
           );
         })}
@@ -127,6 +128,7 @@ VersionContractsList.fragments = {
   contract: gql`
     fragment VersionContractsListFragment on ContractSource {
       id
+      type
       ...VersionContractsListItemFragment
     }
     ${VersionContractsListItem.fragments.contract}
@@ -136,11 +138,13 @@ VersionContractsList.fragments = {
 const DEPLOY_CONTRACT_TO_VERSION = gql`
   mutation DeployedContractToVersion(
     $sourceId: String!
+    $sourceType: Int!
     $versionId: String!
     $address: String!
   ) {
     deployedContractToVersion(
       sourceId: $sourceId
+      sourceType: $sourceType
       versionId: $versionId
       address: $address
     ) {

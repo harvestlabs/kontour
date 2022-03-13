@@ -10,6 +10,7 @@
 export interface VersionContractsListFragment {
   __typename: "ContractSource";
   id: string;
+  type: number;
   name: string;
   constructor: any | null;
   events: any;

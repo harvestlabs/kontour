@@ -32,8 +32,12 @@ const ContractType = new GraphQLObjectType({
       resolve: async (parent, args, ctx, info) => {
         let model: any = RemoteContractSource;
         switch (parent.contract_source_type) {
-          case SourceType.S3_IMPORT:
+          case SourceType.LOCAL:
             model = LocalContractSource;
+            break;
+          case SourceType.REMOTE:
+            model = RemoteContractSource;
+            break;
           default:
             break;
         }

@@ -5,12 +5,14 @@ import {
   GraphQLObjectType,
   GraphQLString,
 } from "graphql";
-import { GraphQLUpload } from "graphql-upload";
-import ApiKey from "../models/ApiKey.model";
+
 import RemoteContractSource from "../models/RemoteContractSource.model";
 import LocalContractSource from "../models/LocalContractSource.model";
-import { uploadFile } from "../utils/s3";
 import ContractSourceType from "./types/contractSource";
+import { GraphQLJSONObject } from "graphql-type-json";
+import { tryCompile } from "../../contour/deployer/compile";
+import ProjectVersion from "../models/ProjectVersion.model";
+import { TemplateType } from "./types/template";
 
 const ContractSourceQueries = {
   remoteContractSource: {
@@ -69,20 +71,6 @@ const ContractSourceQueries = {
 };
 
 const ContractSourceMutations = {
-  createFromTruffleJSON: {
-    type: ContractSourceType,
-    args: {
-      truffleJSON: {
-        type: new GraphQLNonNull(GraphQLString),
-      },
-    },
-    resolve: async (parent, args, ctx, info) => {
-      return await LocalContractSource.uploadToS3(
-        ctx.state.user.id,
-        JSON.parse(args.truffleJSON)
-      );
-    },
-  },
   createFromS3File: {
     type: ContractSourceType,
     args: {
@@ -97,36 +85,92 @@ const ContractSourceMutations = {
       );
     },
   },
-  ingestFromQuikdraw: {
-    type: ContractSourceType,
+  tryCompileSource: {
+    type: GraphQLJSONObject,
     args: {
-      file: {
-        type: GraphQLUpload,
-      },
-      apiKey: {
+      source: {
         type: new GraphQLNonNull(GraphQLString),
       },
     },
     resolve: async (parent, args, ctx, info) => {
-      const apiKey = await ApiKey.findByPk(args.apiKey);
-
-      const { filename, mimetype, createReadStream, encoding } =
-        await args.file;
-      const fileChunks = [];
-      const stream = createReadStream();
-      stream.on("readable", () => {
-        let chunk;
-        while (null !== (chunk = stream.read())) {
-          fileChunks.push(chunk);
-        }
-      });
-      await new Promise<void>((resolve) =>
-        stream.on("end", async () => {
-          const imageBuffer = Buffer.concat(fileChunks);
-          await uploadFile(apiKey.user_id, filename, mimetype, imageBuffer);
-          resolve();
-        })
+      return await tryCompile(args.source);
+    },
+  },
+  importContract: {
+    type: ContractSourceType,
+    args: {
+      address: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+      chainId: {
+        type: new GraphQLNonNull(GraphQLInt),
+      },
+      userId: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+    },
+    resolve: async (parent, args, ctx, info) => {
+      return await RemoteContractSource.importByAddressAndChain(
+        args.address,
+        args.chainId,
+        args.userId
       );
+    },
+  },
+  createFromTemplate: {
+    type: ContractSourceType,
+    args: {
+      userId: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+      template: {
+        type: new GraphQLNonNull(TemplateType),
+      },
+      params: {
+        type: GraphQLJSONObject,
+      },
+    },
+    resolve: async (parent, args, ctx, info) => {
+      return await RemoteContractSource.createFromTemplate(
+        args.template,
+        args.params,
+        args.userId
+      );
+    },
+  },
+  compileFromSource: {
+    type: ContractSourceType,
+    args: {
+      source: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+      versionId: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+    },
+    resolve: async (parent, args, ctx, info) => {
+      const match = args.source.match(/contract +([a-zA-Z0-9]+) *{/);
+      const version = await ProjectVersion.findByPk(args.versionId);
+      if (!version) {
+        return null;
+      }
+      if (!(ctx.state?.user?.id && match[1])) {
+        return null;
+      }
+      const newSource = await RemoteContractSource.compileFromSource(
+        ctx.state.user.id,
+        args.source,
+        match[1]
+      );
+      version.data = {
+        ...version.data,
+        remote_source_ids: [
+          ...(version.data.remote_source_ids || []),
+          newSource.id,
+        ],
+      };
+      await version.save();
+      return newSource;
     },
   },
 };
