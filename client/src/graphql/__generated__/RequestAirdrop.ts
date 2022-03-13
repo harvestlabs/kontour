@@ -16,5 +16,5 @@ export interface RequestAirdrop {
 
 export interface RequestAirdropVariables {
   key: string;
-  projectId: string;
+  nodeId: string;
 }

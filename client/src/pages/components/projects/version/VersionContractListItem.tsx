@@ -18,20 +18,53 @@ import {
 import * as Icons from "react-feather";
 import { setSelectedContractData } from "@redux/slices/projectSlice";
 import { useDispatch } from "react-redux";
-import { gql } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { VersionContractsListItemFragment } from "@gql/__generated__/VersionContractsListItemFragment";
 import EditorContractView from "../editor/EditorContractView";
 import EditorInteractionView from "../editor/EditorInteractionView";
+import VersionContractDeployModal from "./VersionContractDeployModal";
 
 type Props = { contract_source: VersionContractsListItemFragment };
 export default function VersionContractsListItem({ contract_source }: Props) {
-  const { id, name } = contract_source;
+  const { id, name, abi, bytecode } = contract_source;
 
   const { functions, constructor, events } = contract_source as {
     functions: ContractSourceFunction[];
     constructor: ContractSourceConstructor;
     events: ContractSourceEvent[];
   };
+  const [isOpen, setIsOpen] = React.useState(false);
+  const onClose = () => setIsOpen(false);
+  const cancelRef = React.useRef<HTMLButtonElement>(null);
+
+  const [deployedContractToInstance, { loading, error }] = useMutation(
+    DEPLOYED_CONTRACT_TO_INSTANCE
+  );
+
+  const openDeployModal = () => {
+    setIsOpen(true);
+  };
+  const deployContract = async (
+    abi: any,
+    bytecode: string,
+    args: any[] = []
+  ) => {
+    // @ts-ignore
+    const { web3, getAccount } = window.kontour;
+    const Contract = new web3.eth.Contract(abi);
+
+    const transaction = Contract.deploy({ arguments: args, data: bytecode });
+    const result = await transaction.send({
+      from: getAccount(),
+    });
+
+    const address = result.contractAddress;
+    // await deployedContractToInstance({variables: {
+    //     sourceId: id,
+    //     instanceId:
+    // }})
+  };
+
   const dispatch = useDispatch();
   return (
     <AccordionItem>
@@ -91,6 +124,15 @@ export default function VersionContractsListItem({ contract_source }: Props) {
           })}
         </List>
       </AccordionPanel>
+      <Button onClick={() => openDeployModal()}>Hello!</Button>
+      <VersionContractDeployModal
+        cons={constructor}
+        contractName={name}
+        isOpen={isOpen}
+        cancelRef={cancelRef}
+        onClose={onClose}
+        onDeploy={(args) => deployContract(abi, bytecode!, args)}
+      />
     </AccordionItem>
   );
 }
@@ -103,6 +145,7 @@ VersionContractsListItem.fragments = {
       constructor
       events
       functions
+      bytecode
       ...EditorContractViewFragment
       ...EditorInteractionViewFragment
     }
@@ -110,3 +153,19 @@ VersionContractsListItem.fragments = {
     ${EditorInteractionView.fragments.contract}
   `,
 };
+
+const DEPLOYED_CONTRACT_TO_INSTANCE = gql`
+  mutation DeployedContractToInstance(
+    $sourceId: String!
+    $instanceId: String!
+    $address: String!
+  ) {
+    deployedContractToInstance(
+      sourceId: $sourceId
+      instanceId: $instanceId
+      address: $address
+    ) {
+      id
+    }
+  }
+`;

@@ -33,5 +33,5 @@ export interface ImportContract {
 export interface ImportContractVariables {
   address: string;
   chainId: number;
-  projectId: string;
+  instanceId: string;
 }

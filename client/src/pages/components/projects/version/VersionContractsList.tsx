@@ -19,7 +19,10 @@ import * as Icons from "react-feather";
 import { gql } from "@apollo/client";
 import { VersionContractsListFragment } from "@gql/__generated__/VersionContractsListFragment";
 
-type Props = { contract_sources: VersionContractsListFragment[] };
+type Props = {
+  contract_sources: VersionContractsListFragment[];
+  isPublished: boolean;
+};
 
 const mockSandboxes = [
   {
@@ -44,7 +47,10 @@ const mockSandboxes = [
   },
 ];
 
-export default function VersionContractsList({ contract_sources }: Props) {
+export default function VersionContractsList({
+  contract_sources,
+  isPublished,
+}: Props) {
   return (
     <Flex width="100%" height="100%" flexDirection="column" overflow="scroll">
       <Heading py="24px" justifySelf="center" textAlign="center">

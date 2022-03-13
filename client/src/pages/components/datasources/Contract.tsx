@@ -15,12 +15,12 @@ const IMPORT_CONTRACT = gql`
   mutation ImportContract(
     $address: String!
     $chainId: Int!
-    $projectId: String!
+    $instanceId: String!
   ) {
     importContract(
       address: $address
       chainId: $chainId
-      projectId: $projectId
+      instanceId: $instanceId
     ) {
       id
       address
@@ -39,12 +39,12 @@ const IMPORT_CONTRACT = gql`
 `;
 const CREATE_FROM_TEMPLATE = gql`
   mutation CreateFromTemplate(
-    $projectId: String!
+    $instanceId: String!
     $template: Template!
     $params: JSONObject!
   ) {
     createFromTemplate(
-      projectId: $projectId
+      instanceId: $instanceId
       template: $template
       params: $params
     ) {

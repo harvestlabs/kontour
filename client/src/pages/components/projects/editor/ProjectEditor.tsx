@@ -60,6 +60,7 @@ function ProjectEditor({ project_id, version_id }: Props) {
         >
           <VersionContractsList
             contract_sources={data?.projectVersion?.contract_sources || []}
+            isPublished={data?.projectVersion?.status === 2}
           />
         </Box>
         <Box
@@ -82,6 +83,7 @@ export const PROJECT_VERSION = gql`
   query ProjectVersionQuery($version_id: String!) {
     projectVersion(id: $version_id) {
       name
+      status
       contract_sources {
         ...VersionContractsListFragment
       }

@@ -14,5 +14,6 @@ export interface VersionContractsListItemFragment {
   constructor: any | null;
   events: any;
   functions: any;
+  bytecode: string | null;
   abi: any | null;
 }

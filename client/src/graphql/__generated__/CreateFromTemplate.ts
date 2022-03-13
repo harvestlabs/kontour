@@ -33,7 +33,7 @@ export interface CreateFromTemplate {
 }
 
 export interface CreateFromTemplateVariables {
-  projectId: string;
+  instanceId: string;
   template: Template;
   params: any;
 }

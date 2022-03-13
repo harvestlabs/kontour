@@ -14,6 +14,7 @@ export interface ProjectVersionQuery_projectVersion_contract_sources {
   constructor: any | null;
   events: any;
   functions: any;
+  bytecode: string | null;
   abi: any | null;
 }
 
@@ -23,6 +24,10 @@ export interface ProjectVersionQuery_projectVersion {
    * The name of the version
    */
   name: string | null;
+  /**
+   * The ProjectVersionStatus of this version
+   */
+  status: number | null;
   /**
    * The contract sources for project version
    */

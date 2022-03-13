@@ -1,19 +1,19 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Button } from "@chakra-ui/react";
 
 import logger from "@utils/logger";
-import { eth, web3 } from "@utils/constants";
+import { IS_SERVER } from "@utils/constants";
 import { selectAddress, setAddressTo } from "@redux/slices/ethSlice";
 import { useAppDispatch, useAppSelector } from "@redux/hooks";
 
 export default function MetaMaskButton() {
   const dispatch = useAppDispatch();
   // @ts-ignore
-  const kontour = window.kontour;
+  const kontour = IS_SERVER ? null : window.kontour;
   const ethProviderAvailable = kontour?.isMetamaskAvailable();
   const selectedAddress = useAppSelector(selectAddress);
 
-  logger.log("[Metamask] selectedAddress: ", eth, selectedAddress);
+  logger.log("[Metamask] selectedAddress: ", selectedAddress);
 
   useEffect(() => {
     async function checkAccounts() {
