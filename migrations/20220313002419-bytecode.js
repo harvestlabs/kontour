@@ -9,7 +9,18 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
     await queryInterface.addColumn(
-      "s3_contract_sources",
+      "local_contract_sources",
+      "bytecode",
+      Sequelize.DataTypes.TEXT("medium")
+    );
+    /**
+     * Add altering commands here.
+     *
+     * Example:
+     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
+     */
+    await queryInterface.addColumn(
+      "remote_contract_sources",
       "bytecode",
       Sequelize.DataTypes.TEXT("medium")
     );
@@ -22,6 +33,7 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    await queryInterface.removeColumn("s3_contract_sources", "bytecode");
+    await queryInterface.removeColumn("local_contract_sources", "bytecode");
+    await queryInterface.removeColumn("remote_contract_sources", "bytecode");
   },
 };
