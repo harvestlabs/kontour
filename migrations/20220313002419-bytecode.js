@@ -22,6 +22,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    await queryInterface.removeColumn("s3_contract_sources");
+    await queryInterface.removeColumn("s3_contract_sources", "bytecode");
   },
 };
