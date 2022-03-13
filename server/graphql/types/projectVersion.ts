@@ -29,8 +29,8 @@ const ProjectVersionType = new GraphQLObjectType({
       type: new GraphQLList(new GraphQLNonNull(ContractSourceType)),
       description: "The contract sources for project version",
       resolve: async (parent, args, ctx, info) => {
-        let local = [];
-        let remote = [];
+        let local = [],
+          remote = [];
         if (
           parent.data?.local_source_ids?.length != null &&
           parent.data?.local_source_ids?.length > 0
