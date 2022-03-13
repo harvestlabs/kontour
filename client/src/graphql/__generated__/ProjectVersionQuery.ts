@@ -14,6 +14,7 @@ export interface ProjectVersionQuery_projectVersion_contract_sources {
   constructor: any | null;
   events: any;
   functions: any;
+  abi: any | null;
 }
 
 export interface ProjectVersionQuery_projectVersion {

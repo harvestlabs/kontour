@@ -4,10 +4,10 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL fragment: VersionContractsListFragment
+// GraphQL fragment: EditorInteractionViewFragment
 // ====================================================
 
-export interface VersionContractsListFragment {
+export interface EditorInteractionViewFragment {
   __typename: "ContractSource";
   id: string;
   name: string;

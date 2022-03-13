@@ -1,11 +1,8 @@
 (function () {
-  let web3,
-    eth,
-    abi,
-    address = "0xFdaEae2089b4AeBf89838954c598cfB99E3F11AA";
+  let web3, eth, abi, address;
 
   // most recently used account
-  let account = "0xDE45fE1Eb48a0dd6d501e395437AEC12667e76cb";
+  let account;
 
   let contract;
 
@@ -19,7 +16,7 @@
   };
 
   const onWeb3Loaded = () => {
-    web3 = new window.Web3("ws://localhost:8545");
+    web3 = new window.Web3(window.Web3.givenProvider);
   };
 
   const onMetamaskLoaded = async () => {
@@ -103,8 +100,11 @@
     return account;
   };
 
+  const isMetamaskAvailable = () => eth != null;
+
   // request metamask accounts. returns true if success, false if not connected
   const requestMetamaskAccounts = async () => {
+    console.log("switching?");
     // first switch to the proper chain before even connecting
     await switchToProperNode();
     if (eth == null) {
@@ -123,10 +123,14 @@
     return account;
   };
 
-  const setupContract = (abi) => {
+  const setupContract = (abi, contractAddress) => {
     abi = abi;
 
     console.log("address contract", address);
+    if (!contractAddress) {
+      throw new Error("no address provided");
+    }
+    address = contractAddress;
     contract = new web3.eth.Contract(abi, address);
   };
 
@@ -137,9 +141,9 @@
     // const acc = web3.eth.accounts.create();
     // console.log("agcc", acc);
     // web3.eth.personal.importRawKey(acc.privateKey, "password");
+    console.log("Unlocking account", account);
 
-    console.log("account pss", account);
-    web3.eth.personal.unlockAccount(account, "password", 10000);
+    // web3.eth.personal.lockAccount(account);
 
     if (account == null) {
       throw new Error("User has not connected Metamask");
@@ -147,17 +151,11 @@
     console.log("arguments", args[0]);
     console.log("accounts", contract);
 
-    const transactionParameters = {
-      to: address,
-      from: account,
-      data: contract.methods[methodName](...args).encodeABI(),
-    };
+    console.log("contract methods", args, methodName, account);
 
     const result = await contract.methods[methodName](...args)
       .send({
         from: account,
-        gas: await web3.eth.estimateGas(transactionParameters),
-        gasPrice: await web3.eth.getGasPrice(),
       })
       .on("error", function (error, receipt) {
         console.error("error", error);
@@ -294,6 +292,7 @@
     send,
     call,
     getAccount,
+    isMetamaskAvailable,
 
     // // returns: new Promise
     // function sendMETHOD(ARGS) {
