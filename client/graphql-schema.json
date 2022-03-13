@@ -1469,7 +1469,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "Project",
+              "name": "ProjectVersion",
               "ofType": null
             },
             "isDeprecated": false,

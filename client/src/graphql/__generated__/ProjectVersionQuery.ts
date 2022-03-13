@@ -30,6 +30,10 @@ export interface ProjectVersionQuery_projectVersion {
    */
   status: number | null;
   /**
+   * The id of the project this version belongs to
+   */
+  project_id: string | null;
+  /**
    * The contract sources for project version
    */
   contract_sources: ProjectVersionQuery_projectVersion_contract_sources[] | null;

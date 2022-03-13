@@ -26,8 +26,8 @@ import EditorInteractionView from "./EditorInteractionView";
 
 const sizeOfGutter = "30px";
 
-type Props = { project_id: string; version_id: string };
-function ProjectEditor({ project_id, version_id }: Props) {
+type Props = { version_id: string };
+function ProjectEditor({ version_id }: Props) {
   const [sidebarWidth, setSidebarWidth] = useState(20);
 
   const { data, loading, error } = useQuery<
@@ -47,33 +47,47 @@ function ProjectEditor({ project_id, version_id }: Props) {
     }
   }, [data, dispatch]);
 
+  const projectVersion = data?.projectVersion;
+  const project_id = projectVersion?.project_id;
+  if (projectVersion && !project_id) {
+    throw new Error("Project version cannot have no project_id");
+  }
+  console.log("projec", data, projectVersion, project_id, version_id);
+
   return (
     <Flex flexDirection="column" width="100vw" height="100vh">
-      <ProjectEditorNavbar project_id={project_id} version_id={version_id} />
-      <Flex bgColor="white" flexGrow="1" minHeight="1px">
-        <Box
-          width={`${sidebarWidth}%`}
-          height="100%"
-          bgColor="white"
-          flexShrink="0"
-        >
-          <VersionContractsList
-            contract_sources={data?.projectVersion?.contract_sources || []}
-            isPublished={data?.projectVersion?.status === 2}
-            versionId={version_id}
+      {projectVersion && project_id ? (
+        <>
+          <ProjectEditorNavbar
+            project_id={project_id}
+            version_id={version_id}
           />
-        </Box>
-        <Box
-          width={sizeOfGutter}
-          height="100%"
-          bgColor="black"
-          cursor="col-resize"
-          flexShrink="0"
-        />
-        <Box height="100%" bgColor="yellow" flexGrow="1">
-          <EditorInteractionView />
-        </Box>
-      </Flex>
+          <Flex bgColor="white" flexGrow="1" minHeight="1px">
+            <Box
+              width={`${sidebarWidth}%`}
+              height="100%"
+              bgColor="white"
+              flexShrink="0"
+            >
+              <VersionContractsList
+                contract_sources={data?.projectVersion?.contract_sources || []}
+                isPublished={data?.projectVersion?.status === 2}
+                versionId={version_id}
+              />
+            </Box>
+            <Box
+              width={sizeOfGutter}
+              height="100%"
+              bgColor="black"
+              cursor="col-resize"
+              flexShrink="0"
+            />
+            <Box height="100%" bgColor="yellow" flexGrow="1">
+              <EditorInteractionView />
+            </Box>
+          </Flex>
+        </>
+      ) : null}
       <Footer />
     </Flex>
   );
@@ -84,6 +98,7 @@ export const PROJECT_VERSION = gql`
     projectVersion(id: $version_id) {
       name
       status
+      project_id
       contract_sources {
         ...VersionContractsListFragment
       }

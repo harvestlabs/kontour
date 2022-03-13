@@ -17,7 +17,7 @@ const ProjectsPage: NextPageWithLayout = () => {
   const user_id = useAppSelector(selectUserId);
 
   const onCreated = (id: string) => {
-    window.location.href = `/projects/${id}`;
+    window.location.href = `/versions/${id}`;
   };
   return (
     <Container maxW="container.lg" variant="base">

@@ -7,7 +7,7 @@ import ProjectEditorLayout from "@layouts/ProjectEditorLayout";
 
 const ProjectVersionPage: NextPageWithLayout = () => {
   const router = useRouter();
-  const { project_id, version_id } = router?.query;
+  const { version_id } = router?.query;
 
   return (
     <>
@@ -15,17 +15,10 @@ const ProjectVersionPage: NextPageWithLayout = () => {
         <title>Project</title>
       </Head>
       {/* data ? <ProjectDeprecated id={data.project?.id as string} /> : null */}
-      {project_id ? (
-        version_id ? (
-          <ProjectEditor
-            project_id={project_id as string}
-            version_id={version_id as string}
-          />
-        ) : (
-          "no version"
-        )
+      {version_id ? (
+        <ProjectEditor version_id={version_id as string} />
       ) : (
-        "no project"
+        "no version"
       )}
     </>
   );

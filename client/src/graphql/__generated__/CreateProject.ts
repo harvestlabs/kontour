@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface CreateProject_createProject {
-  __typename: "Project";
+  __typename: "ProjectVersion";
   /**
    * The uuid of this project
    */
