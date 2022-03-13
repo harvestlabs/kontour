@@ -16,12 +16,13 @@ import {
 } from "@chakra-ui/react";
 import VersionContractsListItem from "./VersionContractListItem";
 import * as Icons from "react-feather";
-import { gql } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { VersionContractsListFragment } from "@gql/__generated__/VersionContractsListFragment";
 
 type Props = {
   contract_sources: VersionContractsListFragment[];
   isPublished: boolean;
+  versionId: string;
 };
 
 const mockSandboxes = [
@@ -50,7 +51,22 @@ const mockSandboxes = [
 export default function VersionContractsList({
   contract_sources,
   isPublished,
+  versionId,
 }: Props) {
+  const [deployedContractToVersion, meta] = useMutation(
+    DEPLOY_CONTRACT_TO_VERSION
+  );
+  const onDeploy = (sourceId: string) => {
+    return async (address: string) => {
+      await deployedContractToVersion({
+        variables: {
+          sourceId: sourceId,
+          address: address,
+          versionId: versionId,
+        },
+      });
+    };
+  };
   return (
     <Flex width="100%" height="100%" flexDirection="column" overflow="scroll">
       <Heading py="24px" justifySelf="center" textAlign="center">
@@ -62,6 +78,7 @@ export default function VersionContractsList({
             <VersionContractsListItem
               key={source.id}
               contract_source={source}
+              onDeploy={onDeploy(source.id)}
             />
           );
         })}
@@ -115,3 +132,19 @@ VersionContractsList.fragments = {
     ${VersionContractsListItem.fragments.contract}
   `,
 };
+
+const DEPLOY_CONTRACT_TO_VERSION = gql`
+  mutation DeployedContractToVersion(
+    $sourceId: String!
+    $versionId: String!
+    $address: String!
+  ) {
+    deployedContractToVersion(
+      sourceId: $sourceId
+      versionId: $versionId
+      address: $address
+    ) {
+      id
+    }
+  }
+`;

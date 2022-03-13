@@ -61,6 +61,7 @@ function ProjectEditor({ project_id, version_id }: Props) {
           <VersionContractsList
             contract_sources={data?.projectVersion?.contract_sources || []}
             isPublished={data?.projectVersion?.status === 2}
+            versionId={version_id}
           />
         </Box>
         <Box

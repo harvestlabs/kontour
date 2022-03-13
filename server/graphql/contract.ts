@@ -12,6 +12,7 @@ import Contract, {
 } from "../models/Contract.model";
 import ContractSource from "../models/ContractSource.model";
 import Instance from "../models/Instance.model";
+import ProjectVersion from "../models/ProjectVersion.model";
 import S3ContractSource from "../models/S3ContractSource.model";
 import ContractType from "./types/contract";
 import { TemplateType } from "./types/template";
@@ -121,13 +122,13 @@ const ContractMutations = {
       );
     },
   },
-  deployedContractToInstance: {
+  deployedContractToVersion: {
     type: ContractType,
     args: {
       sourceId: {
         type: new GraphQLNonNull(GraphQLString),
       },
-      instanceId: {
+      versionId: {
         type: new GraphQLNonNull(GraphQLString),
       },
       address: {
@@ -135,8 +136,11 @@ const ContractMutations = {
       },
     },
     resolve: async (parent, args, ctx, info) => {
-      const source = await ContractSource.findByPk(args.sourceId);
-      const instance = await Instance.findByPk(args.instanceId);
+      const [source, version] = await Promise.all([
+        S3ContractSource.findByPk(args.sourceId),
+        ProjectVersion.findByPk(args.versionId),
+      ]);
+      const instance = await version.getHead();
       return await Contract.create({
         address: args.address,
         node_id: await instance.getNodeId(),

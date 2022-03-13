@@ -24,8 +24,14 @@ import EditorContractView from "../editor/EditorContractView";
 import EditorInteractionView from "../editor/EditorInteractionView";
 import VersionContractDeployModal from "./VersionContractDeployModal";
 
-type Props = { contract_source: VersionContractsListItemFragment };
-export default function VersionContractsListItem({ contract_source }: Props) {
+type Props = {
+  contract_source: VersionContractsListItemFragment;
+  onDeploy: (address: string) => Promise<void>;
+};
+export default function VersionContractsListItem({
+  contract_source,
+  onDeploy,
+}: Props) {
   const { id, name, abi, bytecode } = contract_source;
 
   const { functions, constructor, events } = contract_source as {
@@ -36,10 +42,6 @@ export default function VersionContractsListItem({ contract_source }: Props) {
   const [isOpen, setIsOpen] = React.useState(false);
   const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef<HTMLButtonElement>(null);
-
-  const [deployedContractToInstance, { loading, error }] = useMutation(
-    DEPLOYED_CONTRACT_TO_INSTANCE
-  );
 
   const openDeployModal = () => {
     setIsOpen(true);
@@ -57,12 +59,9 @@ export default function VersionContractsListItem({ contract_source }: Props) {
     const result = await transaction.send({
       from: getAccount(),
     });
-
-    const address = result.contractAddress;
-    // await deployedContractToInstance({variables: {
-    //     sourceId: id,
-    //     instanceId:
-    // }})
+    const address = result.options.address;
+    await onDeploy(address);
+    onClose();
   };
 
   const dispatch = useDispatch();
@@ -153,19 +152,3 @@ VersionContractsListItem.fragments = {
     ${EditorInteractionView.fragments.contract}
   `,
 };
-
-const DEPLOYED_CONTRACT_TO_INSTANCE = gql`
-  mutation DeployedContractToInstance(
-    $sourceId: String!
-    $instanceId: String!
-    $address: String!
-  ) {
-    deployedContractToInstance(
-      sourceId: $sourceId
-      instanceId: $instanceId
-      address: $address
-    ) {
-      id
-    }
-  }
-`;

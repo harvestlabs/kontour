@@ -117,10 +117,6 @@ const BASIC_LOGGING = {
           { error: requestContext.errors }
         );
       },
-
-      async willSendResponse(requestContext) {
-        logger.info("response sent", { repsonse: requestContext.response });
-      },
     };
   },
 };

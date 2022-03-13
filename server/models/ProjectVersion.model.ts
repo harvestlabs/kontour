@@ -73,4 +73,13 @@ export default class ProjectVersion extends Model {
       await instance.makeHead();
     }
   }
+
+  async getHead() {
+    return await Instance.findOne({
+      where: {
+        project_version_id: this.id,
+        status: InstanceStatus.HEAD,
+      },
+    });
+  }
 }
