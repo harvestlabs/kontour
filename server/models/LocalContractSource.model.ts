@@ -41,10 +41,10 @@ export interface TruffleContractJSON {
 
 @Table({
   timestamps: true,
-  tableName: "s3_contract_sources",
+  tableName: "local_contract_sources",
   underscored: true,
 })
-export default class S3ContractSource extends Model {
+export default class LocalContractSource extends Model {
   @Default(v4)
   @PrimaryKey
   @Column(DataType.UUID)
@@ -80,8 +80,8 @@ export default class S3ContractSource extends Model {
   static async uploadToS3(
     userId: string,
     data: TruffleContractJSON
-  ): Promise<S3ContractSource> {
-    const newContractSource = await S3ContractSource.create({
+  ): Promise<LocalContractSource> {
+    const newContractSource = await LocalContractSource.create({
       name: data.contractName,
       abi: data.abi,
       source: data.source,
@@ -102,11 +102,11 @@ export default class S3ContractSource extends Model {
   static async importFromS3(
     key: string,
     userId: string
-  ): Promise<S3ContractSource> {
+  ): Promise<LocalContractSource> {
     const data: TruffleContractJSON = JSON.parse(
       (await getFile(key)).toString()
     );
-    return await S3ContractSource.uploadToS3(userId, data);
+    return await LocalContractSource.uploadToS3(userId, data);
   }
 
   async fromS3(): Promise<Buffer> {

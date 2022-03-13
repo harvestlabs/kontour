@@ -42,7 +42,8 @@ export default class ProjectVersion extends Model {
 
   /*
    * {
-   *   contract_source_ids: id[]
+   *   local_source_ids: id[]
+   *   remote_source_ids: id[]
    * }
    */
   @Column(DataType.JSON)

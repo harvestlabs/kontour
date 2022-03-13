@@ -23,10 +23,10 @@ export interface CompileResult {
 
 @Table({
   timestamps: true,
-  tableName: "contract_sources",
+  tableName: "remote_contract_sources",
   underscored: true,
 })
-export default class ContractSource extends Model {
+export default class RemoteContractSource extends Model {
   @Default(v4)
   @PrimaryKey
   @Column(DataType.UUID)

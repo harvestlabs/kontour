@@ -6,7 +6,8 @@ import {
   GraphQLString,
 } from "graphql";
 import GraphQLJSONObject from "graphql-type-json";
-import S3ContractSource from "../../models/S3ContractSource.model";
+import LocalContractSource from "../../models/LocalContractSource.model";
+import RemoteContractSource from "../../models/RemoteContractSource.model";
 import ContractSourceType from "./contractSource";
 
 const ProjectVersionType = new GraphQLObjectType({
@@ -28,26 +29,29 @@ const ProjectVersionType = new GraphQLObjectType({
       type: new GraphQLList(new GraphQLNonNull(ContractSourceType)),
       description: "The contract sources for project version",
       resolve: async (parent, args, ctx, info) => {
-        console.log("hello", parent.data);
+        let local,
+          remote = [];
         if (
-          parent.data?.contract_source_ids?.length != null &&
-          parent.data?.contract_source_ids?.length > 0
+          parent.data?.local_source_ids?.length != null &&
+          parent.data?.local_source_ids?.length > 0
         ) {
-          const a = await Promise.all(
-            parent.data?.contract_source_ids?.map(
-              async (contract_source_id: string) => {
-                const contract = await S3ContractSource.findByPk(
-                  contract_source_id
-                );
-                return contract;
-              }
-            )
-          );
-          console.log("jellj", a);
-          return a;
-        } else {
-          return [];
+          local = await LocalContractSource.findAll({
+            where: {
+              id: parent.data.local_source_ids,
+            },
+          });
         }
+        if (
+          parent.data?.remote_source_ids?.length != null &&
+          parent.data?.remote_source_ids?.length > 0
+        ) {
+          remote = await RemoteContractSource.findAll({
+            where: {
+              id: parent.data.remote_source_ids,
+            },
+          });
+        }
+        return local + remote;
       },
     },
     project_id: {

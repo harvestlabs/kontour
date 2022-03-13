@@ -19,11 +19,11 @@ import {
   deployfromTemplate,
 } from "../../contour/deployer/deploy";
 import ERC721Minter from "../../contour/templates/ERC721";
-import ContractSource from "./ContractSource.model";
+import RemoteContractSource from "./RemoteContractSource.model";
 import Project from "./Project.model";
-import S3ContractSource, {
+import LocalContractSource, {
   TruffleContractJSON,
-} from "./S3ContractSource.model";
+} from "./LocalContractSource.model";
 import Instance from "./Instance.model";
 
 export enum ContractSourceType {
@@ -79,7 +79,7 @@ export default class Contract extends Model {
       include: Project,
     });
 
-    let source = await ContractSource.findOne({
+    let source = await RemoteContractSource.findOne({
       where: {
         address: address,
         chain_id: chainId,
@@ -90,7 +90,7 @@ export default class Contract extends Model {
         address,
         chainId
       );
-      source = await ContractSource.create({
+      source = await RemoteContractSource.create({
         address: address,
         chain_id: chainId,
         abi: ABI,
@@ -118,7 +118,7 @@ export default class Contract extends Model {
       node_id: nodeId,
       name: toDeploy.name,
     });
-    await ContractSource.create({
+    await RemoteContractSource.create({
       address: contract.address,
       chain_id: instance.project.node.data.chainId,
       abi: results.abi,
@@ -130,7 +130,7 @@ export default class Contract extends Model {
   }
 
   static async createFromSource(
-    cs: ContractSource,
+    cs: RemoteContractSource,
     instanceId: string
   ): Promise<Contract> {
     const instance = await Instance.findByPk(instanceId, {
@@ -158,7 +158,7 @@ export default class Contract extends Model {
     });
     const nodeId = instance.project.node.id;
     const results = await deployFromSource(source, name, nodeId);
-    const contractSource = await ContractSource.create({
+    const contractSource = await RemoteContractSource.create({
       address: results.address,
       chain_id: instance.project.node.data.chainId,
       abi: results.abi,
@@ -177,7 +177,7 @@ export default class Contract extends Model {
   }
 
   static async importFromS3Source(
-    source: S3ContractSource,
+    source: LocalContractSource,
     instanceId: string,
     params: any[]
   ): Promise<Contract> {

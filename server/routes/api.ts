@@ -3,7 +3,7 @@ import Router from "koa-router";
 import ApiKey from "../models/ApiKey.model";
 import Project from "../models/Project.model";
 import ProjectVersion from "../models/ProjectVersion.model";
-import S3ContractSource from "../models/S3ContractSource.model";
+import LocalContractSource from "../models/LocalContractSource.model";
 import redis from "../utils/redis";
 import authRouter from "./auth";
 
@@ -75,7 +75,7 @@ apiRouter.post("/ingestQuikdraw", async (ctx, next) => {
     stream.on("end", async () => {
       const data = Buffer.concat(fileChunks);
 
-      const source = await S3ContractSource.uploadToS3(
+      const source = await LocalContractSource.uploadToS3(
         apiKey.user_id,
         JSON.parse(data.toString())
       );
@@ -104,7 +104,7 @@ apiRouter.post("/ingestQuikdraw/end", async (ctx, next) => {
   const version = await ProjectVersion.findByPk(versionId);
   version.data = {
     ...version.data,
-    contract_source_ids: allSources,
+    local_source_ids: allSources,
   };
   await version.save();
   await version.createBlankHeadInstance();

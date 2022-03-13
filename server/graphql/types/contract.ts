@@ -5,10 +5,10 @@ import {
   GraphQLString,
 } from "graphql";
 import GraphQLJSON, { GraphQLJSONObject } from "graphql-type-json";
-import ContractSource from "../../models/ContractSource.model";
+import RemoteContractSource from "../../models/RemoteContractSource.model";
 import { ContractSourceType as SourceType } from "../../models/Contract.model";
 import ContractSourceType from "./contractSource";
-import S3ContractSource from "../../models/S3ContractSource.model";
+import LocalContractSource from "../../models/LocalContractSource.model";
 
 const ContractType = new GraphQLObjectType({
   name: "Contract",
@@ -30,10 +30,10 @@ const ContractType = new GraphQLObjectType({
     contractSource: {
       type: new GraphQLNonNull(ContractSourceType),
       resolve: async (parent, args, ctx, info) => {
-        let model: any = ContractSource;
+        let model: any = RemoteContractSource;
         switch (parent.contract_source_type) {
           case SourceType.S3_IMPORT:
-            model = S3ContractSource;
+            model = LocalContractSource;
           default:
             break;
         }

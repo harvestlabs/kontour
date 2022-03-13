@@ -238,7 +238,7 @@
             "deprecationReason": null
           },
           {
-            "name": "contractSource",
+            "name": "remoteContractSource",
             "description": null,
             "args": [
               {
@@ -267,7 +267,7 @@
             "deprecationReason": null
           },
           {
-            "name": "s3ContractSource",
+            "name": "localContractSource",
             "description": null,
             "args": [
               {
@@ -1518,7 +1518,7 @@
             "deprecationReason": null
           },
           {
-            "name": "deployedContractToInstance",
+            "name": "deployedContractToVersion",
             "description": null,
             "args": [
               {
@@ -1538,7 +1538,7 @@
                 "deprecationReason": null
               },
               {
-                "name": "instanceId",
+                "name": "versionId",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",

@@ -12,8 +12,8 @@ import ProjectVersion from "./ProjectVersion.model";
 import Instance from "./Instance.model";
 
 import Contract from "./Contract.model";
-import ContractSource from "./ContractSource.model";
-import S3ContractSource from "./S3ContractSource.model";
+import RemoteContractSource from "./RemoteContractSource.model";
+import LocalContractSource from "./LocalContractSource.model";
 
 import Node from "./Node.model";
 import NodeAccount from "./NodeAccount.model";
@@ -41,8 +41,8 @@ export default function init() {
     ApiKey,
     LoginData,
     Profile,
-    S3ContractSource,
-    ContractSource,
+    LocalContractSource,
+    RemoteContractSource,
     Contract,
     Project,
     ProjectVersion,

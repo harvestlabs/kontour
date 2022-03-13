@@ -32,11 +32,11 @@ export default function EditorInteractionView({}: Props) {
   const contracts: InteractableContractFragment[] = [
     {
       __typename: "Contract",
-      id: "2e232973-934d-4955-9438-97019ebd4b60",
-      address: "0xbB3E54f2456885EB1af717db2a4ED0D3A4d7942E",
+      id: "6fad925c-d243-4947-a3d4-229cd7687309",
+      address: "0x115ec7873BF8A7BD118f269E80d4EBbbF589Bab2",
       contractSource: {
         __typename: "ContractSource",
-        id: "3ba55c39-3fe9-46c7-8653-b3aff931cd26",
+        id: "afe1bd94-1e9a-4032-ae1b-d72df116162e",
         ...contract_source,
       },
     },

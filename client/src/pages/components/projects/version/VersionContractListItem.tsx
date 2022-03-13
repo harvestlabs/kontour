@@ -123,7 +123,9 @@ export default function VersionContractsListItem({
           })}
         </List>
       </AccordionPanel>
-      <Button onClick={() => openDeployModal()}>Hello!</Button>
+      <Button colorScheme="blue" onClick={() => openDeployModal()}>
+        Deploy
+      </Button>
       <VersionContractDeployModal
         cons={constructor}
         contractName={name}

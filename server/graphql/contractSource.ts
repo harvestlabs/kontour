@@ -7,13 +7,13 @@ import {
 } from "graphql";
 import { GraphQLUpload } from "graphql-upload";
 import ApiKey from "../models/ApiKey.model";
-import ContractSource from "../models/ContractSource.model";
-import S3ContractSource from "../models/S3ContractSource.model";
+import RemoteContractSource from "../models/RemoteContractSource.model";
+import LocalContractSource from "../models/LocalContractSource.model";
 import { uploadFile } from "../utils/s3";
 import ContractSourceType from "./types/contractSource";
 
 const ContractSourceQueries = {
-  contractSource: {
+  remoteContractSource: {
     type: ContractSourceType,
     args: {
       id: {
@@ -21,14 +21,14 @@ const ContractSourceQueries = {
       },
     },
     resolve: async (parent, args, ctx, info) => {
-      const source = await ContractSource.findByPk(args.id);
+      const source = await RemoteContractSource.findByPk(args.id);
       if (source.user_id !== ctx.state?.user?.id) {
         return null;
       }
       return source;
     },
   },
-  s3ContractSource: {
+  localContractSource: {
     type: ContractSourceType,
     args: {
       id: {
@@ -36,7 +36,7 @@ const ContractSourceQueries = {
       },
     },
     resolve: async (parent, args, ctx, info) => {
-      const source = await S3ContractSource.findByPk(args.id);
+      const source = await LocalContractSource.findByPk(args.id);
       if (source.user_id !== ctx.state?.user?.id) {
         return null;
       }
@@ -53,17 +53,17 @@ const ContractSourceQueries = {
       if (!userId) {
         return [];
       }
-      const s3Sources = await S3ContractSource.findAll({
+      const localSources = await LocalContractSource.findAll({
         where: {
           user_id: userId,
         },
       });
-      const sources = await ContractSource.findAll({
+      const remoteSources = await RemoteContractSource.findAll({
         where: {
           user_id: userId,
         },
       });
-      return [...s3Sources, ...sources];
+      return [...localSources, ...remoteSources];
     },
   },
 };
@@ -77,7 +77,7 @@ const ContractSourceMutations = {
       },
     },
     resolve: async (parent, args, ctx, info) => {
-      return await S3ContractSource.uploadToS3(
+      return await LocalContractSource.uploadToS3(
         ctx.state.user.id,
         JSON.parse(args.truffleJSON)
       );
@@ -91,7 +91,10 @@ const ContractSourceMutations = {
       },
     },
     resolve: async (parent, args, ctx, info) => {
-      return await S3ContractSource.importFromS3(args.key, ctx.state.user.id);
+      return await LocalContractSource.importFromS3(
+        args.key,
+        ctx.state.user.id
+      );
     },
   },
   ingestFromQuikdraw: {

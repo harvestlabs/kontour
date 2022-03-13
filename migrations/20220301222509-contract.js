@@ -31,7 +31,7 @@ module.exports = {
       updated_at: Sequelize.DataTypes.DATE,
     });
 
-    await queryInterface.createTable("contract_sources", {
+    await queryInterface.createTable("remote_contract_sources", {
       id: {
         type: Sequelize.DataTypes.UUID,
         primaryKey: true,
@@ -56,7 +56,7 @@ module.exports = {
       updated_at: Sequelize.DataTypes.DATE,
     });
 
-    await queryInterface.createTable("s3_contract_sources", {
+    await queryInterface.createTable("local_contract_sources", {
       id: {
         type: Sequelize.DataTypes.UUID,
         primaryKey: true,

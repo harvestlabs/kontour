@@ -10,10 +10,10 @@ import Contract, {
   ContractSourceType,
   templateMapping,
 } from "../models/Contract.model";
-import ContractSource from "../models/ContractSource.model";
+import RemoteContractSource from "../models/RemoteContractSource.model";
 import Instance from "../models/Instance.model";
 import ProjectVersion from "../models/ProjectVersion.model";
-import S3ContractSource from "../models/S3ContractSource.model";
+import LocalContractSource from "../models/LocalContractSource.model";
 import ContractType from "./types/contract";
 import { TemplateType } from "./types/template";
 
@@ -100,7 +100,7 @@ const ContractMutations = {
       },
     },
     resolve: async (parent, args, ctx, info) => {
-      return await ContractSource.tryCompile(args.source);
+      return await RemoteContractSource.tryCompile(args.source);
     },
   },
   compileAndDeployFromSource: {
@@ -137,7 +137,7 @@ const ContractMutations = {
     },
     resolve: async (parent, args, ctx, info) => {
       const [source, version] = await Promise.all([
-        S3ContractSource.findByPk(args.sourceId),
+        LocalContractSource.findByPk(args.sourceId),
         ProjectVersion.findByPk(args.versionId),
       ]);
       const instance = await version.getHead();
@@ -163,7 +163,7 @@ const ContractMutations = {
       },
     },
     resolve: async (parent, args, ctx, info) => {
-      const source = await S3ContractSource.findByPk(args.sourceId);
+      const source = await LocalContractSource.findByPk(args.sourceId);
       if (source.user_id && source.user_id !== ctx.state.user.id) {
         return null;
       }
