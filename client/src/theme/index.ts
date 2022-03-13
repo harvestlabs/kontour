@@ -85,6 +85,7 @@ const Container = {
         sm: "52px",
         md: "80px",
       },
+      minHeight: "100vh",
       maxWidth: {
         md: "1080px",
         xl: "1366px",

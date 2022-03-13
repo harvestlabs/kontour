@@ -70,19 +70,19 @@ export default class Project extends Model {
     user_id,
     project_metadata = {},
     version_metadata = {},
-  }): Promise<Project> {
+  }): Promise<ProjectVersion> {
     const project = await Project.create({
       user_id: user_id,
       data: project_metadata,
     });
     // create a default version
-    await ProjectVersion.create({
+    const version = await ProjectVersion.create({
       project_id: project.id,
       data: version_metadata,
       status: ProjectVersionStatus.DRAFT,
       name: "V0",
     });
-    return project;
+    return version;
   }
 
   async generateNewDraft(): Promise<ProjectVersion> {

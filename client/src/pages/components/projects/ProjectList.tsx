@@ -36,21 +36,22 @@ function ProjectList({ user_id }: Props) {
   console.log("projects", data);
 
   return projects != null ? (
-    <Wrap
-      width="100%"
-      columns={5}
-      spacing={{ base: "15px", md: "30px" }}
-      alignItems="center"
-      justify="center"
-    >
-      {projects.map((project) =>
-        project ? (
-          <Box key={project.id}>
-            <ProjectPreview project={project} />
-          </Box>
-        ) : null
-      )}
-    </Wrap>
+    <Flex width="100%">
+      <Wrap
+        columns={5}
+        spacing={{ base: "15px", md: "30px" }}
+        alignItems="center"
+        justify="center"
+      >
+        {projects.map((project) =>
+          project ? (
+            <Box key={project.id}>
+              <ProjectPreview project={project} />
+            </Box>
+          ) : null
+        )}
+      </Wrap>
+    </Flex>
   ) : null;
 }
 

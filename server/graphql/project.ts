@@ -67,13 +67,14 @@ const ProjectQueries = {
 
 const ProjectMutations = {
   createProject: {
-    type: ProjectType,
+    type: ProjectVersionType,
     resolve: async (parent, args, ctx, info) => {
-      return Project.createProjectWithDefaultVersion({
+      const versionCreated = await Project.createProjectWithDefaultVersion({
         project_metadata: {},
         version_metadata: {},
         user_id: ctx.state?.user?.id,
       });
+      return versionCreated;
     },
   },
   createDraftVersion: {
