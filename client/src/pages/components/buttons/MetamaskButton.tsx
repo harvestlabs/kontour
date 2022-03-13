@@ -7,10 +7,10 @@ import { selectAddress, setAddressTo } from "@redux/slices/ethSlice";
 import { useAppDispatch, useAppSelector } from "@redux/hooks";
 
 export default function MetaMaskButton() {
+  const dispatch = useAppDispatch();
   // @ts-ignore
   const kontour = window.kontour;
-  const ethProviderAvailable = kontour.isMetamaskAvailable();
-  const dispatch = useAppDispatch();
+  const ethProviderAvailable = kontour?.isMetamaskAvailable();
   const selectedAddress = useAppSelector(selectAddress);
 
   logger.log("[Metamask] selectedAddress: ", eth, selectedAddress);

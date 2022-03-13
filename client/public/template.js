@@ -17,10 +17,13 @@
 
   const onWeb3Loaded = () => {
     web3 = new window.Web3(window.Web3.givenProvider);
+    window.kontour.web3 = web3;
   };
 
   const onMetamaskLoaded = async () => {
     eth = await detectEthereumProvider();
+    window.kontour.eth = eth;
+    window.kontour.web3 = web3;
   };
 
   const init = () => {
@@ -283,6 +286,8 @@
     return await call("get");
   };
 
+  console.log(web3);
+
   /* exports */
   window.kontour = {
     init,
@@ -299,7 +304,7 @@
     // }
 
     /* escape hatches */
-    web3,
+    web3: () => web3,
     eth,
 
     /* generated code */
