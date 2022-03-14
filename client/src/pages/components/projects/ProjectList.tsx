@@ -19,12 +19,16 @@ type Props = {
 function ProjectList({ user_id }: Props) {
   const queryProps: {
     fetchPolicy: WatchQueryFetchPolicy;
-    user_id?: string;
+    variables?: {
+      user_id?: string;
+    };
   } = {
     fetchPolicy: "network-only",
   };
   if (user_id != null) {
-    queryProps.user_id = user_id;
+    queryProps.variables = {
+      user_id,
+    };
   }
 
   const { data, loading, error } = useQuery<ProjectsQuery>(
