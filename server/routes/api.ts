@@ -2,10 +2,12 @@ import fs from "fs";
 import Router from "koa-router";
 import ApiKey from "../models/ApiKey.model";
 import Project from "../models/Project.model";
+import Node from "../models/Node.model";
 import ProjectVersion from "../models/ProjectVersion.model";
 import LocalContractSource from "../models/LocalContractSource.model";
 import redis from "../utils/redis";
 import authRouter from "./auth";
+import Contract, { ContractSourceType } from "../models/Contract.model";
 
 const apiRouter = new Router({
   prefix: "/api",
@@ -26,12 +28,15 @@ apiRouter.post("/ingestQuikdraw/start", async (ctx, next) => {
   }
   let project: Project;
   if (!projectId) {
-    project = await Project.create({
-      user_id: apiKey.user_id,
-      data: {},
-    });
+    project = await Project.create(
+      {
+        user_id: apiKey.user_id,
+        data: {},
+      },
+      { include: Node }
+    );
   } else {
-    project = await Project.findByPk(projectId);
+    project = await Project.findByPk(projectId, { include: Node });
     if (project.user_id !== apiKey.user_id) {
       ctx.status = 400;
       next();
@@ -43,9 +48,11 @@ apiRouter.post("/ingestQuikdraw/start", async (ctx, next) => {
   } else {
     version = await ProjectVersion.findByPk(versionId);
   }
+
   ctx.body = {
     projectId: project.id,
     versionId: version.id,
+    provider: project.node.data.hostUrl,
   };
   ctx.status = 200;
   next();
@@ -100,14 +107,67 @@ apiRouter.post("/ingestQuikdraw/end", async (ctx, next) => {
     next();
   }
   const allSources = await redis.redisClient.smembers(versionId);
+  const localSources = await LocalContractSource.findAll({
+    where: { id: allSources },
+  });
+  const nameToId = {};
+  localSources.forEach((s) => {
+    nameToId[s.name] = s.id;
+  });
   await redis.redisClient.del(versionId);
   const version = await ProjectVersion.findByPk(versionId);
   version.data = {
     ...version.data,
-    local_source_ids: allSources,
+    local_sources: {
+      ...version.data.local_sources,
+      ...nameToId,
+    },
   };
+  console.log("version", version.data);
   await version.save();
   await version.createBlankHeadInstance();
+  ctx.status = 200;
+  next();
+});
+apiRouter.post("/ingestQuikdraw/migrate", async (ctx, next) => {
+  const {
+    apiKey: key,
+    projectId,
+    versionId,
+    contractName,
+    args = [],
+  } = ctx.request.body;
+  const apiKey = await ApiKey.findByPk(key);
+  if (!projectId || !apiKey || !versionId) {
+    ctx.status = 400;
+    next();
+  }
+  const project = await Project.findByPk(projectId);
+  if (project.user_id !== apiKey.user_id) {
+    ctx.status = 400;
+    next();
+  }
+  const version = await ProjectVersion.findByPk(versionId);
+  const instance = await version.getHead();
+  const contractSourceId = version.data?.local_sources[contractName];
+  if (!contractSourceId) {
+    ctx.status = 400;
+    next();
+  }
+  const source = await LocalContractSource.findByPk(contractSourceId);
+  const contract = await Contract.importFromSource(
+    source,
+    ContractSourceType.LOCAL,
+    instance.id,
+    args
+  );
+  ctx.body = {
+    id: contract.id,
+    address: contract.address,
+    node_id: contract.node_id,
+    params: contract.constructor_params,
+    instance_id: instance.id,
+  };
   ctx.status = 200;
   next();
 });
