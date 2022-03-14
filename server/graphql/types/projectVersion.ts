@@ -32,23 +32,17 @@ const ProjectVersionType = new GraphQLObjectType({
       resolve: async (parent, args, ctx, info) => {
         let local = [],
           remote = [];
-        if (
-          parent.data?.local_source_ids?.length != null &&
-          parent.data?.local_source_ids?.length > 0
-        ) {
+        if (parent.data.local_sources) {
           local = await LocalContractSource.findAll({
             where: {
-              id: parent.data.local_source_ids,
+              id: Object.keys(parent.data.local_sources),
             },
           });
         }
-        if (
-          parent.data?.remote_source_ids?.length != null &&
-          parent.data?.remote_source_ids?.length > 0
-        ) {
+        if (parent.data.remote_sources) {
           remote = await RemoteContractSource.findAll({
             where: {
-              id: parent.data.remote_source_ids,
+              id: Object.keys(parent.data.remote_sources),
             },
           });
         }

@@ -86,10 +86,15 @@ apiRouter.post("/ingestQuikdraw", async (ctx, next) => {
         apiKey.user_id,
         JSON.parse(data.toString())
       );
+      if (!source) {
+        resolve(null);
+      }
       resolve(source.id);
     });
   });
-  await redis.redisClient.sadd(versionId, newSourceId);
+  if (newSourceId) {
+    await redis.redisClient.sadd(versionId, newSourceId);
+  }
   ctx.status = 200;
   next();
 });

@@ -81,6 +81,9 @@ export default class LocalContractSource extends Model {
     userId: string,
     data: TruffleContractJSON
   ): Promise<LocalContractSource> {
+    if (!data.bytecode || !data.abi) {
+      return null;
+    }
     const newContractSource = await LocalContractSource.create({
       name: data.contractName,
       abi: data.abi,

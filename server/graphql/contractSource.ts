@@ -164,10 +164,10 @@ const ContractSourceMutations = {
       );
       version.data = {
         ...version.data,
-        remote_source_ids: [
-          ...(version.data.remote_source_ids || []),
-          newSource.id,
-        ],
+        remote_sources: {
+          ...version.data.remote_sources,
+          [newSource.name]: newSource.id,
+        },
       };
       await version.save();
       return newSource;
