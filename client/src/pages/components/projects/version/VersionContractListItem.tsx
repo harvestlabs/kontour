@@ -54,7 +54,7 @@ export default function VersionContractsListItem({
   ) => {
     // @ts-ignore
     const { web3, getAccount } = window.kontour;
-    const Contract = new web3.eth.Contract(abi);
+    const Contract = new web3.eth.Contract(JSON.parse(JSON.stringify(abi)));
 
     const transaction = Contract.deploy({ arguments: args, data: bytecode });
     const account = getAccount();
