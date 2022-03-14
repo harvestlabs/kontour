@@ -57,8 +57,11 @@ export default function VersionContractsListItem({
     const Contract = new web3.eth.Contract(abi);
 
     const transaction = Contract.deploy({ arguments: args, data: bytecode });
+    const account = getAccount();
+    const g = await transaction.estimateGas({ from: account });
     const result = await transaction.send({
-      from: getAccount(),
+      from: account,
+      gas: Math.round(g * 1.25),
     });
     const address = result.options.address;
     await onDeploy(address, args);

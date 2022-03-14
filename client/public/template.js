@@ -156,9 +156,11 @@
 
     console.log("contract methods", args, methodName, account);
 
-    const result = await contract.methods[methodName](...args)
+    const transaction = contract.methods[methodName](...args);
+    const result = await transaction
       .send({
         from: account,
+        gas: await transaction.estimateGas({ from: account }),
       })
       .on("error", function (error, receipt) {
         console.error("error", error);
