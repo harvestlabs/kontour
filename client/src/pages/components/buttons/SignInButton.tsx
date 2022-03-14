@@ -5,6 +5,7 @@ import { setUserIdTo } from "@redux/slices/userSlice";
 import { AuthContext } from "@utils/auth";
 import { useContext, useEffect } from "react";
 import * as Icons from "react-feather";
+import { useDispatch } from "react-redux";
 
 export const CURRENT_USER = gql`
   query CurrentUserQuery {
@@ -18,14 +19,16 @@ export default function SignInButton() {
   const { data, loading, error } = useQuery<CurrentUserQuery>(CURRENT_USER, {
     fetchPolicy: "network-only",
   });
-
-  useEffect(() => {
-    if (data?.currentUser) {
-      setUserIdTo(data.currentUser.id);
-    }
-  }, [data]);
+  const dispatch = useDispatch();
 
   const user_id = data?.currentUser?.id;
+
+  useEffect(() => {
+    if (user_id) {
+      console.log("seeting", user_id);
+      dispatch(setUserIdTo(user_id));
+    }
+  }, [dispatch, user_id]);
 
   return (
     <Button
