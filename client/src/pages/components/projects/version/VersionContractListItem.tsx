@@ -26,7 +26,7 @@ import VersionContractDeployModal from "./VersionContractDeployModal";
 
 type Props = {
   contract_source: VersionContractsListItemFragment;
-  onDeploy: (address: string) => Promise<void>;
+  onDeploy: (address: string, params: any[]) => Promise<void>;
 };
 export default function VersionContractsListItem({
   contract_source,
@@ -43,7 +43,8 @@ export default function VersionContractsListItem({
   const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef<HTMLButtonElement>(null);
 
-  const openDeployModal = () => {
+  const openDeployModal = (e) => {
+    e.stopPropagation();
     setIsOpen(true);
   };
   const deployContract = async (
@@ -60,7 +61,7 @@ export default function VersionContractsListItem({
       from: getAccount(),
     });
     const address = result.options.address;
-    await onDeploy(address);
+    await onDeploy(address, args);
     onClose();
   };
 
@@ -76,6 +77,9 @@ export default function VersionContractsListItem({
           <Box flex="1" textAlign="left">
             {name}
           </Box>
+          <Button colorScheme="blue" onClick={(e) => openDeployModal(e)}>
+            Deploy
+          </Button>
         </AccordionButton>
       </h2>
       <AccordionPanel pr={0} pb={4}>
@@ -123,9 +127,6 @@ export default function VersionContractsListItem({
           })}
         </List>
       </AccordionPanel>
-      <Button colorScheme="blue" onClick={() => openDeployModal()}>
-        Deploy
-      </Button>
       <VersionContractDeployModal
         cons={constructor}
         contractName={name}

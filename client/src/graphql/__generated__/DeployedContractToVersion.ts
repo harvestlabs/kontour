@@ -21,4 +21,5 @@ export interface DeployedContractToVersionVariables {
   sourceType: number;
   versionId: string;
   address: string;
+  params: any;
 }

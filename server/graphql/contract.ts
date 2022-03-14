@@ -64,6 +64,9 @@ const ContractMutations = {
       address: {
         type: new GraphQLNonNull(GraphQLString),
       },
+      params: {
+        type: new GraphQLNonNull(GraphQLJSON),
+      },
     },
     resolve: async (parent, args, ctx, info) => {
       const [source, version] = await Promise.all([
@@ -76,8 +79,10 @@ const ContractMutations = {
       return await Contract.create({
         address: args.address,
         node_id: await instance.getNodeId(),
+        instance_id: instance.id,
         contract_source_type: ContractSourceType.LOCAL,
         contract_source_id: source.id,
+        constructor_params: args.params,
       });
     },
   },

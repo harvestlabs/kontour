@@ -72,7 +72,8 @@ export default class ProjectVersion extends Model {
       data: {},
       status: InstanceStatus.SANDBOX,
     });
-    if (this.status === ProjectVersionStatus.PUBLISHED) {
+    if (true) {
+      //this.status === ProjectVersionStatus.PUBLISHED) {
       const contracts = await toClone.$get("contracts");
       const toCreate = await Promise.all(
         contracts.map(async (c) => {
