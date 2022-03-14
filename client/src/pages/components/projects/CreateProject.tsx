@@ -18,6 +18,8 @@ function CreateProject({ onComplete }: CreateProjectProps) {
   return (
     <>
       <Button
+        isLoading={loading}
+        isDisabled={loading}
         onClick={async () => {
           const resp = await createProject();
           onComplete(resp.data?.createProject?.id);

@@ -13,12 +13,15 @@ import ProjectPreview from "./ProjectPreview";
 import { ProjectsQuery } from "@gql/__generated__/ProjectsQuery";
 import { ProjectVersionsListQuery } from "@gql/__generated__/ProjectVersionsListQuery";
 import ProjectVersionPreview from "./ProjectVersionPreview";
+import { useRouter } from "next/router";
+import CreateDraftVersionButton from "./CreateDraftVersionButton";
 
 type Props = {
   project_id: string;
 } & StackProps;
 
 function ProjectVersionsList({ project_id }: Props) {
+  const router = useRouter();
   const { data, loading, error } = useQuery<ProjectVersionsListQuery>(
     PROJECT_VERSIONS,
     {
@@ -32,6 +35,10 @@ function ProjectVersionsList({ project_id }: Props) {
   const { project } = data || {};
   console.log("projects", data, project_id);
 
+  const onCreated = (id: string) => {
+    router.push(`/versions/${id}`);
+  };
+
   return (
     <Flex width="100%">
       {project != null ? (
@@ -41,6 +48,10 @@ function ProjectVersionsList({ project_id }: Props) {
           alignItems="flex-start"
           justify="center"
         >
+          <CreateDraftVersionButton
+            project_id={project_id}
+            onComplete={onCreated}
+          />
           {project?.versions?.map((version) =>
             version ? (
               <Box key={project.id}>

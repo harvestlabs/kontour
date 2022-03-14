@@ -87,6 +87,7 @@ const ProjectMutations = {
     },
     resolve: async (parent, args, ctx, info) => {
       const project = await Project.findByPk(args.projectId);
+      console.log("finding project", project, args.projectId);
       if (project.user_id !== ctx.state?.user?.id) {
         return null;
       }
@@ -94,7 +95,7 @@ const ProjectMutations = {
         data: {},
         status: ProjectVersionStatus.DRAFT,
         name: "New Draft",
-        project_Id: project.id,
+        project_id: project.id,
       });
       await newVersion.createBlankHeadInstance();
       return newVersion;
