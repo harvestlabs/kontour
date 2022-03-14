@@ -53,7 +53,7 @@ export default function EditorContractView({}: Props) {
                         <Text as="span">{input.internalType}</Text>{" "}
                         <Text as="span">
                           {input.name}
-                          {idx !== constructor.inputs.length - 1 && ", "}
+                          {idx !== constructor!.inputs.length - 1 && ", "}
                         </Text>
                       </>
                     );

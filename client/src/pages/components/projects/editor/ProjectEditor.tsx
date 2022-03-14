@@ -101,7 +101,7 @@ function ProjectEditor({ version_id }: Props) {
               flexShrink="0"
             />
             <Box height="100%" bgColor="yellow" flexGrow="1">
-              <EditorInteractionView node_id={projectVersion?.node_id} />
+              <EditorInteractionView instance={projectVersion?.head_instance} />
             </Box>
           </Flex>
         </>
@@ -121,9 +121,13 @@ export const PROJECT_VERSION = gql`
       contract_sources {
         ...VersionContractsListFragment
       }
+      head_instance {
+        ...InstanceFragment
+      }
     }
   }
   ${VersionContractsList.fragments.contract}
+  ${EditorInteractionView.fragments.instance}
 `;
 
 export default ProjectEditor;

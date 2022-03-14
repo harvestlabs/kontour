@@ -2,19 +2,18 @@ import React from "react";
 import { Button, useToast } from "@chakra-ui/react";
 import { selectAddress } from "@redux/slices/ethSlice";
 import { useAppSelector } from "@redux/hooks";
-import { airdropToAddress } from "@utils/airdrop";
 import { gql, useMutation } from "@apollo/client";
 
-type Props = { node_id: string };
+type Props = { instance_id: string };
 
 const REQUEST_AIRDROP = gql`
-  mutation RequestAirdropMutation($address: String!, $node_id: String!) {
-    requestAirdrop(key: $address, nodeId: $node_id)
+  mutation RequestAirdropMutation($address: String!, $instance_id: String!) {
+    requestAirdrop(key: $address, instanceId: $instance_id)
   }
 `;
 
 export default function RequestAirdropButton({
-  node_id,
+  instance_id,
 }: React.PropsWithChildren<Props>) {
   const address = useAppSelector(selectAddress);
   const toast = useToast();
@@ -33,7 +32,7 @@ export default function RequestAirdropButton({
         const resp = await requestAirdrop({
           variables: {
             address,
-            node_id,
+            instance_id,
           },
         });
         console.log("resp", resp);

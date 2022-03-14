@@ -1,5 +1,6 @@
 import {
   GraphQLInt,
+  GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLString,
@@ -35,7 +36,9 @@ const InstanceType = new GraphQLObjectType({
         "The id of the project version this instance branched off of",
     },
     contracts: {
-      type: new GraphQLNonNull(ContractType),
+      type: new GraphQLNonNull(
+        new GraphQLList(new GraphQLNonNull(ContractType))
+      ),
       resolve: async (parent, args, ctx, info) => {
         return await parent.$get("contracts");
       },

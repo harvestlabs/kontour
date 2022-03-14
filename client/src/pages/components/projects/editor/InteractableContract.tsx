@@ -1,4 +1,4 @@
-import React, { constructor, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   Accordion,
@@ -52,14 +52,12 @@ export default function InteractableContract({
           {getters.map((func: any) => (
             <Box key={func.name}>
               <Text>Function: {func.name}</Text>
-              {func.inputs.map((input) => (
+              {func.inputs.map((input: any) => (
                 <Input key={input.name} />
               ))}
               <Button
                 key={func.name}
                 onClick={async () => {
-                  const json = JSON.parse(JSON.stringify(abi));
-
                   const a = await contract.methods[func.name]().call();
 
                   alert(a);
@@ -67,7 +65,7 @@ export default function InteractableContract({
               >
                 {func.name}(
                 {func.inputs.reduce(
-                  (memo: string, input: any, idx) =>
+                  (memo: string, input: any, idx: number) =>
                     memo +
                     (idx === func.inputs.length - 1
                       ? idx === 0
@@ -105,17 +103,20 @@ export default function InteractableContract({
                   const inputValues = (func.inputs || []).map((input: any) => {
                     return argsMapping[func.name]?.[input.name];
                   });
-
-                  const a = await contract.methods[func.name](
+                  const transaction = contract.methods[func.name](
                     ...inputValues
-                  ).send({
+                  );
+                  const account = kontour.getAccount();
+                  const g = await transaction.estimateGas({ from: account });
+                  const a = await transaction.send({
                     from: kontour.getAccount(),
+                    gas: Math.round(g * 1.25),
                   });
                 }}
               >
                 {func.name}(
                 {func.inputs.reduce(
-                  (memo: string, input: any, idx) =>
+                  (memo: string, input: any, idx: number) =>
                     memo +
                     (idx === func.inputs.length - 1
                       ? idx === 0
