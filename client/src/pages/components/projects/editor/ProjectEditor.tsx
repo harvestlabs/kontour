@@ -32,6 +32,7 @@ type Props = { version_id: string };
 function ProjectEditor({ version_id }: Props) {
   const selectedVersionId = useAppSelector(selectSelectedVersionId);
   const [sidebarWidth, setSidebarWidth] = useState(20);
+  const [projectId, setProjectId] = useState("");
 
   const [fetchVersion, { data, loading, error }] = useLazyQuery<
     ProjectVersionQuery,
@@ -57,20 +58,26 @@ function ProjectEditor({ version_id }: Props) {
     if (data?.projectVersion?.contract_sources) {
       dispatch(setSelectedContractData(sources[0]));
     }
-  }, [data, dispatch]);
+    if (
+      data?.projectVersion?.project_id &&
+      data?.projectVersion?.project_id !== projectId
+    ) {
+      setProjectId(data?.projectVersion?.project_id);
+    }
+  }, [data, dispatch, projectId]);
 
   const projectVersion = data?.projectVersion;
-  const project_id = projectVersion?.project_id;
-  if (projectVersion && !project_id) {
+  const newProjectVersionProjectId = projectVersion?.project_id;
+  if (projectVersion && !newProjectVersionProjectId) {
     throw new Error("Project version cannot have no project_id");
   }
 
   return (
     <Flex flexDirection="column" width="100vw" height="100vh">
-      {project_id ? (
+      {projectId ? (
         <>
           <ProjectEditorNavbar
-            project_id={project_id}
+            project_id={projectId}
             version_id={currentVersionId}
           />
           <Flex bgColor="white" flexGrow="1" minHeight="1px">
