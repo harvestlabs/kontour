@@ -88,8 +88,8 @@ function ProjectEditor({ version_id }: Props) {
               flexShrink="0"
             >
               <VersionContractsList
-                contract_sources={data?.projectVersion?.contract_sources || []}
-                isPublished={data?.projectVersion?.status === 2}
+                contract_sources={projectVersion?.contract_sources || []}
+                isPublished={projectVersion?.status === 2}
                 versionId={currentVersionId}
               />
             </Box>
@@ -101,7 +101,7 @@ function ProjectEditor({ version_id }: Props) {
               flexShrink="0"
             />
             <Box height="100%" bgColor="yellow" flexGrow="1">
-              <EditorInteractionView />
+              <EditorInteractionView node_id={projectVersion?.node_id} />
             </Box>
           </Flex>
         </>
@@ -117,6 +117,7 @@ export const PROJECT_VERSION = gql`
       name
       status
       project_id
+      node_id
       contract_sources {
         ...VersionContractsListFragment
       }

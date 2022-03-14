@@ -34,6 +34,10 @@ export interface ProjectVersionQuery_projectVersion {
    */
   project_id: string | null;
   /**
+   * The id of the node this version belongs to
+   */
+  node_id: string | null;
+  /**
    * The contract sources for project version
    */
   contract_sources: ProjectVersionQuery_projectVersion_contract_sources[] | null;

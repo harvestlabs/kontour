@@ -20,10 +20,11 @@ import { EditorInteractionViewFragment } from "@gql/__generated__/EditorInteract
 import Web3 from "web3";
 import { InteractableContractFragment } from "@gql/__generated__/InteractableContractFragment";
 import InteractableContract from "./InteractableContract";
+import EditorRequestAirdropButton from "./EditorRequestAirdropButton";
 
-type Props = {};
+type Props = { node_id?: string | null };
 
-export default function EditorInteractionView({}: Props) {
+export default function EditorInteractionView({ node_id }: Props) {
   const contract_source = useAppSelector(selectSelectedContractData);
 
   const [contract, setContract] = useState<any>(null);
@@ -41,10 +42,20 @@ export default function EditorInteractionView({}: Props) {
       },
     },
   ];
+  if (node_id == null) {
+    throw new Error("No test node found for this project");
+  }
 
   return contract_source != null ? (
-    <Flex width="100%" height="100%" flexDirection="column" overflow="scroll">
+    <Flex
+      width="100%"
+      height="100%"
+      flexDirection="column"
+      overflow="scroll"
+      position="relative"
+    >
       <EditorPublishButton />
+      <EditorRequestAirdropButton node_id={node_id} />
       {contracts.map((contract) => {
         return <InteractableContract key={contract.id} contract={contract} />;
       })}

@@ -58,6 +58,13 @@ const ProjectVersionType = new GraphQLObjectType({
       type: GraphQLString,
       description: "The id of the project this version belongs to",
     },
+    node_id: {
+      type: GraphQLString,
+      description: "The id of the node this version belongs to",
+      resolve: async (parent, args, ctx, info) => {
+        return (await parent.$get("project")).node_id;
+      },
+    },
     status: {
       type: GraphQLInt,
       description: "The ProjectVersionStatus of this version",

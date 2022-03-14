@@ -18,3 +18,14 @@ export default async function airdrop(nodeId: string) {
   });
   return resp;
 }
+
+export async function airdropToAddress(nodeId: string, address: string) {
+  const resp = await GraphQLClient.mutate({
+    mutation: AIRDROP,
+    variables: {
+      key: address,
+      nodeId: nodeId,
+    },
+  });
+  return resp;
+}
