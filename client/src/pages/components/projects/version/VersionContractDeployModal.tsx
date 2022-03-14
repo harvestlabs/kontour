@@ -28,9 +28,9 @@ export default function VersionContractDeployModal({
   onClose,
   onDeploy,
 }: Props) {
-  const args = Array.from(Array(cons.inputs.length));
+  const args = Array.from(Array(cons?.inputs.length));
 
-  const inputs = cons.inputs.map((i, idx) => {
+  const inputs = cons?.inputs.map((i, idx) => {
     return (
       <>
         <FormLabel>

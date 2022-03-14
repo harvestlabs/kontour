@@ -36,8 +36,6 @@ export default function InteractableContract({
 
   const contract = new kontour.web3.eth.Contract(abiJson, address);
 
-  console.log("functions", functions);
-
   const getters = functions.filter(
     (func: any) => func.stateMutability === "view"
   );
@@ -104,8 +102,6 @@ export default function InteractableContract({
               <Button
                 key={func.name}
                 onClick={async () => {
-                  console.log(argsMapping);
-
                   const inputValues = (func.inputs || []).map((input: any) => {
                     return argsMapping[func.name]?.[input.name];
                   });

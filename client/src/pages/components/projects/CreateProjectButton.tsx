@@ -18,7 +18,6 @@ interface CreateProjectButtonProps {
 function CreateProjectButton({ onComplete }: CreateProjectButtonProps) {
   const [createProject, { loading, error }] = useMutation(CREATE_PROJECT);
   const user_id = useAppSelector(selectUserId);
-  console.log("useri s", user_id);
 
   return user_id ? (
     <Button

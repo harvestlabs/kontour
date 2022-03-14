@@ -24,4 +24,4 @@ type ContractSourceConstructor = {
   inputs: ContractSourceValue[];
   stateMutability: string;
   type: "constructor";
-};
+} | null;

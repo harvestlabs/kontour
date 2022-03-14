@@ -25,7 +25,6 @@ export default function SignInButton() {
 
   useEffect(() => {
     if (user_id) {
-      console.log("seeting", user_id);
       dispatch(setUserIdTo(user_id));
     }
   }, [dispatch, user_id]);

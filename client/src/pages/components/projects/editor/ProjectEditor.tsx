@@ -1,4 +1,4 @@
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { Spacer, HStack, Box, Flex, Divider } from "@chakra-ui/react";
 import { v4 } from "uuid";
 import { useAppSelector, useAppDispatch } from "src/redux/hooks";
@@ -7,6 +7,7 @@ import {
   mergeData,
   selectData,
   setSelectedContractData,
+  selectSelectedVersionId,
 } from "src/redux/slices/projectSlice";
 import { useCallback, useEffect, useState } from "react";
 import {
@@ -27,19 +28,30 @@ import EditorInteractionView from "./EditorInteractionView";
 const sizeOfGutter = "30px";
 
 type Props = { version_id: string };
+
 function ProjectEditor({ version_id }: Props) {
+  const selectedVersionId = useAppSelector(selectSelectedVersionId);
   const [sidebarWidth, setSidebarWidth] = useState(20);
 
-  const { data, loading, error } = useQuery<
+  const [fetchVersion, { data, loading, error }] = useLazyQuery<
     ProjectVersionQuery,
     ProjectVersionQueryVariables
   >(PROJECT_VERSION, {
     fetchPolicy: "network-only",
-    variables: {
-      version_id: version_id,
-    },
   });
   const dispatch = useDispatch();
+
+  // in case the user changes versions
+  const currentVersionId = selectedVersionId ? selectedVersionId : version_id;
+
+  useEffect(() => {
+    fetchVersion({
+      variables: {
+        version_id: currentVersionId,
+      },
+    });
+  }, [currentVersionId, fetchVersion]);
+
   useEffect(() => {
     const sources = data?.projectVersion?.contract_sources || [];
     if (data?.projectVersion?.contract_sources) {
@@ -52,15 +64,14 @@ function ProjectEditor({ version_id }: Props) {
   if (projectVersion && !project_id) {
     throw new Error("Project version cannot have no project_id");
   }
-  console.log("projec", data, projectVersion, project_id, version_id);
 
   return (
     <Flex flexDirection="column" width="100vw" height="100vh">
-      {projectVersion && project_id ? (
+      {project_id ? (
         <>
           <ProjectEditorNavbar
             project_id={project_id}
-            version_id={version_id}
+            version_id={currentVersionId}
           />
           <Flex bgColor="white" flexGrow="1" minHeight="1px">
             <Box
@@ -72,7 +83,7 @@ function ProjectEditor({ version_id }: Props) {
               <VersionContractsList
                 contract_sources={data?.projectVersion?.contract_sources || []}
                 isPublished={data?.projectVersion?.status === 2}
-                versionId={version_id}
+                versionId={currentVersionId}
               />
             </Box>
             <Box

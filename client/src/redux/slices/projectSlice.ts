@@ -18,12 +18,14 @@ const BLANK_PROJECT_DATA = {
 export interface ProjectState {
   id: string;
   selectedContractData: EditorContractViewFragment | null;
+  selectedVersionId: string;
   data: ProjectData;
 }
 
 const initialState: ProjectState = {
   id: "",
   selectedContractData: null,
+  selectedVersionId: "",
   data: BLANK_PROJECT_DATA,
 };
 
@@ -50,6 +52,9 @@ export const projectSlice = createSlice({
     setSelectedContractData: (state, action: PayloadAction<any>) => {
       state.selectedContractData = action.payload;
     },
+    setSelectedVersionId: (state, action: PayloadAction<any>) => {
+      state.selectedVersionId = action.payload;
+    },
   },
 });
 
@@ -65,8 +70,16 @@ export const selectInteractions = (state: RootState): Interactions =>
   state.project.data.interactions || {};
 export const selectPage = (state: RootState): Page =>
   state.project.data.page || { components: [] };
+export const selectSelectedVersionId = (state: RootState): string =>
+  state.project.selectedVersionId;
 
-export const { reset, setData, setId, mergeData, setSelectedContractData } =
-  projectSlice.actions;
+export const {
+  reset,
+  setData,
+  setId,
+  mergeData,
+  setSelectedContractData,
+  setSelectedVersionId,
+} = projectSlice.actions;
 
 export default projectSlice.reducer;

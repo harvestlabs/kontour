@@ -6,6 +6,11 @@ import {
   HStack,
   Select,
   Box,
+  Menu,
+  Button,
+  MenuButton,
+  MenuItem,
+  MenuList,
 } from "@chakra-ui/react";
 import { PropsWithChildren, useEffect, useState } from "react";
 import theme from "src/theme";
@@ -21,13 +26,17 @@ import {
   ProjectQuery,
   ProjectQueryVariables,
 } from "@gql/__generated__/ProjectQuery";
+import { setSelectedVersionId } from "@redux/slices/projectSlice";
+import { useDispatch } from "react-redux";
+import * as Icons from "react-feather";
 
 type Props = {
   project_id: string;
   version_id: string;
 };
 function ProjectEditorNavbar({ project_id, version_id }: Props) {
-  const [selectedVersionIndex, setSelectedVersionIndex] = useState(0);
+  const [selectedVersionName, setSelectedVersionName] = useState("Loading...");
+  const dispatch = useDispatch();
 
   const { data, loading, error } = useQuery<
     ProjectQuery,
@@ -42,10 +51,10 @@ function ProjectEditorNavbar({ project_id, version_id }: Props) {
   const versions = data?.project?.versions || [];
 
   useEffect(() => {
-    setSelectedVersionIndex(
-      data?.project?.versions?.findIndex((version) => {
+    setSelectedVersionName(
+      data?.project?.versions?.find((version) => {
         return version?.id === version_id;
-      }) || 0
+      })?.name || ""
     );
   }, [data, version_id]);
 
@@ -56,17 +65,33 @@ function ProjectEditorNavbar({ project_id, version_id }: Props) {
   return (
     <Flex sx={styles.navbar} flexShrink="0">
       <Box flexGrow="0">
-        <Select
-          value={(versions && versions[selectedVersionIndex])?.name || "ERROR"}
-        >
-          {versions?.map((v) => {
-            return (
-              <option value="option1" key={v?.id}>
-                {v?.name}
-              </option>
-            );
-          })}
-        </Select>
+        <Menu>
+          <MenuButton
+            borderRadius="0"
+            as={Button}
+            rightIcon={<Icons.ChevronDown size="16" />}
+          >
+            {selectedVersionName || "ERROR"}
+          </MenuButton>
+
+          <MenuList>
+            {versions?.map((v) => {
+              const name = v?.name;
+              return name != null ? (
+                <MenuItem
+                  value={v?.id}
+                  key={v?.id}
+                  onClick={() => {
+                    setSelectedVersionName(name);
+                    dispatch(setSelectedVersionId(v.id));
+                  }}
+                >
+                  {name}
+                </MenuItem>
+              ) : null;
+            })}
+          </MenuList>
+        </Menu>
       </Box>
       <Spacer />
       <NextLink href={`/`} passHref>
