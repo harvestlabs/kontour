@@ -43,6 +43,12 @@ export default class Contract extends Model {
   @Column(DataType.STRING)
   node_id: string;
 
+  @Column(DataType.STRING)
+  instance_id: string;
+
+  @Column(DataType.JSON)
+  constructor_params: any[];
+
   @Column(DataType.INTEGER)
   contract_source_type: ContractSourceType;
 
@@ -51,6 +57,8 @@ export default class Contract extends Model {
 
   @BelongsTo(() => Node, "node_id")
   node: Node;
+  @BelongsTo(() => Instance, "instance_id")
+  instance: Instance;
 
   static async importFromSource(
     source: LocalContractSource | RemoteContractSource,
@@ -72,8 +80,19 @@ export default class Contract extends Model {
     return await Contract.create({
       address: address,
       node_id: nodeId,
+      instance_id: instanceId,
+      constructor_params: params,
       contract_source_type: type,
       contract_source_id: source.id,
     });
+  }
+
+  async getContractSource(): Promise<
+    LocalContractSource | RemoteContractSource
+  > {
+    if (this.contract_source_type === ContractSourceType.LOCAL) {
+      return await LocalContractSource.findByPk(this.contract_source_id);
+    }
+    return await RemoteContractSource.findByPk(this.contract_source_id);
   }
 }

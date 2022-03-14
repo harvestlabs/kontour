@@ -10,9 +10,11 @@ import {
   DataType,
   PrimaryKey,
   AfterCreate,
+  HasMany,
 } from "sequelize-typescript";
 import Op from "sequelize/lib/operators";
 import { v4 } from "uuid";
+import Contract from "./Contract.model";
 import Node from "./Node.model";
 import Project from "./Project.model";
 import ProjectVersion from "./ProjectVersion.model";
@@ -20,6 +22,7 @@ import ProjectVersion from "./ProjectVersion.model";
 export enum InstanceStatus {
   HEAD = 1,
   OLD = 2,
+  SANDBOX = 3, // only for published instances
 }
 
 @Table({
@@ -59,6 +62,9 @@ export default class Instance extends Model {
 
   @BelongsTo(() => ProjectVersion, "project_version_id")
   project_version: ProjectVersion;
+
+  @HasMany(() => Contract, "instance_id")
+  contracts: Contract[];
 
   async makeHead(): Promise<Instance> {
     // Makes this instance the ONLY head of all instances of this version, marks everything else old

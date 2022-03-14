@@ -5,6 +5,7 @@ import {
   GraphQLString,
 } from "graphql";
 import GraphQLJSONObject from "graphql-type-json";
+import ContractType from "./contract";
 
 const InstanceType = new GraphQLObjectType({
   name: "Instance",
@@ -32,6 +33,12 @@ const InstanceType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description:
         "The id of the project version this instance branched off of",
+    },
+    contracts: {
+      type: new GraphQLNonNull(ContractType),
+      resolve: async (parent, args, ctx, info) => {
+        return await parent.$get("contracts");
+      },
     },
   },
 });

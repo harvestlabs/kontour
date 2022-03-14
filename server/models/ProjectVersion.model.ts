@@ -14,6 +14,7 @@ import {
   BeforeCreate,
 } from "sequelize-typescript";
 import { v4 } from "uuid";
+import Contract from "./Contract.model";
 import Instance, { InstanceStatus } from "./Instance.model";
 import Project from "./Project.model";
 
@@ -62,6 +63,34 @@ export default class ProjectVersion extends Model {
   project: Project;
   @HasMany(() => Instance, "project_version_id")
   instances: Instance[];
+
+  async createSandboxInstance(): Promise<Instance> {
+    const toClone = await this.getHead();
+    const instance = await Instance.create({
+      project_version_id: this.id,
+      project_id: this.project_id,
+      data: {},
+      status: InstanceStatus.SANDBOX,
+    });
+    if (this.status === ProjectVersionStatus.PUBLISHED) {
+      const contracts = await toClone.$get("contracts");
+      const toCreate = await Promise.all(
+        contracts.map(async (c) => {
+          return {
+            params: c.constructor_params,
+            source: await c.getContractSource(),
+            type: c.contract_source_type,
+          };
+        })
+      );
+      await Promise.all(
+        toCreate.map(({ params, source, type }) => {
+          Contract.importFromSource(source, type, instance.id, params);
+        })
+      );
+    }
+    return instance;
+  }
 
   async createBlankHeadInstance() {
     if (this.status === ProjectVersionStatus.DRAFT) {

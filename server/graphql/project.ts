@@ -12,6 +12,7 @@ import ProjectVersionType from "./types/projectVersion";
 import ProjectVersion, {
   ProjectVersionStatus,
 } from "../models/ProjectVersion.model";
+import InstanceType from "./types/instance";
 
 const ProjectQueries = {
   project: {
@@ -119,6 +120,26 @@ const ProjectMutations = {
         ...args.data,
       };
       return await project.save();
+    },
+  },
+  cloneSandbox: {
+    type: InstanceType,
+    args: {
+      projectVersionId: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+      name: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+    },
+    resolve: async (parent, args, ctx, info) => {
+      const version = await ProjectVersion.findByPk(args.projectVersionId, {
+        include: Project,
+      });
+      if (version.project.user_id !== ctx.state?.user?.id) {
+        return null;
+      }
+      return await version.createSandboxInstance();
     },
   },
 };
