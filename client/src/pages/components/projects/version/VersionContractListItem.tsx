@@ -43,7 +43,7 @@ export default function VersionContractsListItem({
   const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef<HTMLButtonElement>(null);
 
-  const openDeployModal = (e) => {
+  const openDeployModal = (e: any) => {
     e.stopPropagation();
     setIsOpen(true);
   };

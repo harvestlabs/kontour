@@ -12,6 +12,7 @@ import ApiKey from "../models/ApiKey.model";
 import NodeAccountType from "./types/nodeAccount";
 import NodeAccount from "../models/NodeAccount.model";
 import Node from "../models/Node.model";
+import Instance from "../models/Instance.model";
 
 const UserQueries = {
   user: {
@@ -78,12 +79,14 @@ const UserMutations = {
       key: {
         type: new GraphQLNonNull(GraphQLString),
       },
-      nodeId: {
+      instanceId: {
         type: new GraphQLNonNull(GraphQLString),
       },
     },
     resolve: async (parent, args, ctx, info) => {
-      const result = await Node.airdropAddress(args.nodeId, args.key, 1);
+      const instance = await Instance.findByPk(args.instanceId);
+      const nodeId = await instance.getNodeId();
+      const result = await Node.airdropAddress(nodeId, args.key, 1);
       return Boolean(result);
     },
   },

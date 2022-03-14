@@ -16,5 +16,5 @@ export interface RequestAirdropMutation {
 
 export interface RequestAirdropMutationVariables {
   address: string;
-  node_id: string;
+  instance_id: string;
 }

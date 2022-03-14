@@ -19,6 +19,46 @@ export interface ProjectVersionQuery_projectVersion_contract_sources {
   abi: any | null;
 }
 
+export interface ProjectVersionQuery_projectVersion_head_instance_contracts_contractSource {
+  __typename: "ContractSource";
+  id: string;
+  name: string;
+  functions: any;
+  constructor: any | null;
+  abi: any | null;
+  events: any;
+}
+
+export interface ProjectVersionQuery_projectVersion_head_instance_contracts {
+  __typename: "Contract";
+  id: string;
+  address: string;
+  contractSource: ProjectVersionQuery_projectVersion_head_instance_contracts_contractSource;
+}
+
+export interface ProjectVersionQuery_projectVersion_head_instance {
+  __typename: "Instance";
+  /**
+   * The uuid of this instance
+   */
+  id: string;
+  /**
+   * The name of the instance
+   */
+  name: string | null;
+  status: number;
+  data: any | null;
+  /**
+   * The id of the project this instance belongs to
+   */
+  project_id: string;
+  /**
+   * The id of the project version this instance branched off of
+   */
+  project_version_id: string;
+  contracts: ProjectVersionQuery_projectVersion_head_instance_contracts[];
+}
+
 export interface ProjectVersionQuery_projectVersion {
   __typename: "ProjectVersion";
   /**
@@ -41,6 +81,10 @@ export interface ProjectVersionQuery_projectVersion {
    * The contract sources for project version
    */
   contract_sources: ProjectVersionQuery_projectVersion_contract_sources[] | null;
+  /**
+   * The head revision instance of this version
+   */
+  head_instance: ProjectVersionQuery_projectVersion_head_instance | null;
 }
 
 export interface ProjectVersionQuery {

@@ -9,6 +9,7 @@ import GraphQLJSONObject from "graphql-type-json";
 import LocalContractSource from "../../models/LocalContractSource.model";
 import RemoteContractSource from "../../models/RemoteContractSource.model";
 import ContractSourceType from "./contractSource";
+import InstanceType from "./instance";
 
 const ProjectVersionType = new GraphQLObjectType({
   name: "ProjectVersion",
@@ -68,6 +69,13 @@ const ProjectVersionType = new GraphQLObjectType({
     status: {
       type: GraphQLInt,
       description: "The ProjectVersionStatus of this version",
+    },
+    head_instance: {
+      type: InstanceType,
+      description: "The head revision instance of this version",
+      resolve: async (parent, args, ctx, info) => {
+        return await parent.getHead();
+      },
     },
   },
 });

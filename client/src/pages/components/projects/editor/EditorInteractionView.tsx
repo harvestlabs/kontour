@@ -21,32 +21,18 @@ import Web3 from "web3";
 import { InteractableContractFragment } from "@gql/__generated__/InteractableContractFragment";
 import InteractableContract from "./InteractableContract";
 import EditorRequestAirdropButton from "./EditorRequestAirdropButton";
+import { ProjectVersionQuery_projectVersion_head_instance } from "@gql/__generated__/ProjectVersionQuery";
 
-type Props = { node_id?: string | null };
+type Props = {
+  instance?: ProjectVersionQuery_projectVersion_head_instance | null;
+};
 
-export default function EditorInteractionView({ node_id }: Props) {
-  const contract_source = useAppSelector(selectSelectedContractData);
-
-  const [contract, setContract] = useState<any>(null);
-
-  // REPLACE THIS WITH AN ARRAY OF CONTRACTS FOR INSTANCe FROM GRAPHQL
-  const contracts: InteractableContractFragment[] = [
-    {
-      __typename: "Contract",
-      id: "6fad925c-d243-4947-a3d4-229cd7687309",
-      address: "0x115ec7873BF8A7BD118f269E80d4EBbbF589Bab2",
-      contractSource: {
-        __typename: "ContractSource",
-        id: "afe1bd94-1e9a-4032-ae1b-d72df116162e",
-        ...contract_source,
-      },
-    },
-  ];
-  if (node_id == null) {
+export default function EditorInteractionView({ instance }: Props) {
+  if (instance == null) {
     throw new Error("No test node found for this project");
   }
 
-  return contract_source != null ? (
+  return (
     <Flex
       width="100%"
       height="100%"
@@ -55,12 +41,12 @@ export default function EditorInteractionView({ node_id }: Props) {
       position="relative"
     >
       <EditorPublishButton />
-      <EditorRequestAirdropButton node_id={node_id} />
-      {contracts.map((contract) => {
+      <EditorRequestAirdropButton instance_id={instance.id} />
+      {instance.contracts.map((contract) => {
         return <InteractableContract key={contract.id} contract={contract} />;
       })}
     </Flex>
-  ) : null;
+  );
 }
 
 EditorInteractionView.fragments = {
@@ -73,5 +59,19 @@ EditorInteractionView.fragments = {
       functions
       abi
     }
+  `,
+  instance: gql`
+    fragment InstanceFragment on Instance {
+      id
+      name
+      status
+      data
+      project_id
+      project_version_id
+      contracts {
+        ...InteractableContractFragment
+      }
+    }
+    ${InteractableContract.fragments.contract}
   `,
 };
