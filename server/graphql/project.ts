@@ -70,6 +70,9 @@ const ProjectMutations = {
   createProject: {
     type: ProjectVersionType,
     resolve: async (parent, args, ctx, info) => {
+      if (ctx.state?.user?.id == null) {
+        throw new Error("Invalid user.");
+      }
       const versionCreated = await Project.createProjectWithDefaultVersion({
         project_metadata: {},
         version_metadata: {},
@@ -86,6 +89,9 @@ const ProjectMutations = {
       },
     },
     resolve: async (parent, args, ctx, info) => {
+      if (ctx.state?.user?.id == null) {
+        throw new Error("Invalid user.");
+      }
       const project = await Project.findByPk(args.projectId);
       console.log("finding project", project, args.projectId);
       if (project.user_id !== ctx.state?.user?.id) {

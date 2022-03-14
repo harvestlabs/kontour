@@ -11,13 +11,14 @@ import { useAppSelector } from "@redux/hooks";
 import { selectUserId } from "@redux/slices/userSlice";
 import { NextPageWithLayout } from "types/next";
 import Layout from "@layouts/Layout";
+import CreateProjectButton from "@components/projects/CreateProjectButton";
 
 const ProjectsPage: NextPageWithLayout = () => {
   const router = useRouter();
   const user_id = useAppSelector(selectUserId);
 
   const onCreated = (id: string) => {
-    window.location.href = `/versions/${id}`;
+    router.push(`/versions/${id}`);
   };
   return (
     <Container maxW="container.lg" variant="base">
@@ -26,7 +27,7 @@ const ProjectsPage: NextPageWithLayout = () => {
       </Head>
       <main>
         <ProjectList user_id={user_id} />
-        <CreateProject onComplete={onCreated} />
+        <CreateProjectButton onComplete={onCreated} />
       </main>
     </Container>
   );
