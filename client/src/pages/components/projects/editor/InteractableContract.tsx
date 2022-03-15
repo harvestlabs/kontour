@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Text,
   Accordion,
@@ -12,6 +12,14 @@ import {
   Input,
   VStack,
   HStack,
+  Table,
+  TableCaption,
+  Tbody,
+  Td,
+  Tfoot,
+  Th,
+  Thead,
+  Tr,
 } from "@chakra-ui/react";
 import { selectSelectedContractData } from "@redux/slices/projectSlice";
 import { useAppSelector } from "@redux/hooks";
@@ -23,6 +31,9 @@ import { EditorInteractionViewFragment } from "@gql/__generated__/EditorInteract
 import Web3 from "web3";
 import { InteractableContractFragment } from "@gql/__generated__/InteractableContractFragment";
 import parseEvents from "@utils/event_parser";
+import ContractValueTableRowRenderer, {
+  ContractFunctionValueType,
+} from "./contract/ContractValueTableRowRenderer";
 
 type Props = { contract: InteractableContractFragment };
 
@@ -33,27 +44,160 @@ export default function InteractableContract({
   const [eventData, setEventData] = useState<any>("");
   const [gasUsed, setGasUsed] = useState<number | null>(null);
   const [result, setResult] = useState<any>(null);
-  let { functions, constructor, events, abi } = contractSource || {};
-  const abiJson = JSON.parse(JSON.stringify(abi));
+  let {
+    functions,
+    // constructor,
+    events,
+    abi,
+  }: {
+    functions: ContractSourceFunction[];
+    events: ContractSourceEvent[];
+    // contructor: ContractSourceConstructor;
+    abi: any;
+  } = contractSource || {};
+  const abiJson = useMemo(() => {
+    return JSON.parse(JSON.stringify(abi));
+  }, [abi]);
 
-  //@ts-ignore
+  // @ts-ignore
   const kontour = window.kontour;
 
-  const contract = new kontour.web3.eth.Contract(abiJson, address);
+  const contract = useMemo(
+    () => new kontour.web3.eth.Contract(abiJson, address),
+    [abiJson, address, kontour.web3.eth.Contract]
+  );
 
-  const getters = functions.filter(
-    (func: any) => func.stateMutability === "view"
+  const getters = useMemo(
+    () => functions.filter((func) => func.stateMutability === "view"),
+    [functions]
   );
-  const nonpayables = functions.filter(
-    (func: any) => func.stateMutability === "nonpayable"
+  const nonpayables = useMemo(
+    () => functions.filter((func) => func.stateMutability === "nonpayable"),
+    [functions]
   );
+
+  const [getterValuesWithoutParams, setGetterValuesWithoutParams] = useState<
+    ContractFunctionValueType[]
+  >([]);
+  const [getterValuesWithParams, setGetterValuesWithParams] = useState<
+    ContractFunctionValueType[]
+  >([]);
+
+  useEffect(() => {
+    async function fetchGetterValuesAsync(
+      innerGetters: ContractSourceFunction[]
+    ) {
+      // we only want to show the values we can get with no input
+      const [getterValuesWithoutParams, getterValuesWithParams] =
+        await Promise.all([
+          Promise.all(
+            innerGetters
+              .filter((func) => func.inputs.length === 0)
+              .map(async (func) => {
+                return {
+                  name: func.name,
+                };
+              })
+          ),
+
+          Promise.all(
+            innerGetters
+              .filter((func) => func.inputs.length > 0)
+              .map(async (func) => {
+                return {
+                  name: func.name,
+                  inputs: func.inputs,
+                };
+              })
+          ),
+        ]);
+      setGetterValuesWithoutParams(getterValuesWithoutParams);
+      setGetterValuesWithParams(getterValuesWithParams);
+    }
+
+    fetchGetterValuesAsync(getters);
+  }, [contract.methods, getters]);
 
   return contractSource != null ? (
-    <Flex width="100%" flexDirection="column">
-      <Heading>{contractSource.name}</Heading>
-      <HStack>
-        <VStack alignItems="flex-start">
-          <Box>
+    <Flex width="100%" flexDirection="column" padding="40px">
+      <Heading>{contractSource.name}.sol</Heading>
+
+      <Flex direction="column">
+        <Table variant="simple">
+          <TableCaption placement="top">Current Contract State</TableCaption>
+          <Thead>
+            <Tr>
+              <Th>View</Th>
+              <Th>Value</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {getterValuesWithoutParams.map((getterValue) => {
+              return (
+                <ContractValueTableRowRenderer
+                  key={getterValue.name}
+                  contract={contract}
+                  name={getterValue.name}
+                />
+              );
+            })}
+            <Tr>
+              <Th>Inputs</Th>
+              <Th></Th>
+            </Tr>
+            {getterValuesWithParams.map((getterValue) => {
+              return (
+                <ContractValueTableRowRenderer
+                  key={getterValue.name}
+                  name={getterValue.name}
+                  contract={contract}
+                  inputs={getterValue.inputs}
+                />
+              );
+            })}
+          </Tbody>
+        </Table>
+        {getters.map((func: any) => {
+          return func.inputs.length === 0 ? (
+            <Box key={func.name}>
+              <Text>Function: {func.name}</Text>
+              {func.inputs.map((input: any) => (
+                <Input key={input.name} />
+              ))}
+              <Button
+                key={func.name}
+                onClick={async () => {
+                  const a = await contract.methods[func.name]().call();
+                  setResult(a);
+                }}
+              >
+                {func.name}(
+                {func.inputs.reduce(
+                  (memo: string, input: any, idx: number) =>
+                    memo +
+                    (idx === func.inputs.length - 1
+                      ? idx === 0
+                        ? `${input.name}`
+                        : `${memo} ${input.name}`
+                      : `${memo} ${input.name},`),
+                  ""
+                )}
+                )
+              </Button>
+            </Box>
+          ) : null;
+        })}
+      </Flex>
+
+      <VStack>
+        <Text>Latest result: {result}</Text>
+        <Text>Events: {eventData}</Text>
+        <Text>Gas: {gasUsed}</Text>
+      </VStack>
+
+      <HStack width="100%">
+        <VStack alignItems="flex-start" width="100%">
+          <Box width="100%">
             <Text>Getters</Text>
             {getters.map((func: any) => (
               <Box key={func.name}>
@@ -143,11 +287,6 @@ export default function InteractableContract({
             ))}
           </Box>
           <Text>Payable Transactions</Text>
-        </VStack>
-        <VStack>
-          <Text>Latest result: {result}</Text>
-          <Text>Events: {eventData}</Text>
-          <Text>Gas: {gasUsed}</Text>
         </VStack>
       </HStack>
     </Flex>

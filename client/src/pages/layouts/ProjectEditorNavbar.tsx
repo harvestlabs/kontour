@@ -34,8 +34,9 @@ import EditorInstanceSelector from "@components/projects/editor/navbar/EditorIns
 type Props = {
   project_id: string;
   version_id: string;
+  instance_id: string;
 };
-function ProjectEditorNavbar({ project_id, version_id }: Props) {
+function ProjectEditorNavbar({ project_id, version_id, instance_id }: Props) {
   const [selectedVersionName, setSelectedVersionName] = useState("Loading...");
   const dispatch = useDispatch();
 
@@ -100,7 +101,10 @@ function ProjectEditorNavbar({ project_id, version_id }: Props) {
           </MenuList>
         </Menu>
         <Text mr="12px">Instance:</Text>
-        <EditorInstanceSelector version_id={version_id} />
+        <EditorInstanceSelector
+          version_id={version_id}
+          instance_id={instance_id}
+        />
       </Flex>
       <Spacer />
       <Spacer />

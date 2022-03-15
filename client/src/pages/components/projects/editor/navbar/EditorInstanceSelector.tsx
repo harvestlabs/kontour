@@ -17,11 +17,14 @@ import { useDispatch } from "react-redux";
 
 type Props = {
   version_id: string;
+  instance_id: string;
 };
 
-export default function EditorInstanceSelector({ version_id }: Props) {
-  const [selectedInstanceName, setSelectedInstanceName] =
-    useState("Loading...");
+export default function EditorInstanceSelector({
+  version_id,
+  instance_id,
+}: Props) {
+  const [selectedInstanceName, setSelectedInstanceName] = useState(instance_id);
   const dispatch = useDispatch();
   const { data, loading, error } = useQuery<
     InstancesSelectorQuery,

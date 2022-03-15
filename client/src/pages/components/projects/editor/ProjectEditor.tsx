@@ -79,6 +79,7 @@ function ProjectEditor({ version_id }: Props) {
           <ProjectEditorNavbar
             project_id={projectId}
             version_id={currentVersionId}
+            instance_id={projectVersion?.head_instance?.id}
           />
           <Flex bgColor="white" flexGrow="1" minHeight="1px">
             <Box

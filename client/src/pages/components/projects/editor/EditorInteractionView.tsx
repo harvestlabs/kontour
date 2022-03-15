@@ -9,6 +9,7 @@ import {
   List,
   ListIcon,
   ListItem,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { selectSelectedContractData } from "@redux/slices/projectSlice";
 import { useAppSelector } from "@redux/hooks";
@@ -43,9 +44,12 @@ export default function EditorInteractionView({ instance }: Props) {
     >
       <EditorPublishButton />
       <EditorRequestAirdropButton instance_id={instance.id} />
-      {instance.contracts.map((contract) => {
-        return <InteractableContract key={contract.id} contract={contract} />;
-      })}
+
+      <SimpleGrid columns={2} spacing={10}>
+        {instance.contracts.map((contract) => {
+          return <InteractableContract key={contract.id} contract={contract} />;
+        })}
+      </SimpleGrid>
     </Flex>
   );
 }
