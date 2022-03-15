@@ -21,7 +21,6 @@ function StickyHeader({}: PropsWithChildren<{}>) {
       <Spacer />
 
       <HStack gap="18px">
-        <DiscordLink color={theme.colors.discordPurple} size={20} />
         <SignInButton />
         <MetamaskButton />
       </HStack>

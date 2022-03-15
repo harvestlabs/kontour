@@ -29,6 +29,7 @@ import {
 import { setSelectedVersionId } from "@redux/slices/projectSlice";
 import { useDispatch } from "react-redux";
 import * as Icons from "react-feather";
+import EditorInstanceSelector from "@components/projects/editor/navbar/EditorInstanceSelector";
 
 type Props = {
   project_id: string;
@@ -64,7 +65,13 @@ function ProjectEditorNavbar({ project_id, version_id }: Props) {
 
   return (
     <Flex sx={styles.navbar} flexShrink="0">
-      <Box flexGrow="0">
+      <NextLink href={`/`} passHref>
+        <Link>
+          <Logo type="dynamic" />
+        </Link>
+      </NextLink>
+      <Flex flexGrow="0" flexDirection="row" alignItems="center">
+        <Text mr="12px">Version:</Text>
         <Menu>
           <MenuButton
             borderRadius="0"
@@ -92,17 +99,13 @@ function ProjectEditorNavbar({ project_id, version_id }: Props) {
             })}
           </MenuList>
         </Menu>
-      </Box>
+        <Text mr="12px">Instance:</Text>
+        <EditorInstanceSelector version_id={version_id} />
+      </Flex>
       <Spacer />
-      <NextLink href={`/`} passHref>
-        <Link>
-          <Logo type="dynamic" />
-        </Link>
-      </NextLink>
       <Spacer />
 
       <HStack gap="18px">
-        <DiscordLink color={theme.colors.discordPurple} size={20} />
         <SignInButton />
         <MetamaskButton />
       </HStack>

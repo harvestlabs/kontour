@@ -41,7 +41,7 @@ export default function SignInButton() {
       }}
       leftIcon={<Icons.User />}
     >
-      {loading ? "Loading..." : user_id ? user_id : "Sign in with Twitter"}
+      {loading ? "Loading..." : user_id ? "" : "Sign in with Twitter"}
     </Button>
   );
 }
