@@ -8,6 +8,7 @@ import {
   DataType,
   PrimaryKey,
   BelongsTo,
+  AfterCreate,
 } from "sequelize-typescript";
 import { v4 } from "uuid";
 import Node from "./Node.model";
@@ -60,6 +61,12 @@ export default class Contract extends Model {
   @BelongsTo(() => Instance, "instance_id")
   instance: Instance;
 
+  @AfterCreate
+  static async generateCode(contract: Contract) {
+    const instance = await Instance.findByPk(contract.instance_id);
+    await instance.generateCode();
+  }
+
   static async importFromSource(
     source: LocalContractSource | RemoteContractSource,
     type: ContractSourceType,
@@ -86,7 +93,6 @@ export default class Contract extends Model {
       contract_source_id: source.id,
     });
 
-    await instance.generateCode();
     return contract;
   }
 

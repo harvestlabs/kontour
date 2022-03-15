@@ -86,9 +86,6 @@ const ContractMutations = {
         contract_source_id: source.id,
         constructor_params: args.params,
       });
-
-      await instance.generateCode();
-
       return contract;
     },
   },

@@ -19,6 +19,7 @@ import http from "http";
 
 import apiPassport from "./server/utils/passport";
 import apiRouter from "./server/routes/api";
+import sdkRouter from "./server/routes/sdk";
 import config from "./config";
 import init from "./server/models/init";
 import logger from "./server/utils/logger";
@@ -92,6 +93,8 @@ app.use(async (ctx, next) => {
 app.use(passport.initialize());
 app.use(apiRouter.routes());
 app.use(apiRouter.allowedMethods());
+app.use(sdkRouter.routes());
+app.use(sdkRouter.allowedMethods());
 
 // TODO: hardcoded settings
 app.use(graphqlUploadKoa({ maxFileSize: 10000000, maxFiles: 10 }));
