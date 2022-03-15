@@ -22,6 +22,7 @@ import { InteractableContractFragment } from "@gql/__generated__/InteractableCon
 import InteractableContract from "./InteractableContract";
 import EditorRequestAirdropButton from "./EditorRequestAirdropButton";
 import { ProjectVersionQuery_projectVersion_head_instance } from "@gql/__generated__/ProjectVersionQuery";
+import { generateKontour } from "src/helpers/generator";
 
 type Props = {
   instance?: ProjectVersionQuery_projectVersion_head_instance | null;
