@@ -24,6 +24,11 @@ export enum ProjectVersionStatus {
   PUBLISHED = 2,
 }
 
+export type ProjectVersionSourceData = {
+  localSources?: { [name: string]: string };
+  remoteSources?: { [name: string]: string };
+};
+
 @Table({
   timestamps: true,
   tableName: "project_versions",
@@ -63,6 +68,23 @@ export default class ProjectVersion extends Model {
   project: Project;
   @HasMany(() => Instance, "project_version_id")
   instances: Instance[];
+
+  async updateSources(
+    sourceData: ProjectVersionSourceData
+  ): Promise<ProjectVersion> {
+    this.data = {
+      ...this.data,
+      local_sources: {
+        ...this.data.local_sources,
+        ...sourceData.localSources,
+      },
+      remote_sources: {
+        ...this.data.remote_sources,
+        ...sourceData.remoteSources,
+      },
+    };
+    return await this.save();
+  }
 
   async createSandboxInstance(): Promise<Instance> {
     const toClone = await this.getHead();

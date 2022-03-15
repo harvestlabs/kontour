@@ -27,20 +27,20 @@ apiRouter.post("/ingestQuikdraw/start", async (ctx, next) => {
     next();
   }
   let project: Project;
+  let node: Node;
   if (!projectId) {
-    project = await Project.create(
-      {
-        user_id: apiKey.user_id,
-        data: {},
-      },
-      { include: Node }
-    );
+    project = await Project.create({
+      user_id: apiKey.user_id,
+      data: {},
+    });
+    node = await project.$get("node");
   } else {
     project = await Project.findByPk(projectId, { include: Node });
     if (project.user_id !== apiKey.user_id) {
       ctx.status = 400;
       next();
     }
+    node = project.node;
   }
   let version: ProjectVersion;
   if (!versionId) {
@@ -52,7 +52,6 @@ apiRouter.post("/ingestQuikdraw/start", async (ctx, next) => {
   ctx.body = {
     projectId: project.id,
     versionId: version.id,
-    provider: project.node.data.hostUrl,
   };
   ctx.status = 200;
   next();

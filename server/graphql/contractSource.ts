@@ -13,6 +13,7 @@ import { GraphQLJSONObject } from "graphql-type-json";
 import { tryCompile } from "../../contour/deployer/compile";
 import ProjectVersion from "../models/ProjectVersion.model";
 import { TemplateType } from "./types/template";
+import Project from "../models/Project.model";
 
 const ContractSourceQueries = {
   remoteContractSource: {
@@ -105,24 +106,30 @@ const ContractSourceMutations = {
       chainId: {
         type: new GraphQLNonNull(GraphQLInt),
       },
-      userId: {
+      versionId: {
         type: new GraphQLNonNull(GraphQLString),
       },
     },
     resolve: async (parent, args, ctx, info) => {
-      return await RemoteContractSource.importByAddressAndChain(
+      const version = await ProjectVersion.findByPk(args.versionId, {
+        include: Project,
+      });
+      if (ctx.state?.user?.id !== version.project.user_id) {
+        return null;
+      }
+      const newSource = await RemoteContractSource.importByAddressAndChain(
         args.address,
-        args.chainId,
-        args.userId
+        args.chainId
       );
+      await version.updateSources({
+        remoteSources: { [newSource.name]: newSource.id },
+      });
+      return newSource;
     },
   },
   createFromTemplate: {
     type: ContractSourceType,
     args: {
-      userId: {
-        type: new GraphQLNonNull(GraphQLString),
-      },
       template: {
         type: new GraphQLNonNull(TemplateType),
       },
@@ -131,10 +138,12 @@ const ContractSourceMutations = {
       },
     },
     resolve: async (parent, args, ctx, info) => {
+      if (!ctx.state?.user?.id) {
+        return null;
+      }
       return await RemoteContractSource.createFromTemplate(
         args.template,
-        args.params,
-        args.userId
+        args.params
       );
     },
   },
@@ -158,7 +167,6 @@ const ContractSourceMutations = {
         return null;
       }
       const newSource = await RemoteContractSource.compileFromSource(
-        ctx.state.user.id,
         args.source,
         match[1]
       );

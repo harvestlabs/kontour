@@ -100,7 +100,7 @@ function ProjectEditor({ version_id }: Props) {
               cursor="col-resize"
               flexShrink="0"
             />
-            <Box height="100%" bgColor="yellow" flexGrow="1">
+            <Box height="100%" bgColor="lightgoldenrodyellow" flexGrow="1">
               <EditorInteractionView instance={projectVersion?.head_instance} />
             </Box>
           </Flex>

@@ -20,6 +20,7 @@
     "@types/apollo-upload-client": "^17.0.0",
     "@types/cookie": "^0.4.1",
     "@types/uuid": "^8.3.4",
+    "abi-decoder": "^2.4.0",
     "apollo-upload-client": "^17.0.0",
     "axios": "^0.26.1",
     "cookie": "^0.4.1",

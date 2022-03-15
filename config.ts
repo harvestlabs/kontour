@@ -70,9 +70,11 @@ const Config = {
   },
   polygon: {
     GETH_URL: env.POLYGON_GETH_URL,
+    GETH_TEST_URL: env.POLYGON_GETH_TEST_URL,
   },
   eth: {
     GETH_URL: env.ETH_GETH_URL,
+    GETH_TEST_URL: env.ETH_GETH_TEST_URL,
   },
   ganache: {
     PK: env.GANACHE_PK,

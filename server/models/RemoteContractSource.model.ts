@@ -16,7 +16,7 @@ import {
   TEMP_JSON,
   tryCompile,
 } from "../../contour/deployer/compile";
-import { getContractCode } from "../utils/etherscan";
+import { getBytecode, getContractCode } from "../utils/etherscan";
 import SimpleStorage from "../../contour/templates/SimpleStorage";
 import ERC721Minter from "../../contour/templates/ERC721";
 
@@ -66,8 +66,7 @@ export default class RemoteContractSource extends Model {
 
   static async importByAddressAndChain(
     address: string,
-    chainId: number,
-    userId: string
+    chainId: number
   ): Promise<RemoteContractSource> {
     let source = await RemoteContractSource.findOne({
       where: {
@@ -84,9 +83,9 @@ export default class RemoteContractSource extends Model {
     );
     source = await RemoteContractSource.create({
       address: address,
-      chainId: chainId,
+      chain_id: chainId,
       source: SourceCode,
-      abi: ABI,
+      abi: JSON.parse(ABI),
       name: ContractName,
     });
     return await source.generateBytecode();
@@ -94,20 +93,17 @@ export default class RemoteContractSource extends Model {
 
   static async createFromTemplate(
     templateName: ContractTemplate,
-    templateArgs: any,
-    userId: string
+    templateArgs: any
   ): Promise<RemoteContractSource> {
     const toDeploy = new templateMapping[templateName](templateArgs);
     const source = await RemoteContractSource.create({
       source: toDeploy.write(),
       name: toDeploy.name,
-      user_id: userId,
     });
-    return await source.generateBytecode();
+    return await source.generateBytecodeLocal();
   }
 
   static async compileFromSource(
-    userId: string,
     source: string,
     contractName: string
   ): Promise<RemoteContractSource> {
@@ -132,11 +128,10 @@ export default class RemoteContractSource extends Model {
       bytecode: bytecode,
       name: contractName,
       source: source,
-      user_id: userId,
     });
   }
 
-  async generateBytecode(): Promise<RemoteContractSource> {
+  async generateBytecodeLocal(): Promise<RemoteContractSource> {
     const result = await tryCompile(this.source);
     if (!result.success) {
       throw Error(result.message);
@@ -155,6 +150,11 @@ export default class RemoteContractSource extends Model {
       .toString();
     this.abi = abi;
     this.bytecode = bytecode;
+    return await this.save();
+  }
+
+  async generateBytecode(): Promise<RemoteContractSource> {
+    this.bytecode = await getBytecode(this.address, this.chain_id);
     return await this.save();
   }
 }
