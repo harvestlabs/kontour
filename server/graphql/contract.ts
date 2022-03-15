@@ -75,8 +75,10 @@ const ContractMutations = {
           : RemoteContractSource.findByPk(args.sourceId),
         ProjectVersion.findByPk(args.versionId),
       ]);
+
       const instance = await version.getHead();
-      return await Contract.create({
+
+      const contract = await Contract.create({
         address: args.address,
         node_id: await instance.getNodeId(),
         instance_id: instance.id,
@@ -84,6 +86,10 @@ const ContractMutations = {
         contract_source_id: source.id,
         constructor_params: args.params,
       });
+
+      await instance.generateCode();
+
+      return contract;
     },
   },
   deployFromLocalSource: {

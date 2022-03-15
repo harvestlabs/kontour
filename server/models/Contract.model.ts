@@ -77,7 +77,7 @@ export default class Contract extends Model {
       source.abi,
       params
     );
-    return await Contract.create({
+    const contract = await Contract.create({
       address: address,
       node_id: nodeId,
       instance_id: instanceId,
@@ -85,6 +85,9 @@ export default class Contract extends Model {
       contract_source_type: type,
       contract_source_id: source.id,
     });
+
+    await instance.generateCode();
+    return contract;
   }
 
   async getContractSource(): Promise<

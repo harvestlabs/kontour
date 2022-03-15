@@ -1,10 +1,7 @@
 (function () {
   let web3, eth, abi, address;
 
-  // most recently used account
   let account;
-
-  let contract;
 
   const chainMetadata = {
     id: "0x539",
@@ -18,6 +15,559 @@
   const onWeb3Loaded = () => {
     web3 = new window.Web3(window.Web3.givenProvider);
     window.kontour.web3 = web3;
+
+    window.kontour.contracts = {
+      Machine: (function () {
+        const abi = [
+          {
+            anonymous: false,
+            inputs: [
+              {
+                indexed: true,
+                internalType: "address",
+                name: "configAddress",
+                type: "address",
+              },
+              {
+                indexed: true,
+                internalType: "address",
+                name: "sender",
+                type: "address",
+              },
+            ],
+            name: "Create",
+            type: "event",
+          },
+          {
+            inputs: [
+              {
+                internalType: "uint256",
+                name: "_reservePrice",
+                type: "uint256",
+              },
+              {
+                internalType: "uint8",
+                name: "_pctCreatorInitialDisbursement",
+                type: "uint8",
+              },
+              {
+                internalType: "uint8",
+                name: "_pctCreatorFinalDisbursement",
+                type: "uint8",
+              },
+              {
+                internalType: "uint64",
+                name: "_mustBeClaimedTime",
+                type: "uint64",
+              },
+            ],
+            name: "create",
+            outputs: [
+              {
+                internalType: "address",
+                name: "configAddress",
+                type: "address",
+              },
+            ],
+            stateMutability: "nonpayable",
+            type: "function",
+          },
+        ];
+        const contractAddress = "0xF2fCb546793b327c836A0D892A3c98CfF797012a";
+        const name = "Machine";
+        const contract = new web3.eth.Contract(abi, contractAddress);
+
+        return {
+          abi: abi,
+          address: contractAddress,
+          web3Object: contract,
+          /* generated functions*/
+          constructor: function () {},
+          executeCreate: async function executeCreate(
+            accountAddress,
+            _reservePrice,
+            _reservePrice,
+            _pctCreatorInitialDisbursement,
+            _reservePrice,
+            _reservePrice,
+            _pctCreatorInitialDisbursement,
+            _pctCreatorFinalDisbursement,
+            _reservePrice,
+            _reservePrice,
+            _pctCreatorInitialDisbursement,
+            _reservePrice,
+            _reservePrice,
+            _pctCreatorInitialDisbursement,
+            _pctCreatorFinalDisbursement,
+            _mustBeClaimedTime
+          ) {
+            return send(
+              contract,
+              accountAddress,
+              "create",
+              _reservePrice,
+              _reservePrice,
+              _pctCreatorInitialDisbursement,
+              _reservePrice,
+              _reservePrice,
+              _pctCreatorInitialDisbursement,
+              _pctCreatorFinalDisbursement,
+              _reservePrice,
+              _reservePrice,
+              _pctCreatorInitialDisbursement,
+              _reservePrice,
+              _reservePrice,
+              _pctCreatorInitialDisbursement,
+              _pctCreatorFinalDisbursement,
+              _mustBeClaimedTime
+            );
+          },
+        };
+      })(),
+      MachineCopy: (function () {
+        const abi = [
+          {
+            anonymous: false,
+            inputs: [
+              {
+                indexed: true,
+                internalType: "address",
+                name: "configAddress",
+                type: "address",
+              },
+              {
+                indexed: true,
+                internalType: "address",
+                name: "sender",
+                type: "address",
+              },
+            ],
+            name: "Create",
+            type: "event",
+          },
+          {
+            inputs: [
+              {
+                internalType: "uint256",
+                name: "_reservePrice",
+                type: "uint256",
+              },
+              {
+                internalType: "uint8",
+                name: "_pctCreatorInitialDisbursement",
+                type: "uint8",
+              },
+              {
+                internalType: "uint8",
+                name: "_pctCreatorFinalDisbursement",
+                type: "uint8",
+              },
+              {
+                internalType: "uint64",
+                name: "_mustBeClaimedTime",
+                type: "uint64",
+              },
+            ],
+            name: "create",
+            outputs: [
+              {
+                internalType: "address",
+                name: "configAddress",
+                type: "address",
+              },
+            ],
+            stateMutability: "nonpayable",
+            type: "function",
+          },
+        ];
+        const contractAddress = "0x7EbE2661BbDd6389113c18bE7BA280d65C6AeFeB";
+        const name = "MachineCopy";
+        const contract = new web3.eth.Contract(abi, contractAddress);
+
+        return {
+          abi: abi,
+          address: contractAddress,
+          web3Object: contract,
+          /* generated functions*/
+          constructor: function () {},
+          executeCreate: async function executeCreate(
+            accountAddress,
+            _reservePrice,
+            _reservePrice,
+            _pctCreatorInitialDisbursement,
+            _reservePrice,
+            _reservePrice,
+            _pctCreatorInitialDisbursement,
+            _pctCreatorFinalDisbursement,
+            _reservePrice,
+            _reservePrice,
+            _pctCreatorInitialDisbursement,
+            _reservePrice,
+            _reservePrice,
+            _pctCreatorInitialDisbursement,
+            _pctCreatorFinalDisbursement,
+            _mustBeClaimedTime
+          ) {
+            return send(
+              contract,
+              accountAddress,
+              "create",
+              _reservePrice,
+              _reservePrice,
+              _pctCreatorInitialDisbursement,
+              _reservePrice,
+              _reservePrice,
+              _pctCreatorInitialDisbursement,
+              _pctCreatorFinalDisbursement,
+              _reservePrice,
+              _reservePrice,
+              _pctCreatorInitialDisbursement,
+              _reservePrice,
+              _reservePrice,
+              _pctCreatorInitialDisbursement,
+              _pctCreatorFinalDisbursement,
+              _mustBeClaimedTime
+            );
+          },
+        };
+      })(),
+      Bounty: (function () {
+        const abi = [
+          {
+            inputs: [
+              {
+                internalType: "uint256",
+                name: "_reservePrice",
+                type: "uint256",
+              },
+              {
+                internalType: "uint8",
+                name: "_pctInitialDisbursement",
+                type: "uint8",
+              },
+              {
+                internalType: "uint8",
+                name: "_pctFinalDisbursement",
+                type: "uint8",
+              },
+              {
+                internalType: "uint64",
+                name: "_mustBeClaimedTime",
+                type: "uint64",
+              },
+              {
+                internalType: "address payable",
+                name: "_owner",
+                type: "address",
+              },
+            ],
+            stateMutability: "nonpayable",
+            type: "constructor",
+          },
+          { inputs: [], name: "AlreadyPaid", type: "error" },
+          { inputs: [], name: "IncorrectPercentages", type: "error" },
+          { inputs: [], name: "NoEquity", type: "error" },
+          { inputs: [], name: "TooLate", type: "error" },
+          { inputs: [], name: "Unauthorized", type: "error" },
+          {
+            anonymous: false,
+            inputs: [
+              {
+                indexed: true,
+                internalType: "string",
+                name: "msg",
+                type: "string",
+              },
+            ],
+            name: "Debug",
+            type: "event",
+          },
+          {
+            anonymous: false,
+            inputs: [
+              {
+                indexed: true,
+                internalType: "address",
+                name: "_to",
+                type: "address",
+              },
+              {
+                indexed: false,
+                internalType: "uint256",
+                name: "_amount",
+                type: "uint256",
+              },
+            ],
+            name: "Withdraw",
+            type: "event",
+          },
+          {
+            inputs: [
+              { internalType: "address", name: "_owner", type: "address" },
+            ],
+            name: "balanceOf",
+            outputs: [
+              { internalType: "uint256", name: "balance", type: "uint256" },
+            ],
+            stateMutability: "view",
+            type: "function",
+          },
+          {
+            inputs: [
+              { internalType: "address", name: "_owner", type: "address" },
+            ],
+            name: "equityOf",
+            outputs: [
+              { internalType: "uint256", name: "balance", type: "uint256" },
+            ],
+            stateMutability: "view",
+            type: "function",
+          },
+          {
+            inputs: [],
+            name: "exit",
+            outputs: [{ internalType: "bool", name: "success", type: "bool" }],
+            stateMutability: "nonpayable",
+            type: "function",
+          },
+          {
+            inputs: [],
+            name: "getCollaboratorsList",
+            outputs: [
+              {
+                internalType: "address payable[]",
+                name: "_collaborators",
+                type: "address[]",
+              },
+            ],
+            stateMutability: "view",
+            type: "function",
+          },
+          {
+            inputs: [],
+            name: "getEquityList",
+            outputs: [
+              {
+                internalType: "uint256[]",
+                name: "_pctEquity",
+                type: "uint256[]",
+              },
+            ],
+            stateMutability: "view",
+            type: "function",
+          },
+          {
+            inputs: [],
+            name: "getTreasuryStatus",
+            outputs: [
+              {
+                internalType: "uint256[3]",
+                name: "_stats",
+                type: "uint256[3]",
+              },
+            ],
+            stateMutability: "view",
+            type: "function",
+          },
+          {
+            inputs: [],
+            name: "owner",
+            outputs: [
+              { internalType: "address payable", name: "", type: "address" },
+            ],
+            stateMutability: "view",
+            type: "function",
+          },
+          {
+            inputs: [{ internalType: "bool", name: "onOff", type: "bool" }],
+            name: "precipitatingEvent",
+            outputs: [{ internalType: "bool", name: "success", type: "bool" }],
+            stateMutability: "nonpayable",
+            type: "function",
+          },
+          {
+            inputs: [],
+            name: "uniqueCollaborators",
+            outputs: [{ internalType: "uint8", name: "num", type: "uint8" }],
+            stateMutability: "view",
+            type: "function",
+          },
+          {
+            inputs: [],
+            name: "getBountyStatus",
+            outputs: [
+              {
+                internalType: "uint256[5]",
+                name: "_stats",
+                type: "uint256[5]",
+              },
+            ],
+            stateMutability: "view",
+            type: "function",
+          },
+          {
+            inputs: [],
+            name: "join",
+            outputs: [{ internalType: "bool", name: "success", type: "bool" }],
+            stateMutability: "payable",
+            type: "function",
+          },
+          {
+            inputs: [
+              {
+                internalType: "uint256",
+                name: "_reservePrice",
+                type: "uint256",
+              },
+              { internalType: "uint64", name: "_endTime", type: "uint64" },
+              {
+                internalType: "address payable",
+                name: "_creatorWallet",
+                type: "address",
+              },
+            ],
+            name: "negotiate",
+            outputs: [{ internalType: "bool", name: "success", type: "bool" }],
+            stateMutability: "nonpayable",
+            type: "function",
+          },
+          {
+            inputs: [
+              {
+                internalType: "address payable",
+                name: "_creatorWallet",
+                type: "address",
+              },
+              { internalType: "uint64", name: "_endTime", type: "uint64" },
+            ],
+            name: "claim",
+            outputs: [{ internalType: "bool", name: "success", type: "bool" }],
+            stateMutability: "nonpayable",
+            type: "function",
+          },
+          {
+            inputs: [],
+            name: "waitingForSignature",
+            outputs: [{ internalType: "bool", name: "success", type: "bool" }],
+            stateMutability: "nonpayable",
+            type: "function",
+          },
+          {
+            inputs: [],
+            name: "complete",
+            outputs: [{ internalType: "bool", name: "success", type: "bool" }],
+            stateMutability: "nonpayable",
+            type: "function",
+          },
+          {
+            inputs: [],
+            name: "reject",
+            outputs: [{ internalType: "bool", name: "success", type: "bool" }],
+            stateMutability: "nonpayable",
+            type: "function",
+          },
+        ];
+        const contractAddress = "0x1D96fF464DF775C58D31a2C1f1688bB5B2E56356";
+        const name = "Bounty";
+        const contract = new web3.eth.Contract(abi, contractAddress);
+
+        return {
+          abi: abi,
+          address: contractAddress,
+          web3Object: contract,
+          /* generated functions*/
+          constructor: function () {},
+          viewBalanceOf: async function viewBalanceOf(_owner) {
+            return call(contract, "balanceOf", _owner);
+          },
+          viewEquityOf: async function viewEquityOf(_owner) {
+            return call(contract, "equityOf", _owner);
+          },
+          executeExit: async function executeExit(accountAddress) {
+            return send(contract, accountAddress, "exit");
+          },
+          viewGetCollaboratorsList: async function viewGetCollaboratorsList() {
+            return call(contract, "getCollaboratorsList");
+          },
+          viewGetEquityList: async function viewGetEquityList() {
+            return call(contract, "getEquityList");
+          },
+          viewGetTreasuryStatus: async function viewGetTreasuryStatus() {
+            return call(contract, "getTreasuryStatus");
+          },
+          viewOwner: async function viewOwner() {
+            return call(contract, "owner");
+          },
+          executePrecipitatingEvent: async function executePrecipitatingEvent(
+            accountAddress,
+            onOff
+          ) {
+            return send(contract, accountAddress, "precipitatingEvent", onOff);
+          },
+          viewUniqueCollaborators: async function viewUniqueCollaborators() {
+            return call(contract, "uniqueCollaborators");
+          },
+          viewGetBountyStatus: async function viewGetBountyStatus() {
+            return call(contract, "getBountyStatus");
+          },
+          executeJoinPayable: async function executeJoinPayable(
+            accountAddress,
+            value
+          ) {
+            return sendPayable(contract, accountAddress, "join", value);
+          },
+          executeNegotiate: async function executeNegotiate(
+            accountAddress,
+            _reservePrice,
+            _reservePrice,
+            _endTime,
+            _reservePrice,
+            _reservePrice,
+            _endTime,
+            _creatorWallet
+          ) {
+            return send(
+              contract,
+              accountAddress,
+              "negotiate",
+              _reservePrice,
+              _reservePrice,
+              _endTime,
+              _reservePrice,
+              _reservePrice,
+              _endTime,
+              _creatorWallet
+            );
+          },
+          executeClaim: async function executeClaim(
+            accountAddress,
+            _creatorWallet,
+            _creatorWallet,
+            _endTime
+          ) {
+            return send(
+              contract,
+              accountAddress,
+              "claim",
+              _creatorWallet,
+              _creatorWallet,
+              _endTime
+            );
+          },
+          executeWaitingForSignature: async function executeWaitingForSignature(
+            accountAddress
+          ) {
+            return send(contract, accountAddress, "waitingForSignature");
+          },
+          executeComplete: async function executeComplete(accountAddress) {
+            return send(contract, accountAddress, "complete");
+          },
+          executeReject: async function executeReject(accountAddress) {
+            return send(contract, accountAddress, "reject");
+          },
+        };
+      })(),
+    };
   };
 
   const onMetamaskLoaded = async () => {
@@ -44,6 +594,10 @@
 
   const getAccount = () => {
     return account;
+  };
+
+  const setAccount = (newAccount) => {
+    account = newAccount;
   };
 
   const switchToProperNode = async () => {
@@ -77,12 +631,18 @@
         } catch (addError) {
           // handle "add" error
           alert(
-            `${error.code}. Something went wrong while trying to add network: ${error?.message}`
+            `${error.code}. Something went wrong while trying to add network: ${
+              error && error.message
+            }`
           );
         }
       } else {
         alert(
-          `Error ${error.code}. Something went wrong while trying to switch networks: ${error?.message}`
+          `Error ${
+            error.code
+          }. Something went wrong while trying to switch networks: ${
+            error && error.message
+          }`
         );
       }
     }
@@ -95,7 +655,7 @@
     }
     const a = await web3.eth.getChainId();
     const accounts = await eth.request({ method: "eth_accounts" });
-    if (!accounts?.length) {
+    if (!(accounts && accounts.length)) {
       // User is not connected to metamask
       return null;
     }
@@ -107,7 +667,6 @@
 
   // request metamask accounts. returns true if success, false if not connected
   const requestMetamaskAccounts = async () => {
-    console.log("switching?");
     // first switch to the proper chain before even connecting
     await switchToProperNode();
     if (eth == null) {
@@ -118,7 +677,7 @@
     });
 
     // User is not connected to metmask
-    if (!accounts?.length) {
+    if (!(accounts && accounts.length)) {
       return null;
     }
     // otherwise we found the current address, let's store it
@@ -126,88 +685,61 @@
     return account;
   };
 
-  const setupContract = (abi, contractAddress) => {
-    abi = abi;
-
-    console.log("address contract", address);
-    if (!contractAddress) {
-      throw new Error("no address provided");
-    }
-    address = contractAddress;
-    contract = new web3.eth.Contract(abi, address);
-  };
-
-  const send = async (methodName, ...args) => {
-    // const newAccount = await web3.eth.personal.newAccount("test");
-    // console.log("newAccount", newAccount);
-    // await web3.eth.personal.unlockAccount(newAccount, "test", 10000);
-    // const acc = web3.eth.accounts.create();
-    // console.log("agcc", acc);
-    // web3.eth.personal.importRawKey(acc.privateKey, "password");
-    console.log("Unlocking account", account);
-
-    // web3.eth.personal.lockAccount(account);
-
-    if (account == null) {
+  const send = async (contract, accountAddress, methodName, ...args) => {
+    if (accountAddress == null) {
       throw new Error("User has not connected Metamask");
     }
-    console.log("arguments", args[0]);
-    console.log("accounts", contract);
-
-    console.log("contract methods", args, methodName, account);
 
     const transaction = contract.methods[methodName](...args);
+
+    const g = await transaction.estimateGas({ from: accountAddress });
     const result = await transaction
       .send({
-        from: account,
-        gas: await transaction.estimateGas({ from: account }),
+        from: accountAddress,
+        gas: Math.round(g * 1.25),
       })
       .on("error", function (error, receipt) {
         console.error("error", error);
         throw error;
       });
 
-    // const receipt = await contract.methods[methodName](...args)
-    //   .send({
-    //     // from: newAccount,
-    //     from: account,
-    //   })
-    //   .on("error", function (error, receipt) {
-    //     throw error;
-    //   });
     return result;
   };
 
-  // const sendPayable = async (methodName, value, ...args) => {
-  //   // const newAccount = await web3.eth.personal.newAccount("test");
-  //   // console.log("newAccount", newAccount);
-  //   // await web3.eth.personal.unlockAccount(newAccount, "test", 10000);
-  //   // if (account == null) {
-  //   //   throw new Error("User has not connected Metamask");
-  //   // }
-  //   console.log("arguments", args[0]);
-  //   console.log("accounts", contract);
-  //   const receipt = await contract.methods[methodName](...args)
-  //     .send({
-  //       // from: newAccount,
-  //       from: account,
-  //       value: value,
-  //     })
-  //     .on("error", function (error, receipt) {
-  //       throw error;
-  //     });
-  //   return receipt;
-  // };
+  const sendPayable = async (
+    contract,
+    accountAddress,
+    methodName,
+    value,
+    ...args
+  ) => {
+    if (accountAddress == null) {
+      throw new Error("User has not connected Metamask");
+    }
 
-  const call = async (methodName, ...args) => {
+    const transaction = contract.methods[methodName](...args);
+
+    const data = {
+      from: accountAddress,
+      value: value,
+    };
+    const g = await transaction.estimateGas(data);
+    const result = await transaction
+      .send({
+        gas: g,
+        ...data,
+      })
+      .on("error", function (error, receipt) {
+        throw error;
+      });
+    return result;
+  };
+
+  const call = async (contract, methodName, ...args) => {
     let val = null;
-    // const acc = web3.eth.accounts.create();
-    // console.log("agcc", acc);
 
     try {
-      console.log("trying", account, methodName);
       val = await contract.methods[methodName](...args).call();
-      console.log("trying val", val);
     } catch (e) {
       console.error("error", e);
       throw e;
@@ -215,36 +747,6 @@
 
     return val;
   };
-
-  /*
-   *
-   * options: {
-   *   filter - (optional) Filter events by indexed parameters : {
-   *    _param1:
-   *    _param2
-   *   }
-   *   fromBlock - Number|String|BN|BigNumber (optional): The block number (greater than or equal to) from which to get events on. Pre-defined block numbers as "earliest", "latest" and "pending" can also be used. For specific range use getPastEvents.
-   *   topics[] - Array (optional) This allows to manually set the topics for the event filter. If given the filter property and event signature, (topic[0]) will not be set automatically. PROB NOT NEEDED
-   * }
-   * callback: Function()
-   * events: "data", "changed", "error", "connected"
-   *
-   * The structure of the returned event Object looks as follows:
-
-   * event - String: The event name.
-   * signature - String|Null: The event signature, null if it’s an anonymous event.
-   * address - String: Address this event originated from.
-   * returnValues - Object: The return values coming from the event, e.g. {myVar: 1, myVar2: '0x234...'}.
-   * logIndex - Number: Integer of the event index position in the block.
-   * transactionIndex - Number: Integer of the transaction’s index position the event was created in.
-   * transactionHash 32 Bytes - String: Hash of the transaction this event was created in.
-   * blockHash 32 Bytes - String: Hash of the block this event was created in. null when it’s still pending.
-   * blockNumber - Number: The block number this log was created in. null when still pending.
-   * raw.data - String: The data containing non-indexed log parameter.
-   * raw.topics - Array: An array with max 4 32 Byte topics, topic 1-3 contains indexed parameters of the event.
-   *
-   *
-   */
 
   const onEvent = async (
     eventName,
@@ -280,23 +782,13 @@
 
   /* generated */
 
-  const set = async function set(value) {
-    return await send("set", value);
-  };
-
-  const get = async function get() {
-    return await call("get");
-  };
-
-  console.log(web3);
-
   /* exports */
   window.kontour = {
     init,
     fetchMetamaskAccount,
     requestMetamaskAccounts,
-    setupContract,
     send,
+    sendPayable,
     call,
     getAccount,
     isMetamaskAvailable,
@@ -306,12 +798,11 @@
     // }
 
     /* escape hatches */
-    web3: () => web3,
+    web3,
     eth,
 
-    /* generated code */
-    set,
-    get,
+    /* generated contracts are created after web3 is loaded*/
+    contracts: {},
   };
 
   init();
