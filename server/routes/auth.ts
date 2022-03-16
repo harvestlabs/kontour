@@ -178,6 +178,8 @@ authRouter.get(
     });
     const { login, id, avatar_url } = await resp.json();
 
+    let finalUser;
+    const loggedInUser = ctx.state?.user;
     const maybeLogin = await LoginData.findOne({
       where: {
         github_id: id,
@@ -189,24 +191,40 @@ authRouter.get(
         },
       ],
     });
-    let user = maybeLogin?.user;
-    if (!user) {
-      user = await User.create({});
+    // #1 Happy case: no github acc exists, no user is logged in
+    // We create the LoginData for the github account and create the new user
+    //
+    // #2 case: Github user account does not exist, user is logged in
+    // and they are not the same id. We create LoginData for the existing user
+    if (!maybeLogin) {
+      if (!loggedInUser) {
+        finalUser = await User.create({});
+      } else {
+        finalUser = loggedInUser;
+      }
       await LoginData.create({
         github_id: id,
         github_handle: login,
-        user_id: user.id,
+        user_id: finalUser.id,
       });
       const profile = await Profile.findOne({
         where: {
-          user_id: user.id,
+          user_id: finalUser.id,
         },
       });
       profile.image_url = avatar_url;
       await profile.save();
-    } else {
-      user.profile.image_url = avatar_url;
-      await user.profile.save();
+    }
+    // #3 case: Github user account exists, no user is logged in
+    // OR user logged in is the same as the github user
+    // We set the logged in user to the github user and refresh the image
+    //
+    // #4 case: Github user account exists, user is logged in
+    // They are different user ids - we log in as the github user
+    else {
+      finalUser = maybeLogin.user;
+      finalUser.profile.image_url = avatar_url;
+      await finalUser.profile.save();
     }
 
     const appOctokit = new App({
@@ -224,13 +242,13 @@ authRouter.get(
     );
     const existingGHData = await GithubData.findOne({
       where: {
-        user_id: user.id,
+        user_id: finalUser.id,
         github_id: data.account.id,
       },
     });
     if (!existingGHData) {
       await GithubData.create({
-        user_id: user.id,
+        user_id: finalUser.id,
         github_app_install_id: Number(installation_id),
         github_id: data.account.id,
         github_handle: data.account.login,
@@ -241,7 +259,7 @@ authRouter.get(
       await existingGHData.save();
     }
     ctx.status = 200;
-    setJwtHeaderOnLogin(ctx, user);
+    setJwtHeaderOnLogin(ctx, finalUser);
     return;
   }
 );
