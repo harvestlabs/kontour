@@ -41,10 +41,6 @@ type Props = { contract: InteractableContractFragment };
 export default function InteractableContract({
   contract: { id, address, contractSource },
 }: Props) {
-  const [argsMapping, setArgsMapping] = useState<any>({});
-  const [eventData, setEventData] = useState<any>("");
-  const [gasUsed, setGasUsed] = useState<number | null>(null);
-  const [result, setResult] = useState<any>(null);
   let {
     functions,
     // constructor,
@@ -115,9 +111,24 @@ export default function InteractableContract({
     setGetterValuesWithParams(getterValuesWithParams);
   }, [contract.methods, getters]);
 
+  useEffect(() => {
+    console.log("hit once event");
+    events.map((event) => {
+      contract.events[event.name]({}, (err: any, e: any) => {
+        console.log("GOT AN EVENT", err, e);
+      });
+    });
+  }, [contract, events]);
+
   return contractSource != null ? (
     <Flex width="100%" flexDirection="column" padding="40px">
       <Heading>{contractSource.name}.sol</Heading>
+      <Flex mt="20px" px="16px">
+        <Heading fontSize="14px" variant="nocaps">
+          Events
+        </Heading>
+        <Flex></Flex>
+      </Flex>
       <Flex width="100%">
         <Box flex="1">
           <Table
@@ -210,11 +221,6 @@ export default function InteractableContract({
           </Table>
         </Box>
       </Flex>
-      <VStack>
-        <Text>Latest result: {result}</Text>
-        <Text>Events: {eventData}</Text>
-        <Text>Gas: {gasUsed}</Text>
-      </VStack>
     </Flex>
   ) : null;
 }
