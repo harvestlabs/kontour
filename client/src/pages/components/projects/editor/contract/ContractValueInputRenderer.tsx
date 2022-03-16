@@ -21,6 +21,7 @@ export default function ContractValueInputRenderer({
     default:
       return (
         <Input
+          size="sm"
           {...register(name, {
             onChange: (e) => {
               trigger(name);

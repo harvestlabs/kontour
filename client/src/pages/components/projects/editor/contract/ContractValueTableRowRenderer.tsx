@@ -46,7 +46,6 @@ export default function ContractValueTableRowRenderer({
 
   useEffect(() => {
     async function getRenderedValueWithInputs(inputs: any[]) {
-      console.log("testing", errors, inputs);
       try {
         const a = await contract.methods[name](...inputs).call();
         setValueToRender(a);
@@ -87,18 +86,22 @@ export default function ContractValueTableRowRenderer({
       try {
         const a = await contract.methods[name]().call();
         setValueToRender(a);
-      } catch (e) {}
+        clearErrors();
+      } catch (e: any) {
+        setError("execute", { message: `${name}: ${e.message}` });
+      }
     }
     if (!inputs?.length) {
       getRenderedValue();
     }
-  }, [contract.methods, inputs, name]);
+  }, [clearErrors, contract.methods, inputs, name, setError]);
 
-  console.log("errors", errors?.execute?.message);
   return (
     <>
       <Tr key={name}>
-        <Td>{name}:</Td>
+        <Td>
+          <b>{name}</b>
+        </Td>
 
         {errors?.execute ? (
           <Td>{errors?.execute?.message}</Td>
@@ -111,7 +114,9 @@ export default function ContractValueTableRowRenderer({
       {inputs
         ? inputs.map((input, idx) => (
             <Tr key={input.name}>
-              <Td>{input.name}</Td>
+              <Td>
+                {input.name} : {input.type}
+              </Td>
               <Td>
                 <FormControl>
                   <ContractValueInputRenderer
@@ -120,7 +125,6 @@ export default function ContractValueTableRowRenderer({
                     type={input.type}
                     trigger={trigger}
                   />
-                  <FormHelperText m="0">{input.type}</FormHelperText>
                 </FormControl>
               </Td>
             </Tr>

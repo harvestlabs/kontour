@@ -24,6 +24,7 @@ export default function EditorPublishButton({
     <>
       <Button
         size="lg"
+        zIndex="10000"
         position="fixed"
         bottom="24px"
         right="24px"
