@@ -1,5 +1,6 @@
-"use strict";
 import Router, { RouterContext } from "koa-router";
+import fetch from "node-fetch";
+import fs from "fs";
 
 import passport from "../utils/passport";
 import { setJwtHeaderOnLogin } from "../utils/jwt";
@@ -8,6 +9,8 @@ import User from "../models/User.model";
 import Profile from "../models/Profile.model";
 import LoginData from "../models/LoginData.model";
 import config from "../../config";
+import GithubData from "../models/GithubData.model";
+import { App } from "@octokit/app";
 
 const authRouter = new Router({
   prefix: "/auth",
@@ -148,5 +151,99 @@ authRouter.get("/github_callback", async (ctx: RouterContext, next: Next) => {
     }
   )(ctx, next);
 });
+authRouter.get(
+  "/github/app_callback",
+  async (ctx: RouterContext, next: Next) => {
+    const { code, installation_id } = ctx.request.query;
+
+    const TOKEN_URL = `https://github.com/login/oauth/access_token`;
+    let resp = await fetch(TOKEN_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        client_id: config.github.APP_CLIENT_ID,
+        client_secret: config.github.APP_CLIENT_SECRET,
+        code: code,
+      }),
+    });
+    const { access_token, refresh_token } = await resp.json();
+    resp = await fetch("https://api.github.com/user", {
+      headers: {
+        Authorization: `token ${access_token}`,
+        Accept: "application/json",
+      },
+    });
+    const { login, id, avatar_url } = await resp.json();
+
+    const maybeLogin = await LoginData.findOne({
+      where: {
+        github_id: id,
+      },
+      include: [
+        {
+          model: User,
+          include: [Profile],
+        },
+      ],
+    });
+    let user = maybeLogin?.user;
+    if (!user) {
+      user = await User.create({});
+      await LoginData.create({
+        github_id: id,
+        github_handle: login,
+        user_id: user.id,
+      });
+      const profile = await Profile.findOne({
+        where: {
+          user_id: user.id,
+        },
+      });
+      profile.image_url = avatar_url;
+      await profile.save();
+    } else {
+      user.profile.image_url = avatar_url;
+      await user.profile.save();
+    }
+
+    const appOctokit = new App({
+      appId: config.github.APP_ID,
+      privateKey: config.github.APP_PK,
+    });
+    const octokit = await appOctokit.getInstallationOctokit(
+      Number(installation_id)
+    );
+    const { data } = await octokit.request(
+      "GET /app/installations/{installation_id}",
+      {
+        installation_id: Number(installation_id),
+      }
+    );
+    const existingGHData = await GithubData.findOne({
+      where: {
+        user_id: user.id,
+        github_id: data.account.id,
+      },
+    });
+    if (!existingGHData) {
+      await GithubData.create({
+        user_id: user.id,
+        github_app_install_id: Number(installation_id),
+        github_id: data.account.id,
+        github_handle: data.account.login,
+      });
+    } else {
+      existingGHData.github_app_install_id = Number(installation_id);
+      existingGHData.github_handle = data.account.login;
+      await existingGHData.save();
+    }
+    ctx.status = 200;
+    setJwtHeaderOnLogin(ctx, user);
+    return;
+  }
+);
 
 export default authRouter;

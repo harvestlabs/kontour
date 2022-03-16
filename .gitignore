@@ -6,3 +6,5 @@ database/
 *.code-workspace
 .env*
 arweave-key-nftoolkit.json
+
+*.pem

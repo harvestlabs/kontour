@@ -3,11 +3,11 @@ import config from "../../config";
 import Redis from "ioredis";
 import { RedisPubSub } from "graphql-redis-subscriptions";
 
-const WORKER_LISTEN_QUEUE = "badger_worker_listen";
+const WORKER_LISTEN_QUEUE = "kontour_worker_listen";
 const WORKER_MSG_QUEUES = {
-  addItemsToMachine: {
-    name: "addItemsToMachine",
-    receive: "recv_add_items_to_machine",
+  buildGithubRepo: {
+    name: "buildGithubRepo",
+    receive: "recv_build_github_repo",
   },
 };
 

@@ -1,11 +1,5 @@
-import { compileSol, compileSourceString } from "solc-typed-ast";
-import SimpleStorage from "../templates/SimpleStorage";
 import { local, polygon, eth } from "../../server/utils/web3";
-import { exec } from "child_process";
-import fs from "fs";
 import { Account } from "web3-core";
-import { ContractType } from "../templates/types";
-import { TEMP_BIN, TEMP_JSON } from "./compile";
 
 const TEMP_FILE = "temp.sol";
 

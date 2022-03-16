@@ -18,6 +18,9 @@ import LocalContractSource from "./LocalContractSource.model";
 import Node from "./Node.model";
 import NodeAccount from "./NodeAccount.model";
 
+import GithubRepo from "./GithubRepo.model";
+import GithubData from "./GithubData.model";
+
 export default function init() {
   const sequelize = new Sequelize(
     config.mysql.DATABASE,
@@ -49,6 +52,8 @@ export default function init() {
     Instance,
     Node,
     NodeAccount,
+    GithubRepo,
+    GithubData,
   ]);
   postInit();
   return sequelize;

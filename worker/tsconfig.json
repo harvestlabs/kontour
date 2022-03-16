@@ -3,14 +3,14 @@
     "target": "es6",
     "lib": ["es2021", "dom"],
     "module": "commonjs",
-    "rootDir": "./",
+    "rootDir": "../",
     "outDir": "./build",
     "esModuleInterop": true,
-    "typeRoots": ["./node_modules/@types"],
+    "typeRoots": ["../node_modules/@types"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "useDefineForClassFields": false,
     "resolveJsonModule": true
   },
-  "exclude": ["node_modules", "client", "worker"]
+  "include": ["../server/models/**/*", "../server/utils/**/*", "main.ts"]
 }

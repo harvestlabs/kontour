@@ -3,6 +3,7 @@ import { UserQueries, UserMutations } from "./user";
 import { ProjectQueries, ProjectMutations } from "./project";
 import { InstanceQueries, InstanceMutations } from "./instance";
 import { ContractQueries, ContractMutations } from "./contract";
+import { GithubRepoQueries, GithubRepoMutations } from "./githubRepo";
 import {
   ContractSourceQueries,
   ContractSourceMutations,
@@ -15,7 +16,8 @@ const rootQuery = new GraphQLObjectType({
     ContractQueries,
     ProjectQueries,
     ContractSourceQueries,
-    InstanceQueries
+    InstanceQueries,
+    GithubRepoQueries
   ),
 });
 const rootMutation = new GraphQLObjectType({
@@ -25,7 +27,8 @@ const rootMutation = new GraphQLObjectType({
     ContractMutations,
     ProjectMutations,
     ContractSourceMutations,
-    InstanceMutations
+    InstanceMutations,
+    GithubRepoMutations
   ),
 });
 
