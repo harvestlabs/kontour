@@ -84,38 +84,26 @@ export default function InteractableContract({
   >([]);
 
   useEffect(() => {
-    async function fetchGetterValuesAsync(
-      innerGetters: ContractSourceFunction[]
-    ) {
-      // we only want to show the values we can get with no input
-      const [getterValuesWithoutParams, getterValuesWithParams] =
-        await Promise.all([
-          Promise.all(
-            innerGetters
-              .filter((func) => func.inputs.length === 0)
-              .map(async (func) => {
-                return {
-                  name: func.name,
-                };
-              })
-          ),
-
-          Promise.all(
-            innerGetters
-              .filter((func) => func.inputs.length > 0)
-              .map(async (func) => {
-                return {
-                  name: func.name,
-                  inputs: func.inputs,
-                };
-              })
-          ),
-        ]);
-      setGetterValuesWithoutParams(getterValuesWithoutParams);
-      setGetterValuesWithParams(getterValuesWithParams);
-    }
-
-    fetchGetterValuesAsync(getters);
+    // we only want to show the values we can get with no input
+    const [getterValuesWithoutParams, getterValuesWithParams] = [
+      getters
+        .filter((func) => func.inputs.length === 0)
+        .map((func) => {
+          return {
+            name: func.name,
+          };
+        }),
+      getters
+        .filter((func) => func.inputs.length > 0)
+        .map((func) => {
+          return {
+            name: func.name,
+            inputs: func.inputs,
+          };
+        }),
+    ];
+    setGetterValuesWithoutParams(getterValuesWithoutParams);
+    setGetterValuesWithParams(getterValuesWithParams);
   }, [contract.methods, getters]);
 
   return contractSource != null ? (

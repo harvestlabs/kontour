@@ -1,18 +1,31 @@
 import { Input } from "@chakra-ui/react";
+import { UseFormRegister, UseFormTrigger } from "react-hook-form";
 
-type Props = { type: string; onChanged: (value: any) => void };
+type Props = {
+  type: string;
+  name: string;
+  register: UseFormRegister<any>;
+  trigger: UseFormTrigger<any>;
+};
 
 const ContractValueTypes = "address";
 
-export default function ContractValueInputRenderer({ type, onChanged }: Props) {
+export default function ContractValueInputRenderer({
+  name,
+  type,
+  register,
+  trigger,
+}: Props) {
   switch (type) {
     case "address":
     default:
       return (
         <Input
-          onChange={(e) => {
-            onChanged(e.target.value);
-          }}
+          {...register(name, {
+            onChange: (e) => {
+              trigger(name);
+            },
+          })}
         />
       );
   }
