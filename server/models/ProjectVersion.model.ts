@@ -69,6 +69,11 @@ export default class ProjectVersion extends Model {
   @HasMany(() => Instance, "project_version_id")
   instances: Instance[];
 
+  @AfterCreate
+  static async createGenesisInstance(version: ProjectVersion) {
+    await version.createBlankHeadInstance();
+  }
+
   async updateSources(
     sourceData: ProjectVersionSourceData
   ): Promise<ProjectVersion> {
