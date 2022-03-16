@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import ContractValueInputRenderer from "./ContractValueInputRenderer";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { KONTOUR_REFRESH_CONTRACT } from "@utils/constants";
 
 export type ContractFunctionInputType = {
   name: string;
@@ -45,7 +46,9 @@ export default function ContractValueTableRowRenderer({
   } = useForm<any>();
 
   useEffect(() => {
-    async function getRenderedValueWithInputs(inputs: any[]) {
+    async function getRenderedValueWithInputs(
+      inputs: ContractFunctionInputType[]
+    ) {
       try {
         const a = await contract.methods[name](...inputs).call();
         setValueToRender(a);
@@ -55,24 +58,50 @@ export default function ContractValueTableRowRenderer({
         setError("execute", { message: `${name}: ${e.message}` });
       }
     }
-    const subscription = watch((value, { name, type }) => {
+
+    function fetchNewValue(inputs: ContractFunctionInputType[] = []) {
+      console.log("calling fetch");
       if (inputs?.length && inputs?.length > 0) {
         const values = getValues();
         const inputValues = Object.keys(values)
           .map((key) => values[key])
           .filter((val) => val);
+
         if (inputValues.length === inputs.length) {
           getRenderedValueWithInputs(inputValues);
         } else {
           clearErrors();
         }
+      } else {
+        getRenderedValueWithInputs(inputs);
       }
-    });
-    return () => subscription.unsubscribe();
+    }
+
+    function autoRefresh() {
+      console.log("event triggered");
+      fetchNewValue(inputs);
+    }
+    document.addEventListener(KONTOUR_REFRESH_CONTRACT, autoRefresh);
+    let unsubscribers: (() => void)[] = [
+      () => {
+        document.removeEventListener(KONTOUR_REFRESH_CONTRACT, autoRefresh);
+      },
+    ];
+
+    if (!inputs?.length) {
+      fetchNewValue(inputs);
+    } else {
+      const subscription = watch((value, { name, type }) => {
+        fetchNewValue(inputs);
+      });
+      unsubscribers.push(() => subscription.unsubscribe());
+    }
+    return () => {
+      unsubscribers.map((unsubscriber) => unsubscriber());
+    };
   }, [
     clearErrors,
     contract.methods,
-    errors,
     getValues,
     inputs,
     inputs?.length,
@@ -80,21 +109,6 @@ export default function ContractValueTableRowRenderer({
     setError,
     watch,
   ]);
-
-  useEffect(() => {
-    async function getRenderedValue() {
-      try {
-        const a = await contract.methods[name]().call();
-        setValueToRender(a);
-        clearErrors();
-      } catch (e: any) {
-        setError("execute", { message: `${name}: ${e.message}` });
-      }
-    }
-    if (!inputs?.length) {
-      getRenderedValue();
-    }
-  }, [clearErrors, contract.methods, inputs, name, setError]);
 
   return (
     <>

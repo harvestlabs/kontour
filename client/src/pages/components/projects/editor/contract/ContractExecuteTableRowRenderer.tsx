@@ -16,6 +16,7 @@ import ContractValueInputRenderer from "./ContractValueInputRenderer";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ContractFunctionInputType } from "./ContractValueTableRowRenderer";
 import * as Icons from "react-feather";
+import { RefreshContractEvent } from "@utils/contracts";
 
 type Props = {
   name: string;
@@ -70,6 +71,8 @@ export default function ContractExecuteTableRowRenderer({
     } catch (e: any) {
       console.log("error", e);
       setError("execute", { message: `${name}: ${e.message}` });
+    } finally {
+      document.dispatchEvent(RefreshContractEvent);
     }
   }, [
     clearErrors,

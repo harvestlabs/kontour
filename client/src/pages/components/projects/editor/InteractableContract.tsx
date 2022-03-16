@@ -123,7 +123,6 @@ export default function InteractableContract({
           <Table
             variant="simple"
             size="sm"
-            lineHeight="12px"
             sx={{
               "&": {
                 tableLayout: "fixed",
