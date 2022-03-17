@@ -11,6 +11,7 @@ export interface ProjectVersionQuery_projectVersion_contract_sources {
   __typename: "ContractSource";
   id: string;
   type: number;
+  source_type: number | null;
   name: string;
   constructor: any | null;
   events: any;
@@ -36,6 +37,23 @@ export interface ProjectVersionQuery_projectVersion_head_instance_contracts {
   contractSource: ProjectVersionQuery_projectVersion_head_instance_contracts_contractSource;
 }
 
+export interface ProjectVersionQuery_projectVersion_head_instance_global_contracts_contractSource {
+  __typename: "ContractSource";
+  id: string;
+  name: string;
+  functions: any;
+  constructor: any | null;
+  abi: any | null;
+  events: any;
+}
+
+export interface ProjectVersionQuery_projectVersion_head_instance_global_contracts {
+  __typename: "Contract";
+  id: string;
+  address: string;
+  contractSource: ProjectVersionQuery_projectVersion_head_instance_global_contracts_contractSource;
+}
+
 export interface ProjectVersionQuery_projectVersion_head_instance {
   __typename: "Instance";
   /**
@@ -57,6 +75,7 @@ export interface ProjectVersionQuery_projectVersion_head_instance {
    */
   project_version_id: string;
   contracts: ProjectVersionQuery_projectVersion_head_instance_contracts[];
+  global_contracts: ProjectVersionQuery_projectVersion_head_instance_global_contracts[];
 }
 
 export interface ProjectVersionQuery_projectVersion {

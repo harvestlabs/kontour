@@ -78,7 +78,6 @@ export default function ContractValueTableRowRenderer({
     }
 
     function autoRefresh() {
-      console.log("event triggered");
       fetchNewValue(inputs);
     }
     document.addEventListener(KONTOUR_REFRESH_CONTRACT, autoRefresh);

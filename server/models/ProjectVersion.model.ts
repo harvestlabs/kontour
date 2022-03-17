@@ -120,7 +120,7 @@ export default class ProjectVersion extends Model {
     return instance;
   }
 
-  async createBlankHeadInstance() {
+  async createBlankHeadInstance(): Promise<Instance | null> {
     if (this.status === ProjectVersionStatus.DRAFT) {
       const instance = await Instance.create({
         project_version_id: this.id,
@@ -128,8 +128,9 @@ export default class ProjectVersion extends Model {
         data: {},
         status: InstanceStatus.HEAD,
       });
-      await instance.makeHead();
+      return await instance.makeHead();
     }
+    return null;
   }
 
   async getHead() {

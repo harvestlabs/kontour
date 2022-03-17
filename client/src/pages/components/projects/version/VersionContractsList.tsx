@@ -98,15 +98,17 @@ export default function VersionContractsList({
         Contracts
       </Heading>
       <Accordion allowToggle={true}>
-        {contract_sources.map((source) => {
-          return (
-            <VersionContractsListItem
-              key={source.id}
-              contract_source={source}
-              onDeploy={onDeploy(source.id, source.type)}
-            />
-          );
-        })}
+        {contract_sources
+          .filter((source) => source.source_type !== 1)
+          .map((source) => {
+            return (
+              <VersionContractsListItem
+                key={source.id}
+                contract_source={source}
+                onDeploy={onDeploy(source.id, source.type)}
+              />
+            );
+          })}
       </Accordion>
 
       <Spacer />
@@ -161,6 +163,7 @@ VersionContractsList.fragments = {
     fragment VersionContractsListFragment on ContractSource {
       id
       type
+      source_type
       ...VersionContractsListItemFragment
     }
     ${VersionContractsListItem.fragments.contract}

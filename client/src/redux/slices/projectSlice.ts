@@ -20,6 +20,7 @@ export interface ProjectState {
   selectedContractData: EditorContractViewFragment | null;
   selectedVersionId: string;
   data: ProjectData;
+  logs: any[];
 }
 
 const initialState: ProjectState = {
@@ -27,6 +28,7 @@ const initialState: ProjectState = {
   selectedContractData: null,
   selectedVersionId: "",
   data: BLANK_PROJECT_DATA,
+  logs: [],
 };
 
 export const projectSlice = createSlice({
@@ -55,6 +57,9 @@ export const projectSlice = createSlice({
     setSelectedVersionId: (state, action: PayloadAction<any>) => {
       state.selectedVersionId = action.payload;
     },
+    appendLog: (state, action: PayloadAction<any>) => {
+      state.logs.push(action.payload);
+    },
   },
 });
 
@@ -72,6 +77,7 @@ export const selectPage = (state: RootState): Page =>
   state.project.data.page || { components: [] };
 export const selectSelectedVersionId = (state: RootState): string =>
   state.project.selectedVersionId;
+export const selectLogs = (state: RootState): any[] => state.project.logs;
 
 export const {
   reset,
@@ -80,6 +86,7 @@ export const {
   mergeData,
   setSelectedContractData,
   setSelectedVersionId,
+  appendLog,
 } = projectSlice.actions;
 
 export default projectSlice.reducer;

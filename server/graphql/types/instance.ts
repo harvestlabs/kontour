@@ -43,6 +43,14 @@ const InstanceType = new GraphQLObjectType({
         return await parent.$get("contracts");
       },
     },
+    global_contracts: {
+      type: new GraphQLNonNull(
+        new GraphQLList(new GraphQLNonNull(ContractType))
+      ),
+      resolve: async (parent, args, ctx, info) => {
+        return await parent.getGlobalContracts();
+      },
+    },
   },
 });
 

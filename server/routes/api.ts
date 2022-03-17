@@ -4,7 +4,9 @@ import ApiKey from "../models/ApiKey.model";
 import Project from "../models/Project.model";
 import Node from "../models/Node.model";
 import ProjectVersion from "../models/ProjectVersion.model";
-import LocalContractSource from "../models/LocalContractSource.model";
+import LocalContractSource, {
+  SourceType,
+} from "../models/LocalContractSource.model";
 import redis from "../utils/redis";
 import authRouter from "./auth";
 import Contract, { ContractSourceType } from "../models/Contract.model";
@@ -129,7 +131,22 @@ apiRouter.post("/ingestQuikdraw/end", async (ctx, next) => {
   };
   console.log("version", version.data);
   await version.save();
-  await version.createBlankHeadInstance();
+  const instance = await version.createBlankHeadInstance();
+  if (instance) {
+    await Promise.all(
+      localSources
+        .filter((s) => s.type === SourceType.LIB)
+        .map((s) => {
+          return Contract.importFromSource(
+            s,
+            ContractSourceType.LOCAL,
+            instance.id,
+            []
+          );
+        })
+    );
+  }
+
   ctx.status = 200;
   next();
 });

@@ -37,6 +37,14 @@ const ContractSourceType = new GraphQLObjectType({
           : ModelContractSourceType.LOCAL;
       },
     },
+    source_type: {
+      type: GraphQLInt,
+      resolve: (parent, args, ctx, info) => {
+        return parent.constructor.name === "RemoteContractSource"
+          ? null
+          : parent.type;
+      },
+    },
     functions: {
       type: new GraphQLNonNull(GraphQLJSON),
       resolve: (parent, args, ctx, info) => {

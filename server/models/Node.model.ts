@@ -19,6 +19,7 @@ import Project from "./Project.model";
 export interface NodeData {
   hostUrl: string;
   chainId: number;
+  globalContracts: string[];
 }
 
 @Table({

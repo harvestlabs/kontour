@@ -112,10 +112,9 @@ export default function InteractableContract({
   }, [contract.methods, getters]);
 
   useEffect(() => {
-    console.log("hit once event");
     events.map((event) => {
       contract.events[event.name]({}, (err: any, e: any) => {
-        console.log("GOT AN EVENT", err, e);
+        console.log(`[event] ${contractSource.name}.${event.name}`, err, e);
       });
     });
   }, [contract, events]);

@@ -24,6 +24,23 @@ export interface InstanceFragment_contracts {
   contractSource: InstanceFragment_contracts_contractSource;
 }
 
+export interface InstanceFragment_global_contracts_contractSource {
+  __typename: "ContractSource";
+  id: string;
+  name: string;
+  functions: any;
+  constructor: any | null;
+  abi: any | null;
+  events: any;
+}
+
+export interface InstanceFragment_global_contracts {
+  __typename: "Contract";
+  id: string;
+  address: string;
+  contractSource: InstanceFragment_global_contracts_contractSource;
+}
+
 export interface InstanceFragment {
   __typename: "Instance";
   /**
@@ -45,4 +62,5 @@ export interface InstanceFragment {
    */
   project_version_id: string;
   contracts: InstanceFragment_contracts[];
+  global_contracts: InstanceFragment_global_contracts[];
 }

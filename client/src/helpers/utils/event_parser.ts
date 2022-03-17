@@ -4,31 +4,30 @@ export interface ParsedEventItem {
 }
 
 export default function parseEvents(
-  events: any,
+  event: any,
   abiEvents: any
 ): { [name: string]: any } {
   //@ts-ignore
   const kontour = window.kontour;
   const nameToResult: { [name: string]: ParsedEventItem[] } = {};
-  Object.keys(events).forEach((event) => {
-    const abi = abiEvents.find((a: any) => a.name === event);
-    if (abi) {
-      const { data, topics } = events[event].raw;
-      const decoded = kontour.web3.eth.abi.decodeLog(
-        abi.inputs,
-        data,
-        abi.anonymous ? topics : topics.slice(1)
-      );
-      nameToResult[event] = [];
-      abi.inputs.forEach((input: any) => {
-        if (decoded[input.name]) {
-          nameToResult[event].push({
-            name: input.name,
-            value: decoded[input.name],
-          });
-        }
-      });
-    }
-  });
+
+  const abi = abiEvents.find((a: any) => a.name === event.event);
+  if (abi) {
+    const { data, topics } = event.raw;
+    const decoded = kontour.web3.eth.abi.decodeLog(
+      abi.inputs,
+      data,
+      abi.anonymous ? topics : topics.slice(1)
+    );
+    nameToResult[abi.name] = [];
+    abi.inputs.forEach((input: any) => {
+      if (decoded[input.name]) {
+        nameToResult[abi.name].push({
+          name: input.name,
+          value: decoded[input.name],
+        });
+      }
+    });
+  }
   return nameToResult;
 }

@@ -38,6 +38,11 @@ const ProjectVersionType = new GraphQLObjectType({
               id: Object.values(parent.data.local_sources) as string[],
             },
           });
+          const instance = await parent.getHead();
+          local = await LocalContractSource.replaceLibraries(
+            instance.id,
+            local
+          );
         }
         if (parent.data.remote_sources) {
           remote = await RemoteContractSource.findAll({

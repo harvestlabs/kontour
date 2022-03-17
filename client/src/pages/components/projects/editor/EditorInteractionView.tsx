@@ -25,6 +25,7 @@ import InteractableContract from "./InteractableContract";
 import EditorRequestAirdropButton from "./EditorRequestAirdropButton";
 import { ProjectVersionQuery_projectVersion_head_instance } from "@gql/__generated__/ProjectVersionQuery";
 import { generateKontour } from "src/helpers/generator";
+import GlobalContractView from "./GlobalContractView";
 
 type Props = {
   instance?: ProjectVersionQuery_projectVersion_head_instance | null;
@@ -49,6 +50,9 @@ export default function EditorInteractionView({ instance }: Props) {
       <VStack>
         {instance.contracts.map((contract) => {
           return <InteractableContract key={contract.id} contract={contract} />;
+        })}
+        {instance.global_contracts.map((contract) => {
+          return <GlobalContractView key={contract.id} contract={contract} />;
         })}
       </VStack>
     </Flex>
@@ -75,6 +79,9 @@ EditorInteractionView.fragments = {
       project_id
       project_version_id
       contracts {
+        ...InteractableContractFragment
+      }
+      global_contracts {
         ...InteractableContractFragment
       }
     }
