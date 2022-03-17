@@ -14,6 +14,7 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import { EditorLogViewInstanceFragment } from "@gql/__generated__/EditorLogViewInstanceFragment";
+import { parseEventReturnValues } from "@utils/event_parser";
 import { useEffect, useState } from "react";
 
 type Props = { instance: EditorLogViewInstanceFragment };
@@ -76,6 +77,7 @@ function EditorLogView({ instance }: Props) {
                 const newAllEvents = [
                   {
                     ...e,
+                    returnValues: parseEventReturnValues(e, abiJson),
                     _kontour: {
                       name: contract.contractSource.name,
                     },
@@ -93,7 +95,13 @@ function EditorLogView({ instance }: Props) {
 
           const eventsWithContractMetadata = events.map((evt: any) => {
             evt._kontour = { name: contract.contractSource.name };
-            return evt;
+            return {
+              ...evt,
+              returnValues: parseEventReturnValues(evt, abiJson),
+              _kontour: {
+                name: contract.contractSource.name,
+              },
+            };
           });
           allContractEvents = allContractEvents.concat(
             eventsWithContractMetadata
