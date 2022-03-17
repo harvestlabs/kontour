@@ -163,7 +163,7 @@ export default class Instance extends Model {
   async getGlobalContracts(): Promise<Contract[]> {
     const node = await Node.findByPk(await this.getNodeId());
     return await Contract.findAll({
-      where: { id: node.data.globalContracts },
+      where: { id: node.data.globalContracts || [] },
     });
   }
 }

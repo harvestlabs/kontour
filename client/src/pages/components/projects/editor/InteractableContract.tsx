@@ -111,22 +111,24 @@ export default function InteractableContract({
     setGetterValuesWithParams(getterValuesWithParams);
   }, [contract.methods, getters]);
 
-  useEffect(() => {
-    events.map((event) => {
-      contract.events[event.name]({}, (err: any, e: any) => {
-        console.log(`[event] ${contractSource.name}.${event.name}`, err, e);
-      });
-    });
-  }, [contract, events]);
-
   return contractSource != null ? (
     <Flex width="100%" flexDirection="column" padding="40px">
       <Heading>{contractSource.name}.sol</Heading>
-      <Flex mt="20px" px="16px">
+      <Flex mt="20px" px="16px" flexDirection="column">
         <Heading fontSize="14px" variant="nocaps">
           Events
         </Heading>
-        <Flex></Flex>
+        {events.map((event) => {
+          return (
+            <Box key={event.name}>
+              <b>{event.name}</b>(
+              {event.inputs
+                .map((input) => `${input.name}: ${input.type}`)
+                .join(",")}
+              ){" "}
+            </Box>
+          );
+        })}
       </Flex>
       <Flex width="100%">
         <Box flex="1">

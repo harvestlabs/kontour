@@ -1,5 +1,13 @@
 import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import { Spacer, HStack, Box, Flex, Divider } from "@chakra-ui/react";
+import {
+  Spacer,
+  Text,
+  HStack,
+  Box,
+  Flex,
+  Divider,
+  useToast,
+} from "@chakra-ui/react";
 import { v4 } from "uuid";
 import { useAppSelector, useAppDispatch } from "src/redux/hooks";
 import {
@@ -33,6 +41,7 @@ function ProjectEditor({ version_id }: Props) {
   const selectedVersionId = useAppSelector(selectSelectedVersionId);
   const [sidebarWidth, setSidebarWidth] = useState(20);
   const [projectId, setProjectId] = useState("");
+  const toast = useToast();
 
   const [fetchVersion, { data, loading, error }] = useLazyQuery<
     ProjectVersionQuery,
@@ -44,6 +53,73 @@ function ProjectEditor({ version_id }: Props) {
 
   // in case the user changes versions
   const currentVersionId = selectedVersionId ? selectedVersionId : version_id;
+
+  // for every contract in the instance, set up a listener that shows a toast
+
+  useEffect(() => {
+    // @ts-ignore
+    const kontour = window.kontour;
+    const listeners: any[] = [];
+
+    const instance = data?.projectVersion?.head_instance;
+    // for every contract, we want to set up listeners on every event
+    instance?.contracts?.map((contract) => {
+      let { address } = contract;
+      let {
+        events,
+        abi,
+        name: contractSourceName,
+      }: {
+        name: string;
+        functions: ContractSourceFunction[];
+        events: ContractSourceEvent[];
+        // contructor: ContractSourceConstructor;
+        abi: any;
+      } = contract?.contractSource || {};
+
+      const abiJson = JSON.parse(JSON.stringify(abi));
+
+      const web3Contract = new kontour.web3.eth.Contract(abiJson, address);
+
+      // for every event on this contract set up the listener and add it to the top level listeners array so it can be removed on remount
+      events.map((event) => {
+        listeners.push(
+          web3Contract.events[event.name]({}, (err: any, e: any) => {
+            toast({
+              title: (
+                <Box>
+                  <Text fontWeight="300" color="white">
+                    Event triggered! <b>{event.name}</b> on{" "}
+                    <b>{contractSourceName}.sol</b>
+                  </Text>
+                  <Box>Return Values:</Box>
+                  {Object.keys(e?.returnValues).map((key) => {
+                    const val = e?.returnValues || {};
+                    return (
+                      <Text
+                        fontWeight="300"
+                        key={key}
+                        variant="ellipsis"
+                        color="white"
+                      >
+                        <b>{key}:</b> {val[key]}
+                      </Text>
+                    );
+                  })}
+                </Box>
+              ),
+              status: "success",
+              duration: 5000,
+              isClosable: true,
+            });
+          })
+        );
+      });
+    });
+    return () => {
+      listeners.map((emitter: any) => emitter.removeAllListeners());
+    };
+  }, [data?.projectVersion?.head_instance, toast]);
 
   useEffect(() => {
     fetchVersion({
@@ -119,11 +195,21 @@ export const PROJECT_VERSION = gql`
       status
       project_id
       node_id
+
       contract_sources {
         ...VersionContractsListFragment
       }
       head_instance {
         ...InstanceFragment
+        contracts {
+          address
+          contractSource {
+            id
+            name
+            abi
+            events
+          }
+        }
       }
     }
   }
