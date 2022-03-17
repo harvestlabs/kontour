@@ -32,12 +32,18 @@ import {
 } from "@gql/__generated__/ProjectVersionQuery";
 import { useDispatch } from "react-redux";
 import EditorInteractionView from "./EditorInteractionView";
+import EditorLogView from "./EditorLogView";
 
 const sizeOfGutter = "30px";
 
-type Props = { version_id: string };
+type Props = { version_id: string; page?: EDITOR_PAGE };
 
-function ProjectEditor({ version_id }: Props) {
+export enum EDITOR_PAGE {
+  INTERACTIVE = "interactive",
+  LOGS = "logs",
+}
+
+function ProjectEditor({ version_id, page = EDITOR_PAGE.INTERACTIVE }: Props) {
   const selectedVersionId = useAppSelector(selectSelectedVersionId);
   const [sidebarWidth, setSidebarWidth] = useState(20);
   const [projectId, setProjectId] = useState("");
@@ -82,39 +88,37 @@ function ProjectEditor({ version_id }: Props) {
       const web3Contract = new kontour.web3.eth.Contract(abiJson, address);
 
       // for every event on this contract set up the listener and add it to the top level listeners array so it can be removed on remount
-      events.map((event) => {
-        listeners.push(
-          web3Contract.events[event.name]({}, (err: any, e: any) => {
-            toast({
-              title: (
-                <Box>
-                  <Text fontWeight="300" color="white">
-                    Event triggered! <b>{event.name}</b> on{" "}
-                    <b>{contractSourceName}.sol</b>
-                  </Text>
-                  <Box>Return Values:</Box>
-                  {Object.keys(e?.returnValues).map((key) => {
-                    const val = e?.returnValues || {};
-                    return (
-                      <Text
-                        fontWeight="300"
-                        key={key}
-                        variant="ellipsis"
-                        color="white"
-                      >
-                        <b>{key}:</b> {val[key]}
-                      </Text>
-                    );
-                  })}
-                </Box>
-              ),
-              status: "success",
-              duration: 5000,
-              isClosable: true,
-            });
-          })
-        );
-      });
+      listeners.push(
+        web3Contract.events.allEvents({}, (err: any, e: any) => {
+          toast({
+            title: (
+              <Box>
+                <Text fontWeight="300" color="white">
+                  Event triggered! <b>{e.event}</b> on{" "}
+                  <b>{contractSourceName}.sol</b>
+                </Text>
+                <Box>Return Values:</Box>
+                {Object.keys(e?.returnValues).map((key) => {
+                  const val = e?.returnValues || {};
+                  return (
+                    <Text
+                      fontWeight="300"
+                      key={key}
+                      variant="ellipsis"
+                      color="white"
+                    >
+                      <b>{key}:</b> {val[key]}
+                    </Text>
+                  );
+                })}
+              </Box>
+            ),
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          });
+        })
+      );
     });
     return () => {
       listeners.map((emitter: any) => emitter.removeAllListeners());
@@ -178,7 +182,13 @@ function ProjectEditor({ version_id }: Props) {
               flexShrink="0"
             />
             <Box height="100%" bgColor="lightgoldenrodyellow" flexGrow="1">
-              <EditorInteractionView instance={projectVersion?.head_instance} />
+              {page === EDITOR_PAGE.LOGS ? (
+                <EditorLogView instance={projectVersion?.head_instance} />
+              ) : (
+                <EditorInteractionView
+                  instance={projectVersion?.head_instance}
+                />
+              )}
             </Box>
           </Flex>
         </>
@@ -201,6 +211,7 @@ export const PROJECT_VERSION = gql`
       }
       head_instance {
         ...InstanceFragment
+        ...EditorLogViewInstanceFragment
         contracts {
           address
           contractSource {
@@ -215,6 +226,7 @@ export const PROJECT_VERSION = gql`
   }
   ${VersionContractsList.fragments.contract}
   ${EditorInteractionView.fragments.instance}
+  ${EditorLogView.fragments.instance}
 `;
 
 export default ProjectEditor;
