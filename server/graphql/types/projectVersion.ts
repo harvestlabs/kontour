@@ -6,8 +6,10 @@ import {
   GraphQLString,
 } from "graphql";
 import GraphQLJSONObject from "graphql-type-json";
+import config from "../../../config";
 import LocalContractSource from "../../models/LocalContractSource.model";
 import RemoteContractSource from "../../models/RemoteContractSource.model";
+import { encodeId, SdkIdType } from "../../routes/sdk";
 import ContractSourceType from "./contractSource";
 import InstanceType from "./instance";
 
@@ -25,6 +27,14 @@ const ProjectVersionType = new GraphQLObjectType({
     },
     data: {
       type: GraphQLJSONObject,
+    },
+    sdk_url: {
+      type: GraphQLString,
+      resolve: (parent, args, ctx, info) => {
+        return `${config.app.PROTOCOL}://${
+          config.app.HOSTNAME
+        }/api/sdk/${encodeId(SdkIdType.VERSION, parent.id, parent.name)}`;
+      },
     },
     contract_sources: {
       type: new GraphQLList(new GraphQLNonNull(ContractSourceType)),

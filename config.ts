@@ -18,7 +18,7 @@ const Config = {
   app: {
     PORT: env.PORT || 8080,
     PROTOCOL: env.PROTOCOL || "http",
-    HOSTNAME: env.HOSTNAME || "localhost",
+    HOSTNAME: env.OUR_HOSTNAME || "localhost",
     IS_PROD: Boolean(env.IS_PROD) || env.NODE_ENV === "production",
     IS_LOCAL: false, //env.NODE_ENV === "development",
     CLIENT_HOSTNAME: env.CLIENT_HOSTNAME,

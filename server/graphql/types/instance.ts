@@ -6,6 +6,8 @@ import {
   GraphQLString,
 } from "graphql";
 import GraphQLJSONObject from "graphql-type-json";
+import config from "../../../config";
+import { encodeId, SdkIdType } from "../../routes/sdk";
 import ContractType from "./contract";
 
 const InstanceType = new GraphQLObjectType({
@@ -25,6 +27,14 @@ const InstanceType = new GraphQLObjectType({
     },
     data: {
       type: GraphQLJSONObject,
+    },
+    sdk_url: {
+      type: GraphQLString,
+      resolve: (parent, args, ctx, info) => {
+        return `${config.app.PROTOCOL}://${
+          config.app.HOSTNAME
+        }/api/sdk/${encodeId(SdkIdType.INSTANCE, parent.id, parent.name)}`;
+      },
     },
     project_id: {
       type: new GraphQLNonNull(GraphQLString),

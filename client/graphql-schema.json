@@ -7,7 +7,9 @@
     "mutationType": {
       "name": "RootMutation"
     },
-    "subscriptionType": null,
+    "subscriptionType": {
+      "name": "RootSubscription"
+    },
     "types": [
       {
         "kind": "OBJECT",
@@ -724,6 +726,18 @@
             "deprecationReason": null
           },
           {
+            "name": "sdk_url",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "contract_sources",
             "description": "The contract sources for project version",
             "args": [],
@@ -1033,6 +1047,18 @@
             "type": {
               "kind": "SCALAR",
               "name": "JSON",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "sdk_url",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -2263,6 +2289,47 @@
             "deprecationReason": null
           }
         ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RootSubscription",
+        "description": null,
+        "specifiedByUrl": null,
+        "fields": [
+          {
+            "name": "subscribeToLogs",
+            "description": null,
+            "args": [
+              {
+                "name": "id",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "SCALAR",
+              "name": "JSONObject",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
         "possibleTypes": null
       },
       {

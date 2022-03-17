@@ -29,10 +29,6 @@ services:
       - "8545:8545"
     networks:
       - webnet
-    environment:
-      - GANACHE_PK=${GANACHE_PK}
-      - GANACHE_PORT=${GANACHE_PORT}
-      - GANACHE_CHAIN_ID=1337
   mysql:
     container_name: mysql
     restart: always

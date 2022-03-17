@@ -15,6 +15,7 @@ export interface InteractableContractFragment_contractSource {
   constructor: any | null;
   abi: any | null;
   events: any;
+  source_type: number | null;
 }
 
 export interface InteractableContractFragment {

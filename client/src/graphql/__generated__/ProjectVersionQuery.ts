@@ -28,6 +28,7 @@ export interface ProjectVersionQuery_projectVersion_head_instance_contracts_cont
   constructor: any | null;
   abi: any | null;
   events: any;
+  source_type: number | null;
 }
 
 export interface ProjectVersionQuery_projectVersion_head_instance_contracts {
@@ -45,6 +46,7 @@ export interface ProjectVersionQuery_projectVersion_head_instance_global_contrac
   constructor: any | null;
   abi: any | null;
   events: any;
+  source_type: number | null;
 }
 
 export interface ProjectVersionQuery_projectVersion_head_instance_global_contracts {
@@ -96,6 +98,7 @@ export interface ProjectVersionQuery_projectVersion {
    * The id of the node this version belongs to
    */
   node_id: string | null;
+  sdk_url: string | null;
   /**
    * The contract sources for project version
    */

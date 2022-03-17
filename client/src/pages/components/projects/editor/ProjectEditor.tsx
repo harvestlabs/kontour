@@ -160,6 +160,7 @@ function ProjectEditor({ version_id, page = EDITOR_PAGE.INTERACTIVE }: Props) {
             project_id={projectId}
             version_id={currentVersionId}
             instance_id={projectVersion?.head_instance?.id}
+            sdk_url={projectVersion?.sdk_url}
           />
           <Flex bgColor="white" flexGrow="1" minHeight="1px">
             <Box
@@ -205,7 +206,6 @@ export const PROJECT_VERSION = gql`
       status
       project_id
       node_id
-
       contract_sources {
         ...VersionContractsListFragment
       }

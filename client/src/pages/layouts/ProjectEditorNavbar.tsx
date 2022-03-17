@@ -34,9 +34,15 @@ import EditorInstanceSelector from "@components/projects/editor/navbar/EditorIns
 type Props = {
   project_id: string;
   version_id: string;
-  instance_id: string;
+  instance_id?: string;
+  sdk_url?: string;
 };
-function ProjectEditorNavbar({ project_id, version_id, instance_id }: Props) {
+function ProjectEditorNavbar({
+  project_id,
+  version_id,
+  instance_id,
+  sdk_url,
+}: Props) {
   const [selectedVersionName, setSelectedVersionName] = useState("Loading...");
   const dispatch = useDispatch();
 
@@ -105,6 +111,7 @@ function ProjectEditorNavbar({ project_id, version_id, instance_id }: Props) {
           version_id={version_id}
           instance_id={instance_id}
         />
+        {sdk_url ? <Link href={sdk_url}>Get the SDK</Link> : null}
       </Flex>
       <Spacer />
       <Spacer />

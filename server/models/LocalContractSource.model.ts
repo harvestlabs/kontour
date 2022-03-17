@@ -99,6 +99,16 @@ export default class LocalContractSource extends Model {
     if (!data.bytecode || !data.abi) {
       return null;
     }
+    const existing = await LocalContractSource.findOne({
+      where: {
+        name: data.contractName,
+        bytecode: data.bytecode,
+        user_id: userId,
+      },
+    });
+    if (existing) {
+      return existing;
+    }
     const newContractSource = await LocalContractSource.create({
       name: data.contractName,
       source_name: data.sourceName,
@@ -158,8 +168,6 @@ export default class LocalContractSource extends Model {
       hashesToAddrs[hash] = libContracts[s.id];
       namesToAddrs[name] = libContracts[s.id];
     });
-    console.log("hash", hashesToAddrs);
-    console.log("name", namesToAddrs);
     // Step 2: look for /__$(hash)$__/ OR /__(Name)_____..../ in bytecode
     const hashReg = /__\$([A-Z0-9a-z]+)\$__/g;
     const nameReg = /__([A-Z0-9a-z]+)__+/g;

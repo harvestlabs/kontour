@@ -1,7 +1,7 @@
-FROM trufflesuite/ganache:latest
+FROM node:16.13.1
 
-ARG GANACHE_PK
-ARG GANACHE_PORT
-ARG GANACHE_CHAIN_ID
-# Sets the root account's balance to 1 Billion Eth
-ENTRYPOINT node /app/dist/node/cli.js --database.dbPath=/var/data --wallet.accounts=$GANACHE_PK,0x33B2E3C9FD0803CE8000000 --chain.chainId=$GANACHE_CHAIN_ID --port=$GANACHE_PORT --logging.verbose=true --chain.hardfork=london --miner.callGasLimit=0x77359400 --miner.priceBump=0
+WORKDIR /usr/src/app
+RUN npm i hardhat dotenv ioredis graphql-redis-subscriptions
+COPY . /usr/src/app
+
+ENTRYPOINT npx hardhat node | node piper.js

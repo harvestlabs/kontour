@@ -17,7 +17,7 @@ import { useDispatch } from "react-redux";
 
 type Props = {
   version_id: string;
-  instance_id: string;
+  instance_id?: string;
 };
 
 export default function EditorInstanceSelector({

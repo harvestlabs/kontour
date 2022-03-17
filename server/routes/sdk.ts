@@ -11,7 +11,7 @@ import Instance from "../models/Instance.model";
 import ProjectVersion from "../models/ProjectVersion.model";
 
 // A-String-Of-Names or something blah blah...213423-(actual encoded id)
-const MAGIC_REGEX = "^[ A-Za-z0-9-]*(-[A-Za-z0-9]+)$";
+const MAGIC_REGEX = "^[ A-Za-z0-9-]*(-[A-Za-z0-9=_-]+)$";
 
 const sdkRouter = new Router({
   prefix: "/sdk",
@@ -25,17 +25,11 @@ sdkRouter.get("/status", async (ctx, next) => {
   next();
 });
 sdkRouter.get("/:magicString", async (ctx, next) => {
-  const { key } = ctx.request.query;
-  if (!key) {
-    ctx.body = {
-      error: `No API key provided - you're gonna want to get one from ${config.app.CLIENT_HOSTNAME}/key`,
-    };
-    ctx.status = 401;
-    next();
-  }
+  console.log(decodeURI(ctx.params.magicString));
   const match = decodeURI(ctx.params.magicString).match(MAGIC_REGEX);
+
   let instance;
-  if (match[1]) {
+  if (match && match[1]) {
     // found an id
     const id = match[1].substring(1);
     const data = decodeId(id);
@@ -46,32 +40,40 @@ sdkRouter.get("/:magicString", async (ctx, next) => {
         ctx.set("Content-Type", "text/javascript");
         ctx.body = instance.generated_lib;
         ctx.status = 200;
+        next();
+        return;
       case SdkIdType.INSTANCE:
         instance = await Instance.findByPk(data.id);
         ctx.set("Content-Type", "text/javascript");
         ctx.body = instance.generated_lib;
         ctx.status = 200;
         next();
+        return;
     }
   }
+  ctx.status = 404;
+  next();
+  return;
 });
 
-enum SdkIdType {
+export enum SdkIdType {
   VERSION = 1,
   INSTANCE = 2,
 }
 interface DecodedMagicString {
-  sdkIdType: SdkIdType;
+  sdkIdType: number;
   id: string;
 }
 
-const encodeId = (t: SdkIdType, id: string): string => {
-  return Buffer.from(`${t}${id}`, "utf-8").toString("base64");
+export const encodeId = (t: SdkIdType, id: string, name: string): string => {
+  return `${encodeURI(name)}-${Buffer.from(`${t}${id}`, "utf-8").toString(
+    "base64"
+  )}`;
 };
 const decodeId = (s: string): DecodedMagicString => {
   const val = Buffer.from(s, "base64").toString("utf-8");
   return {
-    sdkIdType: SdkIdType[val[0]],
+    sdkIdType: Number(val[0]),
     id: val.substring(1),
   };
 };

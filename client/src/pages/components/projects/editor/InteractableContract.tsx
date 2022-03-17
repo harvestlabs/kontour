@@ -238,6 +238,7 @@ InteractableContract.fragments = {
         constructor
         abi
         events
+        source_type
       }
     }
   `,

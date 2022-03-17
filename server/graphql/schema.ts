@@ -8,6 +8,7 @@ import {
   ContractSourceQueries,
   ContractSourceMutations,
 } from "./contractSource";
+import { HardhatSubscriptions } from "./hardhat";
 
 const rootQuery = new GraphQLObjectType({
   name: "RootQuery",
@@ -35,10 +36,10 @@ const rootMutation = new GraphQLObjectType({
 let schema = new GraphQLSchema({
   query: rootQuery,
   mutation: rootMutation,
-  //   subscription: new GraphQLObjectType({
-  //     name: "RootSubscription",
-  //     fields: Object.assign(BoardSubscriptions),
-  //   }),
+  subscription: new GraphQLObjectType({
+    name: "RootSubscription",
+    fields: Object.assign(HardhatSubscriptions),
+  }),
 });
 
 // const checkAuth = async (resolve, root, args, ctx, info) => {
