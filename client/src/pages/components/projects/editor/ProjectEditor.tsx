@@ -62,6 +62,7 @@ function ProjectEditor({ version_id, page = EDITOR_PAGE.INTERACTIVE }: Props) {
 
   // for every contract in the instance, set up a listener that shows a toast
 
+  console.log("logging");
   useEffect(() => {
     // @ts-ignore
     const kontour = window.kontour;
@@ -90,6 +91,7 @@ function ProjectEditor({ version_id, page = EDITOR_PAGE.INTERACTIVE }: Props) {
       // for every event on this contract set up the listener and add it to the top level listeners array so it can be removed on remount
       listeners.push(
         web3Contract.events.allEvents({}, (err: any, e: any) => {
+          console.log("hellooo", e, err);
           toast({
             title: (
               <Box>

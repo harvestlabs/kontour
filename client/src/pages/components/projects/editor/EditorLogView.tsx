@@ -35,10 +35,25 @@ function SubTable({ data, indents }: SubTableProps) {
           <>
             <Tr>
               <Td pl={`${16 + indentMultiplier * indents}px`}>
-                {indents > 0 && <>&rarr; </>}
-                {key}
+                <Text
+                  variant="code"
+                  layerStyle={
+                    indents === 0
+                      ? "function"
+                      : indents === 1
+                      ? "subtitle"
+                      : "value2"
+                  }
+                >
+                  {indents > 0 && <>&rarr; </>}
+                  {key}
+                </Text>
               </Td>
-              {!isObject(data[key]) ? <Td>{data[key]}</Td> : null}
+              {!isObject(data[key]) ? (
+                <Td>
+                  <Text variant="code">{data[key]}</Text>
+                </Td>
+              ) : null}
             </Tr>
             {isObject(data[key]) ? (
               <SubTable data={data[key]} indents={indents + 1} />
@@ -123,28 +138,36 @@ function EditorLogView({ instance }: Props) {
     }
 
     findContractEvents();
-  }, [allEvents, instance.contracts]);
+    // DO NOT PUT "allEvents" INTO THIS ARRAY, IT WILL CAUSE AN INFINITE LOOP
+  }, [instance.contracts]);
 
   useEffect(() => {}, []);
 
   console.log("vets", allEvents);
   return (
     <Flex width="100%" height="100%" flexDirection="column" position="relative">
+      <Heading layerStyle="title">Event Log</Heading>
       {allEvents.map((evt) => {
         console.log("evt", evt);
         return (
           <Box key={evt.blockHash}>
             <Table variant="simple" size="sm">
               <TableCaption fontSize="16px" textAlign="left" placement="top">
-                {evt.event}{" "}
-                <Text as="span" fontSize="12px">
+                <Text layerStyle="event" as="span">
+                  {evt.event}{" "}
+                </Text>
+                <Text layerStyle="info" as="span" fontSize="12px">
                   (from {evt._kontour.name}.sol)
                 </Text>
               </TableCaption>
               <Thead>
                 <Tr>
-                  <Th>Event Key</Th>
-                  <Th>Event Data</Th>
+                  <Th>
+                    <Text layerStyle="title2">Event Key</Text>
+                  </Th>
+                  <Th>
+                    <Text layerStyle="title2">Event Data</Text>
+                  </Th>
                 </Tr>
               </Thead>
               <Tbody>

@@ -46,7 +46,6 @@ export default function ContractExecuteTableRowRenderer({
 
   const executeFunction = useCallback(async () => {
     try {
-      console.log("values", getValues());
       const values = getValues();
       const inputValues = Object.keys(values)
         .map((key) => values[key])
@@ -85,7 +84,6 @@ export default function ContractExecuteTableRowRenderer({
     setError,
     value,
   ]);
-  console.log(errors);
 
   return (
     <>
