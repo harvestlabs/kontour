@@ -174,6 +174,15 @@ const theme = extendTheme({
     blue: {
       color: "contourBlue.500",
     },
+    purple: {
+      color: "contourPurple.500",
+    },
+    green: {
+      color: "contourGreen.500",
+    },
+    yellow: {
+      color: "contourYellow.300",
+    },
     error: {
       color: "contourRed.500",
     },
@@ -181,7 +190,7 @@ const theme = extendTheme({
       color: "contourYellow.500",
     },
     success: {
-      color: "contourGreen.500",
+      color: "green.500",
     },
     link: {
       color: "contourBlue.500",

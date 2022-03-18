@@ -129,10 +129,12 @@ export default function VersionContractsList({
         display="flex"
         my="8px"
       >
-        <Icons.Cloud size="18px" />
-        <Text as="span" ml="8px">
-          Deployed Contracts
-        </Text>
+        <Flex layerStyle="purple" alignItems="center">
+          <Icons.Cloud size="18px" />
+          <Text as="span" ml="8px">
+            Deployed Contracts
+          </Text>
+        </Flex>
       </Heading>
       <List>
         {instance.contracts.map((contract) => {
@@ -145,6 +147,7 @@ export default function VersionContractsList({
         })}
       </List>
       <Heading
+        layerStyle="yellow"
         mt="12px"
         mb="8px"
         fontSize="18px"
