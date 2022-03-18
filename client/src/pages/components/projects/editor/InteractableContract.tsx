@@ -20,6 +20,7 @@ import {
   Th,
   Thead,
   Tr,
+  Divider,
 } from "@chakra-ui/react";
 import { selectSelectedContractData } from "@redux/slices/projectSlice";
 import { useAppSelector } from "@redux/hooks";
@@ -112,85 +113,57 @@ export default function InteractableContract({
   }, [contract.methods, getters]);
 
   return contractSource != null ? (
-    <Flex width="100%" flexDirection="column">
-      <Heading>{contractSource.name}.sol</Heading>
-      <Flex mt="20px" px="16px" flexDirection="column">
-        <Heading fontSize="14px" variant="nocaps">
+    <Flex width="100%" flexDirection="column" pr="80px">
+      <Heading layerStyle="title">{contractSource.name}.sol</Heading>
+      <Flex mt="20px" flexDirection="column">
+        <Heading layerStyle="info" fontSize="26px" variant="nocaps">
           Events
         </Heading>
         {events.map((event) => {
           return (
             <Box key={event.name}>
-              <b>{event.name}</b>(
-              {event.inputs
-                .map((input) => `${input.name}: ${input.type}`)
-                .join(",")}
-              ){" "}
+              <Text
+                variant="code"
+                layerStyle="event"
+                as="span"
+                fontWeight="500"
+              >
+                {event.name}
+              </Text>{" "}
+              ({" "}
+              {event.inputs.map((input, idx) => {
+                return (
+                  <Text as="span" key={input.name} variant="code">
+                    {input.name}:{" "}
+                    <Text layerStyle="type" as="span">
+                      {input.type.toString()}
+                    </Text>
+                    {idx !== event.inputs.length - 1 && ","}
+                  </Text>
+                );
+              })}{" "}
+              )
             </Box>
           );
         })}
       </Flex>
       <Flex width="100%">
         <Box flex="1">
-          <Table
-            variant="simple"
-            size="sm"
-            sx={{
-              "&": {
-                tableLayout: "fixed",
-              },
-            }}
-          >
-            <TableCaption textAlign="left" placement="top">
-              Current Contract State
-            </TableCaption>
-            <Thead>
-              <Tr>
-                <Th>View</Th>
-                <Th>Value</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {getterValuesWithoutParams.map((getterValue) => {
-                return (
-                  <ContractValueTableRowRenderer
-                    key={getterValue.name}
-                    contract={contract}
-                    name={getterValue.name}
-                  />
-                );
-              })}
-              <Tr>
-                <Th>View</Th>
-                <Th>Inputs</Th>
-              </Tr>
-              {getterValuesWithParams.map((getterValue) => {
-                return (
-                  <ContractValueTableRowRenderer
-                    key={getterValue.name}
-                    name={getterValue.name}
-                    contract={contract}
-                    inputs={getterValue.inputs}
-                  />
-                );
-              })}
-            </Tbody>
-          </Table>
-        </Box>
-        <Box flex="1">
           <Table variant="simple" size="sm">
             <TableCaption textAlign="left" placement="top">
-              Executable Functions
+              <Text fontWeight="bold" fontSize="26px" layerStyle="title">
+                Executable Functions
+              </Text>
             </TableCaption>
-            <Thead>
-              <Tr>
-                <Th>Function</Th>
-                <Th>Inputs</Th>
-              </Tr>
-            </Thead>
+            <Thead></Thead>
+
             <Tbody>
               <Tr>
-                <Th>Payable</Th>
+                <Th width="250px">
+                  <Text fontSize="16px" layerStyle="subtitle">
+                    Payable
+                  </Text>
+                </Th>
                 <Th></Th>
               </Tr>
               {payables.map((func) => {
@@ -205,7 +178,11 @@ export default function InteractableContract({
                 );
               })}
               <Tr>
-                <Th>Nonpayable</Th>
+                <Th>
+                  <Text fontSize="16px" layerStyle="subtitle">
+                    Nonpayable
+                  </Text>
+                </Th>
                 <Th></Th>
               </Tr>
               {nonpayables.map((func) => {
@@ -215,6 +192,75 @@ export default function InteractableContract({
                     name={func.name}
                     contract={contract}
                     inputs={func.inputs}
+                  />
+                );
+              })}
+            </Tbody>
+          </Table>
+        </Box>
+
+        <Box width="20px"></Box>
+        <Divider orientation="vertical" opacity="0.1" />
+        <Box width="20px"></Box>
+
+        <Box flex="1">
+          <Table
+            variant="simple"
+            size="sm"
+            sx={{
+              "&": {
+                tableLayout: "fixed",
+              },
+            }}
+          >
+            <TableCaption textAlign="left" placement="top">
+              <Text fontWeight="bold" fontSize="26px" layerStyle="title2">
+                Current Contract State
+              </Text>
+            </TableCaption>
+            <Thead>
+              <Tr>
+                <Th>
+                  <Text fontSize="16px" layerStyle="subtitle2">
+                    Function
+                  </Text>
+                </Th>
+                <Th>
+                  <Text fontSize="16px" layerStyle="subtitle2">
+                    Value
+                  </Text>
+                </Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {getterValuesWithoutParams.map((getterValue) => {
+                return (
+                  <ContractValueTableRowRenderer
+                    key={getterValue.name}
+                    contract={contract}
+                    name={getterValue.name}
+                  />
+                );
+              })}
+              <Tr>
+                <Th>
+                  <Text fontSize="16px" layerStyle="subtitle2">
+                    Function
+                  </Text>
+                </Th>
+                <Th>
+                  <Text fontSize="16px" layerStyle="subtitle2">
+                    Inputs
+                  </Text>
+                </Th>
+              </Tr>
+              {getterValuesWithParams.map((getterValue) => {
+                return (
+                  <ContractValueTableRowRenderer
+                    key={getterValue.name}
+                    name={getterValue.name}
+                    contract={contract}
+                    inputs={getterValue.inputs}
                   />
                 );
               })}

@@ -91,20 +91,23 @@ export default function ContractExecuteTableRowRenderer({
     <>
       <Tr key={name}>
         <Td>
-          <b>{name}:</b>
+          <IconButton
+            variant="ghost"
+            aria-label="execute"
+            size="sm"
+            mr="12px"
+            icon={<Icons.Play size="12" fill="black" />}
+            onClick={() => {
+              executeFunction();
+            }}
+          />
+          <Text variant="code" layerStyle="function" as="b">
+            {name}
+          </Text>
         </Td>
         <Td>
           <FormControl isInvalid={errors?.execute} display="flex">
             <Flex>
-              <IconButton
-                aria-label="execute"
-                size="sm"
-                mr="12px"
-                icon={<Icons.Play size="12" fill="black" />}
-                onClick={() => {
-                  executeFunction();
-                }}
-              />
               {payable ? (
                 <Box mr="12px">
                   <Input
@@ -130,8 +133,14 @@ export default function ContractExecuteTableRowRenderer({
       {inputs
         ? inputs.map((input, idx) => (
             <Tr key={input.name}>
-              <Td>
-                {input.name}: {input.type}
+              <Td pl="40px">
+                <Text variant="code" as="span">
+                  {input.name} :{" "}
+                </Text>
+                <Text variant="code" as="span" layerStyle="type">
+                  {" "}
+                  {input.type}
+                </Text>
               </Td>
               <Td>
                 <ContractValueInputRenderer

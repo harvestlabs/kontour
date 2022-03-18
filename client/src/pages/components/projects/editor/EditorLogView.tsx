@@ -129,13 +129,7 @@ function EditorLogView({ instance }: Props) {
 
   console.log("vets", allEvents);
   return (
-    <Flex
-      width="100%"
-      height="100%"
-      flexDirection="column"
-      overflow="scroll"
-      position="relative"
-    >
+    <Flex width="100%" height="100%" flexDirection="column" position="relative">
       {allEvents.map((evt) => {
         console.log("evt", evt);
         return (

@@ -46,6 +46,7 @@ import { setSelectedVersionId } from "@redux/slices/projectSlice";
 import EditorInstanceSelector from "../editor/navbar/EditorInstanceSelector";
 import { useDispatch } from "react-redux";
 import MetamaskButton from "@components/buttons/MetamaskButton";
+import colors from "src/theme/colors";
 
 type Props = {
   contract_sources: VersionContractsListFragment[];
@@ -90,12 +91,12 @@ export default function VersionContractsList({
 
   return (
     <Flex
-      opacity="70%"
+      opacity="50%"
       width="320px"
       maxHeight="50%"
       flexDirection="column"
       overflow="scroll"
-      bgColor="white"
+      bgColor={colors.contourBackgroundDarker}
       position="fixed"
       right="24px"
       top="104px"

@@ -112,23 +112,50 @@ export default function ContractValueTableRowRenderer({
   return (
     <>
       <Tr key={name}>
-        <Td>
-          <b>{name}</b>
+        <Td fontSize="16px">
+          <Text variant="code" layerStyle="function2" as="b">
+            {name}
+          </Text>
         </Td>
 
         {errors?.execute ? (
-          <Td>{errors?.execute?.message}</Td>
+          <Td fontSize="16px">
+            <Text variant="code" layerStyle="error">
+              {errors?.execute?.message}
+            </Text>
+          </Td>
         ) : Array.isArray(valueToRender) ? (
-          <Td>[{valueToRender.join(", ") || " "}]</Td>
+          <Td fontSize="16px">
+            [{" "}
+            {valueToRender.map((value, idx) => {
+              return (
+                <>
+                  <Text variant="code" as="span" key={idx} layerStyle="value2">
+                    {value}
+                  </Text>
+                  {idx !== valueToRender.length - 1 ? ", " : null}
+                </>
+              );
+            }) || " "}{" "}
+            ]
+          </Td>
         ) : (
-          <Td>{valueToRender}</Td>
+          <Td fontSize="16px">
+            <Text variant="code" layerStyle="value2">
+              {valueToRender}
+            </Text>
+          </Td>
         )}
       </Tr>
       {inputs
         ? inputs.map((input, idx) => (
             <Tr key={input.name}>
-              <Td>
-                {input.name} : {input.type}
+              <Td pl="40px" fontSize="16px">
+                {input.name} :{" "}
+                <Text as="span" layerStyle="type2">
+                  {" "}
+                  {input.type}
+                </Text>
               </Td>
               <Td>
                 <FormControl>

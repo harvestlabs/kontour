@@ -1,4 +1,8 @@
-import { extendTheme, theme as defaultTheme } from "@chakra-ui/react";
+import {
+  extendTheme,
+  theme as defaultTheme,
+  withDefaultColorScheme,
+} from "@chakra-ui/react";
 import colors from "./colors";
 
 const Button = {
@@ -57,9 +61,13 @@ const Button = {
 
 const Text = {
   // The styles all button have in common
-  baseStyle: { color: colors.contourText },
+  baseStyle: {},
   // Two variants: outline and solid
   variants: {
+    code: {
+      fontFamily:
+        "Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;",
+    },
     ellipsis: {
       overflow: "hidden",
       textOverflow: "ellipsis",
@@ -73,6 +81,7 @@ const Text = {
       overflow: "hidden",
     },
   },
+
   // The default size and variant values
   defaultProps: {},
 };
@@ -119,7 +128,98 @@ const Link = {
   },
 };
 
+const Input = {
+  baseStyle: {
+    field: {
+      borderColor: "blue",
+      backgroundColor: `${colors.contourBlack["700"]} !important`,
+    },
+  },
+  sizes: {
+    sm: {
+      field: {},
+    },
+  },
+};
+
+const Code = {};
+
+// const TextColorScheme: {
+//   titleHeader: {};
+// };
+
+const Table = {
+  parts: ["table", "thead", "tbody", "tr", "th", "td", "tfoot", "caption"],
+  baseStyle: {
+    caption: {
+      px: 0,
+      p: 0,
+    },
+    th: {
+      borderColor: "contourBorder.500",
+      height: "60px",
+      px: 0,
+      p: 0,
+    },
+    td: {
+      "border-bottom": `1px solid ${colors.contourBorder["700"]} !important`,
+      px: 0,
+      p: 0,
+    },
+  },
+};
+
 const theme = extendTheme({
+  layerStyles: {
+    error: {
+      color: "contourRed.500",
+    },
+    warning: {
+      color: "contourYellow.500",
+    },
+    success: {
+      color: "contourGreen.500",
+    },
+    link: {
+      color: "contourBlue.500",
+    },
+    info: {
+      color: "contourGreen.500",
+    },
+    event: {
+      color: "contourPurple.500",
+    },
+    title: {
+      color: "contourCyan.500",
+    },
+    subtitle: {
+      color: "contourRed.300",
+    },
+    type: {
+      color: "contourYellow.300",
+    },
+    function: {
+      color: "contourBlue.500",
+    },
+    value: {
+      color: "contourYellow.500",
+    },
+    title2: {
+      color: "contourYellow.500",
+    },
+    subtitle2: {
+      color: "contourBlue.500",
+    },
+    type2: {
+      color: "contourYellow.300",
+    },
+    function2: {
+      color: "contourPurple.500",
+    },
+    value2: {
+      color: "contourCyan.500",
+    },
+  },
   styles: {
     global: {
       // styles for the `body`
@@ -142,6 +242,8 @@ const theme = extendTheme({
     FormLabel: Text,
     Container,
     Heading,
+    Table,
+    Input,
   },
   // mobile
   sm: "768px",

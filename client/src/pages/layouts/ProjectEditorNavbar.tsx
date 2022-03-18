@@ -11,6 +11,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Heading,
 } from "@chakra-ui/react";
 import { PropsWithChildren, useEffect, useState } from "react";
 import theme from "src/theme";
@@ -30,6 +31,7 @@ import { setSelectedVersionId } from "@redux/slices/projectSlice";
 import { useDispatch } from "react-redux";
 import * as Icons from "react-feather";
 import EditorInstanceSelector from "@components/projects/editor/navbar/EditorInstanceSelector";
+import { useRouter } from "next/router";
 
 type Props = {
   project_id: string;
@@ -45,12 +47,24 @@ function ProjectEditorNavbar({
 }: Props) {
   const [selectedVersionName, setSelectedVersionName] = useState("Loading...");
   const dispatch = useDispatch();
+  const router = useRouter();
+  console.log("router", router.asPath);
 
   return (
     <Flex sx={styles.navbar} flexShrink="0">
       <NextLink href={`/`} passHref>
         <Link>
           <Logo type="dynamic" />
+        </Link>
+      </NextLink>
+      <NextLink href={`${router.asPath}/api`} passHref>
+        <Link ml="24px">
+          <Text fontSize="24px">API</Text>
+        </Link>
+      </NextLink>
+      <NextLink href={`${router.asPath}/logs`} passHref>
+        <Link ml="24px">
+          <Text fontSize="24px">Event Logs</Text>
         </Link>
       </NextLink>
       {sdk_url ? <Link href={sdk_url}>Get the SDK</Link> : null}
@@ -89,7 +103,7 @@ const styles = {
       base: "52px",
       md: "80px",
     },
-    backgroundColor: colors.contourBackground,
+    backgroundColor: colors.contourBackgroundMedium,
   },
 };
 
