@@ -17,7 +17,7 @@ const colors = {
   ...theme.colors,
   contourLink: contourBlue,
   contourBackground: contourBlack,
-  contourText: contourGreyLight,
+  contourText: contourWhite,
   contourBlack,
   contourWhite,
   contourRed,

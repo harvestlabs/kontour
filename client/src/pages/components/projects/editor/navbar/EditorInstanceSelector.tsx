@@ -1,5 +1,12 @@
 import { gql, useQuery } from "@apollo/client";
-import { MenuButton, Button, MenuList, MenuItem, Menu } from "@chakra-ui/react";
+import {
+  Text,
+  MenuButton,
+  Button,
+  MenuList,
+  MenuItem,
+  Menu,
+} from "@chakra-ui/react";
 import * as Icons from "react-feather";
 import {
   InstancesSelectorQuery,
@@ -41,11 +48,12 @@ export default function EditorInstanceSelector({
   return (
     <Menu>
       <MenuButton
+        size="sm"
         borderRadius="0"
         as={Button}
         rightIcon={<Icons.ChevronDown size="16" />}
       >
-        {selectedInstanceName || "ERROR"}
+        <Text variant="ellipsis">{selectedInstanceName || "ERROR"}</Text>
       </MenuButton>
 
       <MenuList>

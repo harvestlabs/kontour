@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect } from "react";
-import { Button } from "@chakra-ui/react";
+import { Button, ButtonProps } from "@chakra-ui/react";
 
 import logger from "@utils/logger";
 import { IS_SERVER } from "@utils/constants";
 import { selectAddress, setAddressTo } from "@redux/slices/ethSlice";
 import { useAppDispatch, useAppSelector } from "@redux/hooks";
 
-export default function MetaMaskButton() {
+export default function MetaMaskButton({ ...props }: ButtonProps) {
   const dispatch = useAppDispatch();
   // @ts-ignore
   const kontour = IS_SERVER ? null : window.kontour;
@@ -38,6 +38,7 @@ export default function MetaMaskButton() {
       onClick={requestUserAccounts}
       // ethProvider hydrates differently on server since it doesn't exist
       suppressHydrationWarning={true}
+      {...props}
     >
       {ethProviderAvailable
         ? selectedAddress

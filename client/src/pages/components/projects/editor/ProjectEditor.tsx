@@ -162,27 +162,8 @@ function ProjectEditor({ version_id, page = EDITOR_PAGE.INTERACTIVE }: Props) {
             instance_id={projectVersion?.head_instance?.id}
             sdk_url={projectVersion?.sdk_url}
           />
-          <Flex bgColor="white" flexGrow="1" minHeight="1px">
-            <Box
-              width={`${sidebarWidth}%`}
-              height="100%"
-              bgColor="white"
-              flexShrink="0"
-            >
-              <VersionContractsList
-                contract_sources={projectVersion?.contract_sources || []}
-                isPublished={projectVersion?.status === 2}
-                versionId={currentVersionId}
-              />
-            </Box>
-            <Box
-              width={sizeOfGutter}
-              height="100%"
-              bgColor="black"
-              cursor="col-resize"
-              flexShrink="0"
-            />
-            <Box height="100%" bgColor="lightgoldenrodyellow" flexGrow="1">
+          <Flex flexGrow="1" minHeight="1px">
+            <Box height="100%" flexGrow="1">
               {page === EDITOR_PAGE.LOGS ? (
                 <EditorLogView instance={projectVersion?.head_instance} />
               ) : (
@@ -191,6 +172,13 @@ function ProjectEditor({ version_id, page = EDITOR_PAGE.INTERACTIVE }: Props) {
                 />
               )}
             </Box>
+            <VersionContractsList
+              contract_sources={projectVersion?.contract_sources || []}
+              isPublished={projectVersion?.status === 2}
+              versionId={currentVersionId}
+              projectId={projectId}
+              instance={projectVersion?.head_instance}
+            />
           </Flex>
         </>
       ) : null}
@@ -210,6 +198,7 @@ export const PROJECT_VERSION = gql`
         ...VersionContractsListFragment
       }
       head_instance {
+        ...VersionContractsListInstanceFragment
         ...InstanceFragment
         ...EditorLogViewInstanceFragment
         contracts {
@@ -225,6 +214,7 @@ export const PROJECT_VERSION = gql`
     }
   }
   ${VersionContractsList.fragments.contract}
+  ${VersionContractsList.fragments.instance}
   ${EditorInteractionView.fragments.instance}
   ${EditorLogView.fragments.instance}
 `;

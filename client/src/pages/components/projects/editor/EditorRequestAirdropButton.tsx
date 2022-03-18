@@ -1,10 +1,11 @@
 import React from "react";
-import { Button, useToast } from "@chakra-ui/react";
+import { Button, ButtonProps, useToast } from "@chakra-ui/react";
 import { selectAddress } from "@redux/slices/ethSlice";
 import { useAppSelector } from "@redux/hooks";
 import { gql, useMutation } from "@apollo/client";
+import * as Icons from "react-feather";
 
-type Props = { instance_id: string };
+type Props = { instance_id: string } & ButtonProps;
 
 const REQUEST_AIRDROP = gql`
   mutation RequestAirdropMutation($address: String!, $instance_id: String!) {
@@ -14,6 +15,7 @@ const REQUEST_AIRDROP = gql`
 
 export default function RequestAirdropButton({
   instance_id,
+  ...props
 }: React.PropsWithChildren<Props>) {
   const address = useAppSelector(selectAddress);
   const toast = useToast();
@@ -23,11 +25,10 @@ export default function RequestAirdropButton({
     <Button
       size="lg"
       colorScheme="green"
-      position="absolute"
-      top="24px"
-      right="24px"
       isLoading={loading}
       isDisabled={loading}
+      leftIcon={<Icons.ArrowDown strokeWidth="3px" size="14px" />}
+      iconSpacing="4px"
       onClick={async () => {
         const resp = await requestAirdrop({
           variables: {
@@ -47,8 +48,9 @@ export default function RequestAirdropButton({
           throw new Error("Airdrop failed. Please try again");
         }
       }}
+      {...props}
     >
-      Get Airdrop
+      ETH
     </Button>
   );
 }

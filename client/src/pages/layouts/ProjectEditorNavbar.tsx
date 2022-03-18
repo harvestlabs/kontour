@@ -46,30 +46,6 @@ function ProjectEditorNavbar({
   const [selectedVersionName, setSelectedVersionName] = useState("Loading...");
   const dispatch = useDispatch();
 
-  const { data, loading, error } = useQuery<
-    ProjectQuery,
-    ProjectQueryVariables
-  >(PROJECT, {
-    fetchPolicy: "network-only",
-    variables: {
-      project_id: project_id,
-    },
-  });
-
-  const versions = data?.project?.versions || [];
-
-  useEffect(() => {
-    setSelectedVersionName(
-      data?.project?.versions?.find((version) => {
-        return version?.id === version_id;
-      })?.name || ""
-    );
-  }, [data, version_id]);
-
-  if (!loading && versions.length === 0) {
-    throw new Error("Something went wrong. No versions found for this project");
-  }
-
   return (
     <Flex sx={styles.navbar} flexShrink="0">
       <NextLink href={`/`} passHref>
@@ -77,48 +53,12 @@ function ProjectEditorNavbar({
           <Logo type="dynamic" />
         </Link>
       </NextLink>
-      <Flex flexGrow="0" flexDirection="row" alignItems="center">
-        <Text mr="12px">Version:</Text>
-        <Menu>
-          <MenuButton
-            borderRadius="0"
-            as={Button}
-            rightIcon={<Icons.ChevronDown size="16" />}
-          >
-            {selectedVersionName || "ERROR"}
-          </MenuButton>
-
-          <MenuList>
-            {versions?.map((v) => {
-              const name = v?.name;
-              return name != null ? (
-                <MenuItem
-                  value={v?.id}
-                  key={v?.id}
-                  onClick={() => {
-                    setSelectedVersionName(name);
-                    dispatch(setSelectedVersionId(v.id));
-                  }}
-                >
-                  {name}
-                </MenuItem>
-              ) : null;
-            })}
-          </MenuList>
-        </Menu>
-        <Text mr="12px">Instance:</Text>
-        <EditorInstanceSelector
-          version_id={version_id}
-          instance_id={instance_id}
-        />
-        {sdk_url ? <Link href={sdk_url}>Get the SDK</Link> : null}
-      </Flex>
+      {sdk_url ? <Link href={sdk_url}>Get the SDK</Link> : null}
       <Spacer />
       <Spacer />
 
       <HStack gap="18px">
         <SignInButton />
-        <MetamaskButton />
       </HStack>
     </Flex>
   );
@@ -152,17 +92,5 @@ const styles = {
     backgroundColor: colors.contourBackground,
   },
 };
-
-export const PROJECT = gql`
-  query ProjectQuery($project_id: String!) {
-    project(id: $project_id) {
-      id
-      versions {
-        id
-        name
-      }
-    }
-  }
-`;
 
 export default ProjectEditorNavbar;

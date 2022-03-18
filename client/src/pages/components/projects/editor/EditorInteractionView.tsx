@@ -45,7 +45,6 @@ export default function EditorInteractionView({ instance }: Props) {
       position="relative"
     >
       <EditorPublishButton />
-      <EditorRequestAirdropButton instance_id={instance.id} />
 
       <VStack>
         {instance.contracts

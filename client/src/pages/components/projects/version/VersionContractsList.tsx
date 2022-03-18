@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "@components/Footer";
 import {
+  Menu,
+  Icon,
   Text,
   Accordion,
   AccordionButton,
@@ -14,10 +16,15 @@ import {
   ListItem,
   Spacer,
   Button,
+  Divider,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  HStack,
 } from "@chakra-ui/react";
 import VersionContractsListItem from "./VersionContractListItem";
 import * as Icons from "react-feather";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { VersionContractsListFragment } from "@gql/__generated__/VersionContractsListFragment";
 import {
   DeployedContractToVersion,
@@ -27,133 +34,190 @@ import {
   CloneSandbox,
   CloneSandboxVariables,
 } from "@gql/__generated__/CloneSandbox";
+import VersionDeployedContractListItem from "./VersionDeployedContractListItem";
+import { VersionContractsListInstanceFragment } from "@gql/__generated__/VersionContractsListInstanceFragment";
+import EditorRequestAirdropButton from "../editor/EditorRequestAirdropButton";
+import { versions } from "process";
+import {
+  ProjectQuery,
+  ProjectQueryVariables,
+} from "@gql/__generated__/ProjectQuery";
+import { setSelectedVersionId } from "@redux/slices/projectSlice";
+import EditorInstanceSelector from "../editor/navbar/EditorInstanceSelector";
+import { useDispatch } from "react-redux";
+import MetamaskButton from "@components/buttons/MetamaskButton";
 
 type Props = {
   contract_sources: VersionContractsListFragment[];
   isPublished: boolean;
+  projectId: string;
   versionId: string;
+  instance: VersionContractsListInstanceFragment;
 };
-
-const mockSandboxes = [
-  {
-    id: "0",
-    name: "Instance 1",
-  },
-  {
-    id: "1",
-    name: "Instance 2",
-  },
-  {
-    id: "2",
-    name: "Instance 3",
-  },
-  {
-    id: "3",
-    name: "Instance 4",
-  },
-  {
-    id: "4",
-    name: "Instance 5",
-  },
-];
 
 export default function VersionContractsList({
   contract_sources,
-  isPublished,
+  projectId,
   versionId,
+  isPublished,
+  instance,
 }: Props) {
-  const [deployedContractToVersion, meta] = useMutation<
-    DeployedContractToVersion,
-    DeployedContractToVersionVariables
-  >(DEPLOY_CONTRACT_TO_VERSION);
-  const [cloneSandbox, { loading, error }] = useMutation<
-    CloneSandbox,
-    CloneSandboxVariables
-  >(CLONE_SANDBOX);
-  const onDeploy = (sourceId: string, sourceType: number) => {
-    return async (address: string, params: any[]) => {
-      await deployedContractToVersion({
-        variables: {
-          sourceId: sourceId,
-          sourceType: sourceType,
-          address: address,
-          versionId: versionId,
-          params: params,
-        },
-      });
-    };
-  };
-  const createNewSandbox = async (e: any) => {
-    e.stopPropagation();
-    await cloneSandbox({
-      variables: {
-        projectVersionId: versionId,
-        name: "New Sandbox",
-      },
-    });
-  };
+  const [selectedVersionName, setSelectedVersionName] = useState("Loading...");
+  const dispatch = useDispatch();
+
+  const { data, loading, error } = useQuery<
+    ProjectQuery,
+    ProjectQueryVariables
+  >(PROJECT, {
+    fetchPolicy: "network-only",
+    variables: {
+      project_id: projectId,
+    },
+  });
+  const versions = data?.project?.versions || [];
+
+  useEffect(() => {
+    setSelectedVersionName(
+      data?.project?.versions?.find((version) => {
+        return version?.id === versionId;
+      })?.name || ""
+    );
+  }, [data, versionId]);
+
+  if (!loading && versions.length === 0) {
+    throw new Error("Something went wrong. No versions found for this project");
+  }
+
   return (
-    <Flex width="100%" height="100%" flexDirection="column" overflow="scroll">
-      <Heading py="24px" justifySelf="center" textAlign="center">
-        Contracts
+    <Flex
+      opacity="70%"
+      width="320px"
+      maxHeight="50%"
+      flexDirection="column"
+      overflow="scroll"
+      bgColor="white"
+      position="fixed"
+      right="24px"
+      top="104px"
+      p="24px"
+      transition="opacity .2s ease-in-out"
+      boxShadow="0px 0px 20px rgba(0,0,0,0.12)"
+      _hover={{
+        opacity: "100%",
+      }}
+    >
+      <Flex>
+        <Heading fontSize="24px">Toolkit</Heading>
+
+        <Spacer />
+        <MetamaskButton size="sm" />
+      </Flex>
+      <Heading
+        fontSize="18px"
+        textAlign="left"
+        variant="nocaps"
+        alignItems="center"
+        display="flex"
+        my="8px"
+      >
+        <Icons.Cloud size="18px" />
+        <Text as="span" ml="8px">
+          Deployed Contracts
+        </Text>
       </Heading>
-      <Accordion allowToggle={true}>
-        {contract_sources
-          .filter((source) => source.source_type !== 1)
-          .map((source) => {
+      <List>
+        {instance.contracts.map((contract) => {
+          return (
+            <VersionDeployedContractListItem
+              icon={Icons.Circle}
+              contract={contract}
+              key={contract.id}
+            />
+          );
+        })}
+      </List>
+      <List>
+        {instance.contracts.map((contract) => {
+          return (
+            <VersionDeployedContractListItem
+              icon={Icons.Globe}
+              contract={contract}
+              key={contract.id}
+            />
+          );
+        })}
+      </List>
+
+      <Heading
+        mt="12px"
+        mb="8px"
+        fontSize="18px"
+        textAlign="left"
+        variant="nocaps"
+        alignItems="center"
+        display="flex"
+      >
+        <Icons.BookOpen size="18px" />
+        <Text as="span" ml="8px">
+          Project API
+        </Text>
+      </Heading>
+
+      <Box height="0" overflow="hidden">
+        <List>
+          {contract_sources.map((contract_source) => {
             return (
               <VersionContractsListItem
-                key={source.id}
-                contract_source={source}
-                onDeploy={onDeploy(source.id, source.type)}
+                contract_source={contract_source}
+                key={contract_source.id}
               />
             );
           })}
-      </Accordion>
+        </List>
+      </Box>
 
       <Spacer />
-      {true ? (
-        <Accordion allowToggle={true}>
-          <AccordionItem>
-            <h2>
-              <AccordionButton>
-                <Box flex="1" textAlign="left">
-                  Sandboxes
-                </Box>
-                <Button
-                  colorScheme="orange"
-                  onClick={(e) => createNewSandbox(e)}
+      <Divider />
+      <HStack mt="24px" flexShrink="0">
+        <Menu>
+          <MenuButton
+            size="sm"
+            borderRadius="0"
+            as={Button}
+            rightIcon={<Icons.ChevronDown size="16" />}
+            flexShrink="0"
+          >
+            <Text variant="ellipsis">{selectedVersionName || "ERROR"}</Text>
+          </MenuButton>
+
+          <MenuList>
+            {versions?.map((v) => {
+              const name = v?.name;
+              return name != null ? (
+                <MenuItem
+                  value={v?.id}
+                  key={v?.id}
+                  onClick={() => {
+                    setSelectedVersionName(name);
+                    dispatch(setSelectedVersionId(v.id));
+                  }}
                 >
-                  New Sandbox
-                </Button>
-              </AccordionButton>
-            </h2>
-            <AccordionPanel pr={0} pb={4}>
-              <List spacing={3}>
-                {mockSandboxes.map((instance) => {
-                  return (
-                    <ListItem
-                      key={instance.id}
-                      display="flex"
-                      alignItems="center"
-                    >
-                      <Text>{instance.name}</Text>
-                      <Spacer />
-                      <Text>Load Instance</Text>
-                      <ListIcon
-                        ml="8px"
-                        verticalAlign="middle"
-                        as={Icons.UploadCloud}
-                        color="green.500"
-                      />
-                    </ListItem>
-                  );
-                })}
-              </List>
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
-      ) : null}
+                  {name}
+                </MenuItem>
+              ) : null;
+            })}
+          </MenuList>
+        </Menu>
+        <EditorInstanceSelector
+          version_id={versionId}
+          instance_id={instance.id}
+        />
+        <EditorRequestAirdropButton
+          instance_id={instance.id}
+          size="sm"
+          flexShrink="0"
+        />
+      </HStack>
     </Flex>
   );
 }
@@ -168,32 +232,36 @@ VersionContractsList.fragments = {
     }
     ${VersionContractsListItem.fragments.contract}
   `,
+
+  instance: gql`
+    fragment VersionContractsListInstanceFragment on Instance {
+      id
+      name
+      status
+      data
+      project_id
+      project_version_id
+      contracts {
+        id
+        ...VersionDeployedContractListItemFragment
+      }
+      global_contracts {
+        id
+        ...VersionDeployedContractListItemFragment
+      }
+    }
+    ${VersionDeployedContractListItem.fragments.contract}
+  `,
 };
 
-const DEPLOY_CONTRACT_TO_VERSION = gql`
-  mutation DeployedContractToVersion(
-    $sourceId: String!
-    $sourceType: Int!
-    $versionId: String!
-    $address: String!
-    $params: JSON!
-  ) {
-    deployedContractToVersion(
-      sourceId: $sourceId
-      sourceType: $sourceType
-      versionId: $versionId
-      address: $address
-      params: $params
-    ) {
+export const PROJECT = gql`
+  query ProjectQuery($project_id: String!) {
+    project(id: $project_id) {
       id
-    }
-  }
-`;
-
-const CLONE_SANDBOX = gql`
-  mutation CloneSandbox($projectVersionId: String!, $name: String!) {
-    cloneSandbox(projectVersionId: $projectVersionId, name: $name) {
-      id
+      versions {
+        id
+        name
+      }
     }
   }
 `;
