@@ -58,7 +58,7 @@ const Config = {
     APP_CLIENT_SECRET: env.GITHUB_APP_CLIENT_SECRET,
     APP_CALLBACK_URL: env.GITHUB_APP_CALLBACK_URL,
     APP_ID: env.GITHUB_APP_ID,
-    APP_PK: env.GITHUB_APP_PK,
+    APP_PK: env.GITHUB_APP_PK.replace(/\\n/gm, "\n"),
     INSTALL_URL: env.GITHUB_INSTALL_URL,
   },
   stripe: {
