@@ -98,7 +98,6 @@ export interface ProjectVersionQuery_projectVersion {
    * The id of the node this version belongs to
    */
   node_id: string | null;
-  sdk_url: string | null;
   /**
    * The contract sources for project version
    */
