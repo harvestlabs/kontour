@@ -85,6 +85,9 @@ const Config = {
   ganache: {
     PK: env.GANACHE_PK,
   },
+  quikdraw: {
+    VERSION: env.QUIKDRAW_VERSION,
+  },
 };
 
 export default Config;

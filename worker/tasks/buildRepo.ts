@@ -86,7 +86,7 @@ export default async function BuildRepoTasks(data: Request): Promise<Response> {
       })
     );
     console.log("installing quikdraw", cwd);
-    execSync("npm i quikdraw@0.1.8", {
+    execSync(`npm i quikdraw@${config.quikdraw.VERSION}`, {
       cwd: cwd,
       stdio: "inherit",
     });
