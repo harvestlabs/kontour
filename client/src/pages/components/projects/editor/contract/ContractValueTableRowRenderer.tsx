@@ -112,20 +112,20 @@ export default function ContractValueTableRowRenderer({
   return (
     <>
       <Tr key={name}>
-        <Td fontSize="16px">
+        <Td>
           <Text variant="code" layerStyle="function2" as="b">
             {name}
           </Text>
         </Td>
 
         {errors?.execute ? (
-          <Td fontSize="16px">
+          <Td>
             <Text variant="code" layerStyle="error">
               {errors?.execute?.message}
             </Text>
           </Td>
         ) : Array.isArray(valueToRender) ? (
-          <Td fontSize="16px">
+          <Td>
             [{" "}
             {valueToRender.map((value, idx) => {
               return (
@@ -140,7 +140,7 @@ export default function ContractValueTableRowRenderer({
             ]
           </Td>
         ) : (
-          <Td fontSize="16px">
+          <Td>
             <Text variant="code" layerStyle="value2">
               {valueToRender}
             </Text>
@@ -150,7 +150,7 @@ export default function ContractValueTableRowRenderer({
       {inputs
         ? inputs.map((input, idx) => (
             <Tr key={idx}>
-              <Td pl="40px" fontSize="16px">
+              <Td pl="40px">
                 {input.name} :{" "}
                 <Text as="span" layerStyle="type2">
                   {" "}

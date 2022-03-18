@@ -116,7 +116,7 @@ export default function InteractableContract({
     <Flex width="100%" flexDirection="column" pr="80px">
       <Heading layerStyle="title">{contractSource.name}.sol</Heading>
       <Flex mt="20px" flexDirection="column">
-        <Heading layerStyle="info" fontSize="26px" variant="nocaps">
+        <Heading layerStyle="info" fontSize="24px" variant="nocaps">
           Events
         </Heading>
         {events.map((event) => {
@@ -151,7 +151,7 @@ export default function InteractableContract({
         <Box flex="1">
           <Table variant="simple" size="sm">
             <TableCaption textAlign="left" placement="top">
-              <Text fontWeight="bold" fontSize="26px" layerStyle="title">
+              <Text fontWeight="bold" fontSize="24px" layerStyle="title">
                 Executable Functions
               </Text>
             </TableCaption>
@@ -160,7 +160,7 @@ export default function InteractableContract({
             <Tbody>
               <Tr>
                 <Th width="250px">
-                  <Text fontSize="16px" layerStyle="subtitle">
+                  <Text fontSize="14px" layerStyle="subtitle">
                     Payable
                   </Text>
                 </Th>
@@ -179,7 +179,7 @@ export default function InteractableContract({
               })}
               <Tr>
                 <Th>
-                  <Text fontSize="16px" layerStyle="subtitle">
+                  <Text fontSize="14px" layerStyle="subtitle">
                     Nonpayable
                   </Text>
                 </Th>
@@ -214,19 +214,19 @@ export default function InteractableContract({
             }}
           >
             <TableCaption textAlign="left" placement="top">
-              <Text fontWeight="bold" fontSize="26px" layerStyle="title2">
+              <Text fontWeight="bold" fontSize="24px" layerStyle="title2">
                 Current Contract State
               </Text>
             </TableCaption>
             <Thead>
               <Tr>
                 <Th>
-                  <Text fontSize="16px" layerStyle="subtitle2">
+                  <Text fontSize="14px" layerStyle="subtitle2">
                     Function
                   </Text>
                 </Th>
                 <Th>
-                  <Text fontSize="16px" layerStyle="subtitle2">
+                  <Text fontSize="14px" layerStyle="subtitle2">
                     Value
                   </Text>
                 </Th>
@@ -244,12 +244,12 @@ export default function InteractableContract({
               })}
               <Tr>
                 <Th>
-                  <Text fontSize="16px" layerStyle="subtitle2">
+                  <Text fontSize="14px" layerStyle="subtitle2">
                     Function
                   </Text>
                 </Th>
                 <Th>
-                  <Text fontSize="16px" layerStyle="subtitle2">
+                  <Text fontSize="14px" layerStyle="subtitle2">
                     Inputs
                   </Text>
                 </Th>
