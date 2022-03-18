@@ -25,12 +25,16 @@ export default function MetaMaskButton({ ...props }: ButtonProps) {
     checkAccounts();
   }, [dispatch, kontour]);
 
-  const requestUserAccounts = useCallback(async () => {
-    const account = await kontour?.requestMetamaskAccounts();
-    if (account) {
-      dispatch(setAddressTo(account));
-    }
-  }, [dispatch, kontour]);
+  const requestUserAccounts = useCallback(
+    async (e) => {
+      e.stopPropagation();
+      const account = await kontour?.requestMetamaskAccounts();
+      if (account) {
+        dispatch(setAddressTo(account));
+      }
+    },
+    [dispatch, kontour]
+  );
 
   return (
     <Button

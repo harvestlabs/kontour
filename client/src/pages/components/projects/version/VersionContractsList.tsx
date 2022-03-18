@@ -116,42 +116,34 @@ export default function VersionContractsList({
         opacity: "100%",
       }}
     >
-      <Flex alignItems="center" mb="12px">
-        <Heading layerStyle="title" fontSize="24px">
-          Toolkit
-        </Heading>
-
-        <Spacer />
-        <IconButton
-          variant="ghost"
-          aria-label="toggle toolkit expand"
-          borderRadius="0"
-          icon={
-            expanded ? (
-              <Icons.ChevronUp size="20px" strokeWidth="3px" />
-            ) : (
-              <Icons.ChevronDown size="20px" strokeWidth="3px" />
-            )
-          }
+      <Tooltip
+        label={expanded ? "Minimize Toolkit" : "Maximize Toolkit"}
+        closeOnClick={false}
+        placement="top"
+      >
+        <Flex
+          alignItems="center"
+          mb="12px"
+          cursor="pointer"
           onClick={() => {
             setExpanded(!expanded);
           }}
-        />
-      </Flex>
-      <Flex alignItems="center" mb="12px">
-        <Heading
-          fontSize="18px"
-          textAlign="left"
-          variant="nocaps"
-          alignItems="center"
-          display="flex"
-          layerStyle="blue"
         >
-          Wallet:
-        </Heading>
+          <Heading layerStyle="title" fontSize="24px">
+            Toolkit
+          </Heading>
 
-        <MetamaskButton size="sm" ml="12px" />
-      </Flex>
+          <Spacer />
+          {expanded ? (
+            <Icons.ChevronUp size="20px" strokeWidth="3px" />
+          ) : (
+            <Icons.ChevronDown size="20px" strokeWidth="3px" />
+          )}
+          <Spacer />
+          <MetamaskButton size="sm" ml="12px" />
+        </Flex>
+      </Tooltip>
+      <Divider mb="12px" />
       <Box mb="8px">
         <Heading
           fontSize="18px"
