@@ -66,7 +66,7 @@ export default function SignInButton() {
         ? "Loading..."
         : github_handle
         ? github_handle
-        : "Sign in with Twitter"}
+        : "Sign in with Github"}
     </Button>
   );
 }
