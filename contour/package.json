@@ -1,0 +1,13 @@
+{
+  "name": "contour",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "graphql-redis-subscriptions": "^2.4.2",
+    "hardhat": "^2.9.1",
+    "ioredis": "^4.28.5"
+  }
+}
