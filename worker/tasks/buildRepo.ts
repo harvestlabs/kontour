@@ -82,11 +82,11 @@ export default async function BuildRepoTasks(data: Request): Promise<Response> {
         apiKey: data.apiKey,
         projectId: data.projectId,
         versionId: data.versionId,
-        deployScript: data.deployScript,
+        deploy: data.deployScript,
       })
     );
     console.log("installing quikdraw", cwd);
-    execSync("npm i quikdraw@0.1.7", {
+    execSync("npm i quikdraw@0.1.8", {
       cwd: cwd,
       stdio: "inherit",
     });

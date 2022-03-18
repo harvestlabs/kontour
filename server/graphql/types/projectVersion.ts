@@ -31,9 +31,11 @@ const ProjectVersionType = new GraphQLObjectType({
     sdk_url: {
       type: GraphQLString,
       resolve: (parent, args, ctx, info) => {
-        return `${config.app.PROTOCOL}://${
-          config.app.HOSTNAME
-        }/api/sdk/${encodeId(SdkIdType.VERSION, parent.id, parent.name)}`;
+        return `${config.app.PROTOCOL}://${config.app.HOSTNAME}/sdk/${encodeId(
+          SdkIdType.VERSION,
+          parent.id,
+          parent.name
+        )}`;
       },
     },
     contract_sources: {

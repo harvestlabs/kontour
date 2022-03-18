@@ -188,6 +188,7 @@ apiRouter.post("/ingestQuikdraw/migrate", async (ctx, next) => {
     node_id: contract.node_id,
     params: contract.constructor_params,
     instance_id: instance.id,
+    version_id: version.id,
   };
   ctx.status = 200;
   next();

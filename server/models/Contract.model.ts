@@ -17,6 +17,7 @@ import RemoteContractSource from "./RemoteContractSource.model";
 import Project from "./Project.model";
 import LocalContractSource from "./LocalContractSource.model";
 import Instance from "./Instance.model";
+import ProjectVersion from "./ProjectVersion.model";
 
 export enum ContractSourceType {
   REMOTE = 1,
@@ -74,14 +75,29 @@ export default class Contract extends Model {
     params: any[]
   ): Promise<Contract> {
     const instance = await Instance.findByPk(instanceId, {
-      include: { model: Project, include: [Node] },
+      include: [{ model: Project, include: [Node] }, { model: ProjectVersion }],
     });
     const nodeId = instance.project.node.id;
 
+    let toDeploy = source;
+    if (toDeploy.bytecode.indexOf("__") !== -1) {
+      // MUST REPLACE WITH SOME LIBRARY CODE, GO FIND IT
+      const allSources = await Promise.all(
+        Object.values(instance.project_version.data.local_sources).map(
+          (o: string) => LocalContractSource.findByPk(o)
+        )
+      );
+      const replacedSources = await LocalContractSource.replaceLibraries(
+        instance.id,
+        allSources
+      );
+      toDeploy = replacedSources.find((s) => s.id === source.id);
+    }
+
     const address = await deployBinaryAndABI(
       nodeId,
-      source.bytecode,
-      source.abi,
+      toDeploy.bytecode,
+      toDeploy.abi,
       params
     );
     const contract = await Contract.create({
