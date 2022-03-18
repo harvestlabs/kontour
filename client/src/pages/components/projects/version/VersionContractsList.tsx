@@ -24,6 +24,7 @@ import {
   HStack,
   Link,
   AccordionIcon,
+  IconButton,
 } from "@chakra-ui/react";
 import VersionContractsListItem from "./VersionContractListItem";
 import * as Icons from "react-feather";
@@ -50,6 +51,7 @@ import EditorInstanceSelector from "../editor/navbar/EditorInstanceSelector";
 import { useDispatch } from "react-redux";
 import MetamaskButton from "@components/buttons/MetamaskButton";
 import colors from "src/theme/colors";
+import { motion } from "framer-motion";
 
 type Props = {
   contract_sources: VersionContractsListFragment[];
@@ -68,6 +70,7 @@ export default function VersionContractsList({
   instance,
   sdk_url,
 }: Props) {
+  const [expanded, setExpanded] = useState(false);
   const [sdkCopied, setSdkCopied] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [selectedVersionName, setSelectedVersionName] = useState("Loading...");
@@ -102,7 +105,6 @@ export default function VersionContractsList({
       width="320px"
       maxHeight="80%"
       flexDirection="column"
-      overflowY="scroll"
       bgColor={colors.contourBackgroundDarker}
       position="fixed"
       right="24px"
@@ -114,84 +116,113 @@ export default function VersionContractsList({
         opacity: "100%",
       }}
     >
-      <Flex>
+      <Flex alignItems="center" mb="12px">
         <Heading layerStyle="title" fontSize="24px">
           Toolkit
         </Heading>
 
         <Spacer />
-        <MetamaskButton size="sm" />
+        <IconButton
+          variant="ghost"
+          aria-label="toggle toolkit expand"
+          borderRadius="0"
+          icon={
+            expanded ? (
+              <Icons.ChevronUp size="20px" strokeWidth="3px" />
+            ) : (
+              <Icons.ChevronDown size="20px" strokeWidth="3px" />
+            )
+          }
+          onClick={() => {
+            setExpanded(!expanded);
+          }}
+        />
       </Flex>
-      <Heading
-        fontSize="18px"
-        textAlign="left"
-        variant="nocaps"
-        alignItems="center"
-        display="flex"
-        my="8px"
+      <Flex alignItems="center" mb="12px">
+        <Heading
+          fontSize="18px"
+          textAlign="left"
+          variant="nocaps"
+          alignItems="center"
+          display="flex"
+          layerStyle="blue"
+        >
+          Wallet:
+        </Heading>
+
+        <MetamaskButton size="sm" ml="12px" />
+      </Flex>
+      <Box mb="8px">
+        <Heading
+          fontSize="18px"
+          textAlign="left"
+          variant="nocaps"
+          alignItems="center"
+          display="flex"
+          mb="8px"
+        >
+          <Flex layerStyle="purple" alignItems="center">
+            <Icons.Cloud size="18px" />
+            <Text as="span" ml="8px">
+              Deployed Contracts
+            </Text>
+          </Flex>
+        </Heading>
+        <List px="24px">
+          {instance.contracts.map((contract) => {
+            return (
+              <VersionDeployedContractListItem
+                contract={contract}
+                key={contract.id}
+              />
+            );
+          })}
+        </List>
+      </Box>
+      <Box
+        overflow="hidden"
+        as={motion.div}
+        animate={{
+          height: expanded ? "auto" : 0,
+          marginBottom: expanded ? "24px" : 0,
+        }}
       >
-        <Flex layerStyle="purple" alignItems="center">
-          <Icons.Cloud size="18px" />
+        <Heading
+          layerStyle="yellow"
+          mt="12px"
+          mb="8px"
+          fontSize="18px"
+          textAlign="left"
+          variant="nocaps"
+          alignItems="center"
+          display="flex"
+        >
+          <Icons.Book size="18px" />
           <Text as="span" ml="8px">
-            Deployed Contracts
+            Project API
           </Text>
-        </Flex>
-      </Heading>
-      <List>
-        {instance.contracts.map((contract) => {
-          return (
-            <VersionDeployedContractListItem
-              contract={contract}
-              key={contract.id}
-            />
-          );
-        })}
-      </List>
-      <Box overflow="scroll">
-        <Accordion allowToggle={true}>
-          <AccordionItem border="0" p="0" isFocusable={false}>
-            <AccordionButton
-              border="none"
-              p="0"
-              display="flex"
-              isFocusable={false}
-            >
-              <Heading
-                layerStyle="yellow"
-                mt="12px"
-                mb="8px"
-                fontSize="18px"
-                textAlign="left"
-                variant="nocaps"
-                alignItems="center"
-                display="flex"
-              >
-                <Icons.Book size="18px" />
-                <Text as="span" ml="8px">
-                  Project API
-                </Text>
-              </Heading>
-              <Spacer />
-              <AccordionIcon />
-            </AccordionButton>
-            <AccordionPanel>
-              <List>
-                {contract_sources.map((contract_source) => {
-                  return (
-                    <VersionContractsListItem
-                      contract_source={contract_source}
-                      key={contract_source.id}
-                    />
-                  );
-                })}
-              </List>
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
+        </Heading>
+        <List px="24px">
+          {contract_sources.map((contract_source) => {
+            return (
+              <VersionContractsListItem
+                contract_source={contract_source}
+                key={contract_source.id}
+              />
+            );
+          })}
+        </List>
       </Box>
       <Spacer />
-      <Divider />
-      <HStack mt="24px" flexShrink="0">
+      <HStack
+        overflow="hidden"
+        flexShrink="0"
+        as={motion.div}
+        animate={{
+          height: expanded ? "auto" : 0,
+          marginBottom: expanded ? "24px" : 0,
+        }}
+      >
         <Menu>
           <MenuButton
             size="sm"
@@ -225,13 +256,8 @@ export default function VersionContractsList({
           version_id={versionId}
           instance_id={instance.id}
         />
-        <EditorRequestAirdropButton
-          instance_id={instance.id}
-          size="sm"
-          flexShrink="0"
-        />
       </HStack>
-      <HStack pt="24px">
+      <HStack>
         {sdk_url ? (
           <Tooltip
             label={!sdkCopied ? "Click to copy" : "URL Copied!"}
@@ -260,6 +286,13 @@ export default function VersionContractsList({
             </Button>
           </Tooltip>
         ) : null}
+
+        <Spacer />
+        <EditorRequestAirdropButton
+          instance_id={instance.id}
+          size="sm"
+          flexShrink="0"
+        />
       </HStack>
     </Flex>
   );
