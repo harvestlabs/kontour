@@ -23,6 +23,7 @@ import {
   MenuList,
   HStack,
   Link,
+  AccordionIcon,
 } from "@chakra-ui/react";
 import VersionContractsListItem from "./VersionContractListItem";
 import * as Icons from "react-feather";
@@ -99,9 +100,9 @@ export default function VersionContractsList({
     <Flex
       opacity="50%"
       width="320px"
-      maxHeight="50%"
+      maxHeight="80%"
       flexDirection="column"
-      overflow="scroll"
+      overflowY="scroll"
       bgColor={colors.contourBackgroundDarker}
       position="fixed"
       right="24px"
@@ -146,32 +147,47 @@ export default function VersionContractsList({
           );
         })}
       </List>
-      <Heading
-        layerStyle="yellow"
-        mt="12px"
-        mb="8px"
-        fontSize="18px"
-        textAlign="left"
-        variant="nocaps"
-        alignItems="center"
-        display="flex"
-      >
-        <Icons.Book size="18px" />
-        <Text as="span" ml="8px">
-          Project API
-        </Text>
-      </Heading>
-      <Box height="0" overflow="hidden">
-        <List>
-          {contract_sources.map((contract_source) => {
-            return (
-              <VersionContractsListItem
-                contract_source={contract_source}
-                key={contract_source.id}
-              />
-            );
-          })}
-        </List>
+      <Box overflow="scroll">
+        <Accordion allowToggle={true}>
+          <AccordionItem border="0" p="0" isFocusable={false}>
+            <AccordionButton
+              border="none"
+              p="0"
+              display="flex"
+              isFocusable={false}
+            >
+              <Heading
+                layerStyle="yellow"
+                mt="12px"
+                mb="8px"
+                fontSize="18px"
+                textAlign="left"
+                variant="nocaps"
+                alignItems="center"
+                display="flex"
+              >
+                <Icons.Book size="18px" />
+                <Text as="span" ml="8px">
+                  Project API
+                </Text>
+              </Heading>
+              <Spacer />
+              <AccordionIcon />
+            </AccordionButton>
+            <AccordionPanel>
+              <List>
+                {contract_sources.map((contract_source) => {
+                  return (
+                    <VersionContractsListItem
+                      contract_source={contract_source}
+                      key={contract_source.id}
+                    />
+                  );
+                })}
+              </List>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
       </Box>
       <Spacer />
       <Divider />
@@ -238,6 +254,7 @@ export default function VersionContractsList({
                 }, 3000);
               }}
               leftIcon={<Icons.BookOpen size="18px" />}
+              size="sm"
             >
               Javascript SDK
             </Button>
