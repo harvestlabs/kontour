@@ -59,4 +59,17 @@ export default class ApiKey extends Model {
 
     instance.key = key;
   }
+
+  static async getOrCreateForUser(userId: string): Promise<ApiKey> {
+    const user = await User.findByPk(userId, {
+      include: [ApiKey],
+    });
+    if (user.api_key) {
+      return user.api_key;
+    }
+    const apiKey = await ApiKey.create({
+      user_id: user.id,
+    });
+    return apiKey;
+  }
 }

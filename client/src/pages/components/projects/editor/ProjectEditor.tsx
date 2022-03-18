@@ -160,12 +160,12 @@ function ProjectEditor({ version_id, page = EDITOR_PAGE.INTERACTIVE }: Props) {
             project_id={projectId}
             version_id={currentVersionId}
             instance_id={projectVersion?.head_instance?.id}
-            sdk_url={projectVersion?.sdk_url}
+            sdk_url={projectVersion?.sdk_url!}
           />
           <Flex flexGrow="1" minHeight="1px">
             <Box height="100%" flexGrow="1">
               {page === EDITOR_PAGE.LOGS ? (
-                <EditorLogView instance={projectVersion?.head_instance} />
+                <EditorLogView instance={projectVersion?.head_instance!} />
               ) : (
                 <EditorInteractionView
                   instance={projectVersion?.head_instance}
@@ -194,6 +194,7 @@ export const PROJECT_VERSION = gql`
       status
       project_id
       node_id
+      sdk_url
       contract_sources {
         ...VersionContractsListFragment
       }

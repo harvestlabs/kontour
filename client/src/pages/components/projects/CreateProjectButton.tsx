@@ -4,8 +4,8 @@ import { useAppSelector } from "@redux/hooks";
 import { selectUserId } from "@redux/slices/userSlice";
 
 const CREATE_PROJECT = gql`
-  mutation CreateProjectButton {
-    createProject {
+  mutation CreateProjectButton($name: String) {
+    createProject(name: $name) {
       id
     }
   }

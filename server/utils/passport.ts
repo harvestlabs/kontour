@@ -78,8 +78,8 @@ passport.use(
       cb(null, {
         handle: profile.username,
         id: profile.id,
-        email: profile.emails && profile.emails[0].value,
-        image_url: profile.photos && profile.photos[0].value,
+        email: profile.emails ? profile.emails[0].value : null,
+        image_url: profile.photos[0].value,
       });
     }
   )

@@ -19,22 +19,11 @@ type Props = {
 function ProjectList({ user_id }: Props) {
   const queryProps: {
     fetchPolicy: WatchQueryFetchPolicy;
-    variables?: {
-      user_id?: string;
-    };
   } = {
     fetchPolicy: "network-only",
   };
-  if (user_id != null) {
-    queryProps.variables = {
-      user_id,
-    };
-  }
 
-  const { data, loading, error } = useQuery<ProjectsQuery>(
-    PROJECTS,
-    queryProps
-  );
+  const { data, loading, error } = useQuery<ProjectsQuery>(PROJECTS);
 
   const { projects } = data || {};
   console.log("projects", data);
@@ -68,8 +57,8 @@ ProjectList.fragments = {
 };
 
 export const PROJECTS = gql`
-  query ProjectsQuery($user_id: String) {
-    projects(user_id: $user_id) {
+  query ProjectsQuery {
+    projects {
       id
       ...ProjectPreviewFragment
     }

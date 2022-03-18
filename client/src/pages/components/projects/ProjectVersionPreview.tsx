@@ -6,7 +6,6 @@ import NextLink from "next/link";
 type Props = { version: ProjectVersionPreviewFragment };
 
 export default function ProjectVersionPreview({ version }: Props) {
-  console.log("project", version);
   return (
     <Box>
       <NextLink href={`/versions/${version.id}`} passHref>

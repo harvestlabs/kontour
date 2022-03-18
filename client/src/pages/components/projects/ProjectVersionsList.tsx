@@ -15,25 +15,15 @@ import { ProjectVersionsListQuery } from "@gql/__generated__/ProjectVersionsList
 import ProjectVersionPreview from "./ProjectVersionPreview";
 import { useRouter } from "next/router";
 import CreateDraftVersionButton from "./CreateDraftVersionButton";
+import { ProjectVersionsList_project_versions } from "@gql/__generated__/ProjectVersionsList";
 
 type Props = {
   project_id: string;
+  versions: ProjectVersionsList_project_versions[];
 } & StackProps;
 
-function ProjectVersionsList({ project_id }: Props) {
+function ProjectVersionsList({ project_id, versions }: Props) {
   const router = useRouter();
-  const { data, loading, error } = useQuery<ProjectVersionsListQuery>(
-    PROJECT_VERSIONS,
-    {
-      fetchPolicy: "network-only",
-      variables: {
-        project_id,
-      },
-    }
-  );
-
-  const { project } = data || {};
-  console.log("projects", data, project_id);
 
   const onCreated = (id: string) => {
     router.push(`/versions/${id}`);
@@ -41,44 +31,24 @@ function ProjectVersionsList({ project_id }: Props) {
 
   return (
     <Flex width="100%">
-      {project != null ? (
-        <VStack
-          columns={5}
-          spacing={{ base: "15px", md: "30px" }}
-          alignItems="flex-start"
-          justify="center"
-        >
-          <CreateDraftVersionButton
-            project_id={project_id}
-            onComplete={onCreated}
-          />
-          {project?.versions?.map((version) =>
-            version ? (
-              <Box key={project.id}>
-                <ProjectVersionPreview version={version} />
-              </Box>
-            ) : null
-          )}
-        </VStack>
-      ) : (
-        "no project found"
-      )}
+      <VStack
+        columns={5}
+        spacing={{ base: "15px", md: "30px" }}
+        alignItems="flex-start"
+        justify="center"
+      >
+        <CreateDraftVersionButton
+          project_id={project_id}
+          onComplete={onCreated}
+        />
+        {versions.map((version) =>
+          version ? (
+            <ProjectVersionPreview key={project_id} version={version} />
+          ) : null
+        )}
+      </VStack>
     </Flex>
   );
 }
-
-export const PROJECT_VERSIONS = gql`
-  query ProjectVersionsListQuery($project_id: String!) {
-    project(id: $project_id) {
-      id
-      versions {
-        id
-        name
-        ...ProjectVersionPreviewFragment
-      }
-    }
-  }
-  ${ProjectVersionPreview.fragments.version}
-`;
 
 export default ProjectVersionsList;

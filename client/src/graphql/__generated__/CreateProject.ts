@@ -18,3 +18,7 @@ export interface CreateProject_createProject {
 export interface CreateProject {
   createProject: CreateProject_createProject | null;
 }
+
+export interface CreateProjectVariables {
+  name?: string | null;
+}

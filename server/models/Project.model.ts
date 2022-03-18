@@ -12,12 +12,19 @@ import {
   AfterCreate,
   HasMany,
   BeforeCreate,
+  HasOne,
 } from "sequelize-typescript";
 import { v4 } from "uuid";
 import User from "./User.model";
 import Node from "./Node.model";
 import ProjectVersion, { ProjectVersionStatus } from "./ProjectVersion.model";
 import Instance from "./Instance.model";
+import GithubRepo from "./GithubRepo.model";
+
+type ProjectAndVersion = {
+  project: Project;
+  version: ProjectVersion;
+};
 
 @Table({
   timestamps: true,
@@ -56,6 +63,8 @@ export default class Project extends Model {
   versions: ProjectVersion[];
   @HasMany(() => Instance, "project_id")
   instances: Instance[];
+  @HasOne(() => GithubRepo, "project_id")
+  github_repo: GithubRepo;
 
   @BeforeCreate
   static async assignToNode(instance: Project) {
@@ -70,7 +79,7 @@ export default class Project extends Model {
     user_id,
     project_metadata = {},
     version_metadata = {},
-  }): Promise<ProjectVersion> {
+  }): Promise<ProjectAndVersion> {
     const project = await Project.create({
       user_id: user_id,
       data: project_metadata,
@@ -82,7 +91,10 @@ export default class Project extends Model {
       status: ProjectVersionStatus.DRAFT,
       name: "V0",
     });
-    return version;
+    return {
+      project: project,
+      version: version,
+    };
   }
 
   async generateNewDraft(): Promise<ProjectVersion> {

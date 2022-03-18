@@ -38,8 +38,7 @@ const ProjectQueries = {
     },
   },
   projects: {
-    type: new GraphQLList(ProjectType),
-
+    type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(ProjectType))),
     args: {
       limit: {
         type: GraphQLInt,
@@ -47,38 +46,43 @@ const ProjectQueries = {
       order: {
         type: GraphQLString,
       },
-      user_id: {
-        type: GraphQLString,
-      },
     },
     resolve: async (parent, args, ctx, info) => {
-      const params = {
+      if (!ctx.state?.user?.id) {
+        return [];
+      }
+      return await Project.findAll({
+        where: {
+          user_id: ctx.state.user.id,
+        },
         limit: args.limit,
         order: args.order,
-      };
-      if (args.user_id) {
-        params["where"] = {
-          user_id: args.user_id,
-        };
-      }
-      return await Project.findAll(params);
+      });
     },
   },
 };
 
 const ProjectMutations = {
   createProject: {
-    type: ProjectVersionType,
+    type: ProjectType,
+    args: {
+      name: {
+        type: GraphQLString,
+      },
+    },
     resolve: async (parent, args, ctx, info) => {
-      if (ctx.state?.user?.id == null) {
-        throw new Error("Invalid user.");
+      if (!ctx.state?.user?.id) {
+        throw new Error("Invalid user");
       }
-      const versionCreated = await Project.createProjectWithDefaultVersion({
-        project_metadata: {},
-        version_metadata: {},
-        user_id: ctx.state?.user?.id,
-      });
-      return versionCreated;
+      const { project, version } =
+        await Project.createProjectWithDefaultVersion({
+          project_metadata: {
+            name: args.name,
+          },
+          version_metadata: {},
+          user_id: ctx.state.user.id,
+        });
+      return project;
     },
   },
   createDraftVersion: {
@@ -89,13 +93,9 @@ const ProjectMutations = {
       },
     },
     resolve: async (parent, args, ctx, info) => {
-      if (ctx.state?.user?.id == null) {
-        throw new Error("Invalid user.");
-      }
       const project = await Project.findByPk(args.projectId);
-      console.log("finding project", project, args.projectId);
       if (project.user_id !== ctx.state?.user?.id) {
-        return null;
+        throw new Error("Invalid user");
       }
       const newVersion = await ProjectVersion.create({
         data: {},

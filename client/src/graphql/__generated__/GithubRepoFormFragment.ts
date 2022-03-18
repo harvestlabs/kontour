@@ -4,17 +4,15 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: ProjectsQuery
+// GraphQL fragment: GithubRepoFormFragment
 // ====================================================
 
-export interface ProjectsQuery_projects {
-  __typename: "Project";
-  /**
-   * The uuid of this project
-   */
+export interface GithubRepoFormFragment {
+  __typename: "GithubRepo";
   id: string;
-}
-
-export interface ProjectsQuery {
-  projects: ProjectsQuery_projects[];
+  repo_name: string;
+  handle: string;
+  deploy_status: number;
+  deploy_data: any | null;
+  user_id: string;
 }

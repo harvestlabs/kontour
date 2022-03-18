@@ -4,10 +4,10 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: CreateProjectButton
+// GraphQL mutation operation: UpdateGithubRepo
 // ====================================================
 
-export interface CreateProjectButton_createProject {
+export interface UpdateGithubRepo_createProject {
   __typename: "ProjectVersion";
   /**
    * The uuid of this project
@@ -15,10 +15,10 @@ export interface CreateProjectButton_createProject {
   id: string;
 }
 
-export interface CreateProjectButton {
-  createProject: CreateProjectButton_createProject | null;
+export interface UpdateGithubRepo {
+  createProject: UpdateGithubRepo_createProject | null;
 }
 
-export interface CreateProjectButtonVariables {
+export interface UpdateGithubRepoVariables {
   name?: string | null;
 }

@@ -5,6 +5,7 @@ import {
   GraphQLString,
 } from "graphql";
 import GraphQLJSONObject from "graphql-type-json";
+import GithubRepoType from "./githubRepo";
 import ProjectVersionType from "./projectVersion";
 
 const ProjectType = new GraphQLObjectType({
@@ -33,6 +34,12 @@ const ProjectType = new GraphQLObjectType({
       type: new GraphQLList(new GraphQLNonNull(ProjectVersionType)),
       resolve: async (parent, args, ctx, info) => {
         return await parent.$get("versions");
+      },
+    },
+    github_repo: {
+      type: GithubRepoType,
+      resolve: async (parent, args, ctx, info) => {
+        return await parent.$get("github_repo");
       },
     },
   },

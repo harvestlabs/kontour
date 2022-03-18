@@ -14,6 +14,7 @@ import {
 } from "sequelize-typescript";
 import { v4 } from "uuid";
 import GithubData from "./GithubData.model";
+import Project from "./Project.model";
 import User from "./User.model";
 
 export enum DeployStatus {
@@ -33,6 +34,7 @@ export interface DeployData {
   truffleConfigPath: string;
   projectId: string;
   versionId: string;
+  deployScript: string; // relative to root of repo
 }
 
 @Table({
@@ -65,6 +67,10 @@ export default class GithubRepo extends Model {
   @Column(DataType.STRING)
   user_id: string;
 
+  @ForeignKey(() => Project)
+  @Column(DataType.STRING)
+  project_id: string;
+
   @CreatedAt
   created_at!: Date;
   @UpdatedAt
@@ -72,6 +78,8 @@ export default class GithubRepo extends Model {
 
   @BelongsTo(() => User, "user_id")
   user: User;
+  @BelongsTo(() => Project, "project_id")
+  project: Project;
 
   async getInstallId(): Promise<number> {
     const data = await GithubData.findOne({

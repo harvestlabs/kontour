@@ -96,15 +96,7 @@ const UserMutations = {
       if (!ctx.state?.user?.id) {
         return null;
       }
-      const user = await User.findByPk(ctx.state.user.id, {
-        include: [ApiKey],
-      });
-      if (user.api_key) {
-        return user.api_key.key;
-      }
-      const apiKey = await ApiKey.create({
-        user_id: user.id,
-      });
+      const apiKey = await ApiKey.getOrCreateForUser(ctx.state.user.id);
       return apiKey.key;
     },
   },

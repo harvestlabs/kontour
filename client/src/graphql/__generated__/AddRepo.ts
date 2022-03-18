@@ -4,17 +4,19 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: ProjectsQuery
+// GraphQL mutation operation: AddRepo
 // ====================================================
 
-export interface ProjectsQuery_projects {
-  __typename: "Project";
-  /**
-   * The uuid of this project
-   */
+export interface AddRepo_addRepo {
+  __typename: "GithubRepo";
   id: string;
 }
 
-export interface ProjectsQuery {
-  projects: ProjectsQuery_projects[];
+export interface AddRepo {
+  addRepo: AddRepo_addRepo | null;
+}
+
+export interface AddRepoVariables {
+  repo_name: string;
+  handle: string;
 }
