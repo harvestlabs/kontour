@@ -15,6 +15,7 @@ export interface VersionContractsListInstanceFragment_contracts_contractSource {
   constructor: any | null;
   abi: any | null;
   events: any;
+  source_type: number | null;
 }
 
 export interface VersionContractsListInstanceFragment_contracts {
@@ -32,6 +33,7 @@ export interface VersionContractsListInstanceFragment_global_contracts_contractS
   constructor: any | null;
   abi: any | null;
   events: any;
+  source_type: number | null;
 }
 
 export interface VersionContractsListInstanceFragment_global_contracts {

@@ -48,9 +48,6 @@ export default function EditorInteractionView({ instance }: Props) {
               <InteractableContract key={contract.id} contract={contract} />
             );
           })}
-        {instance.global_contracts.map((contract) => {
-          return <GlobalContractView key={contract.id} contract={contract} />;
-        })}
       </VStack>
     </Flex>
   );

@@ -26,7 +26,7 @@ apiRouter.post("/ingestQuikdraw/start", async (ctx, next) => {
   const apiKey = await ApiKey.findByPk(key);
   if (!apiKey) {
     ctx.status = 400;
-    next();
+    return;
   }
   let project: Project;
   let node: Node;
@@ -40,7 +40,7 @@ apiRouter.post("/ingestQuikdraw/start", async (ctx, next) => {
     project = await Project.findByPk(projectId, { include: Node });
     if (project.user_id !== apiKey.user_id) {
       ctx.status = 400;
-      next();
+      return;
     }
     node = project.node;
   }
@@ -65,12 +65,12 @@ apiRouter.post("/ingestQuikdraw", async (ctx, next) => {
   const apiKey = await ApiKey.findByPk(key);
   if (!projectId || !apiKey || !versionId) {
     ctx.status = 400;
-    next();
+    return;
   }
   const project = await Project.findByPk(projectId);
   if (project.user_id !== apiKey.user_id) {
     ctx.status = 400;
-    next();
+    return;
   }
 
   const fileChunks = [];
@@ -105,12 +105,12 @@ apiRouter.post("/ingestQuikdraw/end", async (ctx, next) => {
   const apiKey = await ApiKey.findByPk(key);
   if (!projectId || !apiKey || !versionId) {
     ctx.status = 400;
-    next();
+    return;
   }
   const project = await Project.findByPk(projectId);
   if (project.user_id !== apiKey.user_id) {
     ctx.status = 400;
-    next();
+    return;
   }
   const allSources = await redis.redisClient.smembers(versionId);
   const localSources = await LocalContractSource.findAll({
@@ -161,19 +161,19 @@ apiRouter.post("/ingestQuikdraw/migrate", async (ctx, next) => {
   const apiKey = await ApiKey.findByPk(key);
   if (!projectId || !apiKey || !versionId) {
     ctx.status = 400;
-    next();
+    return;
   }
   const project = await Project.findByPk(projectId);
   if (project.user_id !== apiKey.user_id) {
     ctx.status = 400;
-    next();
+    return;
   }
   const version = await ProjectVersion.findByPk(versionId);
   const instance = await version.getHead();
   const contractSourceId = version.data?.local_sources[contractName];
   if (!contractSourceId) {
     ctx.status = 400;
-    next();
+    return;
   }
   const source = await LocalContractSource.findByPk(contractSourceId);
   const contract = await Contract.importFromSource(

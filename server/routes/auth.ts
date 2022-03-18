@@ -116,7 +116,6 @@ authRouter.get("/github_callback", async (ctx: RouterContext, next: Next) => {
     console.log(data, err);
 
     const { id, email, handle, image_url } = data || {};
-    console.log("did it succeed", err, id, email, handle, image_url);
     const maybeLogin = await LoginData.findOne({
       where: {
         github_id: id,
@@ -129,10 +128,8 @@ authRouter.get("/github_callback", async (ctx: RouterContext, next: Next) => {
       ],
     });
     let user = maybeLogin?.user;
-    console.log("outside user", user);
     if (!user) {
       user = await User.create({});
-      console.log("no user", user);
       await LoginData.create({
         github_id: id,
         github_handle: handle,

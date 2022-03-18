@@ -83,32 +83,34 @@ function GithubRepoForm({ repo }: Props) {
 
   return (
     <>
-      <FormLabel>Branch to build</FormLabel>
+      <FormLabel pt="6">Branch to build</FormLabel>
       <Input
         onChange={(e) => setBranch(e.target.value)}
         placeholder="master"
         value={branch}
       />
-      <FormLabel>Build directory</FormLabel>
+      <FormLabel pt="6">Build directory</FormLabel>
       <Input
         onChange={(e) => setBuildDir(e.target.value)}
         placeholder="./"
         value={buildDir}
       />
-      <FormLabel>Build command</FormLabel>
+      <FormLabel pt="6">Build command</FormLabel>
       <Input
         onChange={(e) => setBuildCmd(e.target.value)}
         placeholder="npm install"
         value={buildCmd}
       />
-      <FormLabel>(Optional) deploy script</FormLabel>
+      <FormLabel pt="6">(Optional) deploy script</FormLabel>
       <Input
         onChange={(e) => setDeployScript(e.target.value)}
         placeholder="./deploy.js"
         value={deployScript}
       />
-      <RadioGroup onChange={setBuildType} value={buildType}>
-        <Radio value="hardhat">Hardhat</Radio>
+      <RadioGroup py="6" onChange={setBuildType} value={buildType}>
+        <Radio pr="10" value="hardhat">
+          Hardhat
+        </Radio>
         <Radio value="truffle">Truffle</Radio>
       </RadioGroup>
       {buildType === "truffle" ? (

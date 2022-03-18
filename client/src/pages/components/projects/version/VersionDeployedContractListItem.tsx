@@ -15,7 +15,7 @@ export default function VersionDeployedContractListItem({
   return (
     <ListItem display="flex" alignItems="center">
       {icon ? <ListIcon as={icon} width="12px" /> : null}
-      {contract?.contractSource?.name}.sol
+      {contract?.contractSource?.name}: {contract.address.substring(0, 8)}...
     </ListItem>
   );
 }
@@ -32,6 +32,7 @@ VersionDeployedContractListItem.fragments = {
         constructor
         abi
         events
+        source_type
       }
     }
   `,

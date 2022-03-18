@@ -113,59 +113,65 @@ export default function InteractableContract({
   }, [contract.methods, getters]);
 
   return contractSource != null ? (
-    <Flex width="100%" flexDirection="column" pr="80px">
-      <Heading layerStyle="title">{contractSource.name}.sol</Heading>
-      <Flex mt="20px" flexDirection="column">
-        <Heading layerStyle="info" fontSize="24px" variant="nocaps">
-          Events
-        </Heading>
-        {events.map((event) => {
-          return (
-            <Box key={event.name}>
-              <Text
-                variant="code"
-                layerStyle="event"
-                as="span"
-                fontWeight="500"
-              >
-                {event.name}
-              </Text>{" "}
-              ({" "}
-              {event.inputs.map((input, idx) => {
-                return (
-                  <Text as="span" key={input.name} variant="code">
-                    {input.name}:{" "}
-                    <Text layerStyle="type" as="span">
-                      {input.type.toString()}
+    <Flex width="100%" flexDirection="column" pb="60px" pr="80px">
+      <Heading layerStyle="title">
+        {contractSource.name}: {address.substring(0, 8)}...
+      </Heading>
+      {events.length > 0 ? (
+        <Flex mt="20px" flexDirection="column">
+          <Heading layerStyle="info" fontSize="24px" variant="nocaps">
+            Events
+          </Heading>
+          {events.map((event) => {
+            return (
+              <Box key={event.name}>
+                <Text
+                  variant="code"
+                  layerStyle="event"
+                  as="span"
+                  fontWeight="500"
+                >
+                  {event.name}
+                </Text>{" "}
+                ({" "}
+                {event.inputs.map((input, idx) => {
+                  return (
+                    <Text as="span" key={input.name} variant="code">
+                      {input.name}:{" "}
+                      <Text layerStyle="type" as="span">
+                        {input.type.toString()}
+                      </Text>
+                      {idx !== event.inputs.length - 1 && ","}
                     </Text>
-                    {idx !== event.inputs.length - 1 && ","}
-                  </Text>
-                );
-              })}{" "}
-              )
-            </Box>
-          );
-        })}
-      </Flex>
+                  );
+                })}{" "}
+                )
+              </Box>
+            );
+          })}
+        </Flex>
+      ) : null}
       <Flex width="100%">
         <Box flex="1">
           <Table variant="simple" size="sm">
             <TableCaption textAlign="left" placement="top">
-              <Text fontWeight="bold" fontSize="24px" layerStyle="title">
-                Executable Functions
-              </Text>
+              <Heading layerStyle="info" fontSize="26px" variant="nocaps">
+                Functions
+              </Heading>
             </TableCaption>
             <Thead></Thead>
 
             <Tbody>
-              <Tr>
-                <Th width="250px">
-                  <Text fontSize="14px" layerStyle="subtitle">
-                    Payable
-                  </Text>
-                </Th>
-                <Th></Th>
-              </Tr>
+              {payables.length > 0 ? (
+                <Tr>
+                  <Th width="250px">
+                    <Text fontSize="14px" layerStyle="subtitle">
+                      Payable
+                    </Text>
+                  </Th>
+                  <Th></Th>
+                </Tr>
+              ) : null}
               {payables.map((func) => {
                 return (
                   <ContractExecuteTableRowRenderer
@@ -177,14 +183,16 @@ export default function InteractableContract({
                   />
                 );
               })}
-              <Tr>
-                <Th>
-                  <Text fontSize="14px" layerStyle="subtitle">
-                    Nonpayable
-                  </Text>
-                </Th>
-                <Th></Th>
-              </Tr>
+              {nonpayables.length > 0 ? (
+                <Tr>
+                  <Th>
+                    <Text fontSize="14px" layerStyle="subtitle">
+                      Nonpayable
+                    </Text>
+                  </Th>
+                  <Th></Th>
+                </Tr>
+              ) : null}
               {nonpayables.map((func) => {
                 return (
                   <ContractExecuteTableRowRenderer
@@ -214,24 +222,26 @@ export default function InteractableContract({
             }}
           >
             <TableCaption textAlign="left" placement="top">
-              <Text fontWeight="bold" fontSize="24px" layerStyle="title2">
-                Current Contract State
-              </Text>
+              <Heading layerStyle="info" fontSize="24px" variant="nocaps">
+                State
+              </Heading>
             </TableCaption>
-            <Thead>
-              <Tr>
-                <Th>
-                  <Text fontSize="14px" layerStyle="subtitle2">
-                    Function
-                  </Text>
-                </Th>
-                <Th>
-                  <Text fontSize="14px" layerStyle="subtitle2">
-                    Value
-                  </Text>
-                </Th>
-              </Tr>
-            </Thead>
+            {getterValuesWithoutParams.length > 0 ? (
+              <Thead>
+                <Tr>
+                  <Th>
+                    <Text fontSize="14px" layerStyle="subtitle2">
+                      Function
+                    </Text>
+                  </Th>
+                  <Th>
+                    <Text fontSize="14px" layerStyle="subtitle2">
+                      Value
+                    </Text>
+                  </Th>
+                </Tr>
+              </Thead>
+            ) : null}
             <Tbody>
               {getterValuesWithoutParams.map((getterValue) => {
                 return (
@@ -242,18 +252,20 @@ export default function InteractableContract({
                   />
                 );
               })}
-              <Tr>
-                <Th>
-                  <Text fontSize="14px" layerStyle="subtitle2">
-                    Function
-                  </Text>
-                </Th>
-                <Th>
-                  <Text fontSize="14px" layerStyle="subtitle2">
-                    Inputs
-                  </Text>
-                </Th>
-              </Tr>
+              {getterValuesWithParams.length > 0 ? (
+                <Tr>
+                  <Th>
+                    <Text fontSize="14px" layerStyle="subtitle2">
+                      Function
+                    </Text>
+                  </Th>
+                  <Th>
+                    <Text fontSize="14px" layerStyle="subtitle2">
+                      Inputs
+                    </Text>
+                  </Th>
+                </Tr>
+              ) : null}
               {getterValuesWithParams.map((getterValue) => {
                 return (
                   <ContractValueTableRowRenderer

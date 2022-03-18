@@ -64,7 +64,7 @@ export default function EditorContractView({}: Props) {
             </Button>
           </>
         )}
-        <ListItem>Events</ListItem>;
+        {events.length > 0 ? <ListItem>Events</ListItem> : null}
         {events.map((event) => {
           return (
             <Button key={event.name} variant="listItem" onClick={() => {}}>
