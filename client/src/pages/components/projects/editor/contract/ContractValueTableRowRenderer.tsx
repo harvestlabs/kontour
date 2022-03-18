@@ -129,12 +129,12 @@ export default function ContractValueTableRowRenderer({
             [{" "}
             {valueToRender.map((value, idx) => {
               return (
-                <>
-                  <Text variant="code" as="span" key={idx} layerStyle="value2">
+                <Text variant="code" as="span" key={idx}>
+                  <Text as="span" layerStyle="value2">
                     {value}
                   </Text>
                   {idx !== valueToRender.length - 1 ? ", " : null}
-                </>
+                </Text>
               );
             }) || " "}{" "}
             ]
@@ -149,7 +149,7 @@ export default function ContractValueTableRowRenderer({
       </Tr>
       {inputs
         ? inputs.map((input, idx) => (
-            <Tr key={input.name}>
+            <Tr key={idx}>
               <Td pl="40px" fontSize="16px">
                 {input.name} :{" "}
                 <Text as="span" layerStyle="type2">

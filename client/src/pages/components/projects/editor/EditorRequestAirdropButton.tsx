@@ -24,7 +24,7 @@ export default function RequestAirdropButton({
   return (
     <Button
       size="lg"
-      colorScheme="green"
+      colorScheme="contourBlue"
       isLoading={loading}
       isDisabled={loading}
       leftIcon={<Icons.ArrowDown strokeWidth="3px" size="14px" />}

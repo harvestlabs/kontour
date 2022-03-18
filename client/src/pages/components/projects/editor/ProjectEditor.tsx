@@ -160,7 +160,6 @@ function ProjectEditor({ version_id, page = EDITOR_PAGE.INTERACTIVE }: Props) {
             project_id={projectId}
             version_id={currentVersionId}
             instance_id={projectVersion?.head_instance?.id}
-            sdk_url={projectVersion?.sdk_url!}
           />
           <Flex
             flexGrow="1"
@@ -186,6 +185,7 @@ function ProjectEditor({ version_id, page = EDITOR_PAGE.INTERACTIVE }: Props) {
               versionId={currentVersionId}
               projectId={projectId}
               instance={projectVersion?.head_instance!}
+              sdk_url={projectVersion?.sdk_url!}
             />
           </Flex>
         </>

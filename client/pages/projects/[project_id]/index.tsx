@@ -60,7 +60,9 @@ const ProjectVersionListPage: NextPageWithLayout = () => {
               versions={project.versions}
             />
 
-            <GithubRepoForm repo={project.github_repo} />
+            {project.github_repo && (
+              <GithubRepoForm repo={project.github_repo} />
+            )}
           </main>
         </>
       ) : loading ? (

@@ -37,14 +37,8 @@ type Props = {
   project_id: string;
   version_id: string;
   instance_id?: string;
-  sdk_url?: string;
 };
-function ProjectEditorNavbar({
-  project_id,
-  version_id,
-  instance_id,
-  sdk_url,
-}: Props) {
+function ProjectEditorNavbar({ project_id, version_id, instance_id }: Props) {
   const [selectedVersionName, setSelectedVersionName] = useState("Loading...");
   const dispatch = useDispatch();
   const router = useRouter();
@@ -67,7 +61,6 @@ function ProjectEditorNavbar({
           <Text fontSize="24px">Event Logs</Text>
         </Link>
       </NextLink>
-      {sdk_url ? <Link href={sdk_url}>Get the SDK</Link> : null}
       <Spacer />
       <Spacer />
 

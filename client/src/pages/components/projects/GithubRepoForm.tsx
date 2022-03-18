@@ -51,14 +51,14 @@ function GithubRepoForm({ repo }: Props) {
     DeployFromRepoVariables
   >(DEPLOY_FROM_REPO);
 
-  const [buildType, setBuildType] = useState<string>(repo.deploy_data?.type);
-  const [branch, setBranch] = useState<string>(repo.deploy_data?.branch);
-  const [buildDir, setBuildDir] = useState<string>(repo.deploy_data?.buildDir);
-  const [buildCmd, setBuildCmd] = useState<string>(repo.deploy_data?.buildCmd);
+  const [buildType, setBuildType] = useState<string>(repo?.deploy_data?.type);
+  const [branch, setBranch] = useState<string>(repo?.deploy_data?.branch);
+  const [buildDir, setBuildDir] = useState<string>(repo?.deploy_data?.buildDir);
+  const [buildCmd, setBuildCmd] = useState<string>(repo?.deploy_data?.buildCmd);
   const [deployScript, setDeployScript] = useState<string>(
-    repo.deploy_data?.deployScript
+    repo?.deploy_data?.deployScript
   );
-  const [isDeploying, setIsDeploying] = useState<number>(repo.deploy_status);
+  const [isDeploying, setIsDeploying] = useState<number>(repo?.deploy_status);
 
   const saveRepoFormAndDeploy = async () => {
     await updateDeployParams({

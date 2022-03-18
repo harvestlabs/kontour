@@ -35,6 +35,7 @@ export default function MetaMaskButton({ ...props }: ButtonProps) {
   return (
     <Button
       size="lg"
+      colorScheme="blue"
       onClick={requestUserAccounts}
       // ethProvider hydrates differently on server since it doesn't exist
       suppressHydrationWarning={true}

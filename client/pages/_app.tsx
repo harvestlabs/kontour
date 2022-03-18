@@ -20,7 +20,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <>
-      <Script src="/template.js" />
       <Provider store={store}>
         <ApolloProvider client={GraphQLClient}>
           <ChakraProvider theme={theme}>

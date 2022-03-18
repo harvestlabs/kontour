@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Footer from "@components/Footer";
 import {
   Menu,
   Icon,
+  Tooltip,
   Text,
   Accordion,
   AccordionButton,
@@ -21,6 +22,7 @@ import {
   MenuItem,
   MenuList,
   HStack,
+  Link,
 } from "@chakra-ui/react";
 import VersionContractsListItem from "./VersionContractListItem";
 import * as Icons from "react-feather";
@@ -54,6 +56,7 @@ type Props = {
   projectId: string;
   versionId: string;
   instance: VersionContractsListInstanceFragment;
+  sdk_url?: string;
 };
 
 export default function VersionContractsList({
@@ -62,7 +65,10 @@ export default function VersionContractsList({
   versionId,
   isPublished,
   instance,
+  sdk_url,
 }: Props) {
+  const [sdkCopied, setSdkCopied] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [selectedVersionName, setSelectedVersionName] = useState("Loading...");
   const dispatch = useDispatch();
 
@@ -158,7 +164,7 @@ export default function VersionContractsList({
         alignItems="center"
         display="flex"
       >
-        <Icons.BookOpen size="18px" />
+        <Icons.Book size="18px" />
         <Text as="span" ml="8px">
           Project API
         </Text>
@@ -218,6 +224,35 @@ export default function VersionContractsList({
           size="sm"
           flexShrink="0"
         />
+      </HStack>
+      <HStack pt="24px">
+        {sdk_url ? (
+          <Tooltip
+            label={!sdkCopied ? "Click to copy" : "URL Copied!"}
+            closeOnClick={false}
+            placement="left"
+          >
+            <Button
+              colorScheme="green"
+              onClick={() => {
+                if (timeoutRef.current !== null) {
+                  clearTimeout(timeoutRef.current);
+                }
+
+                navigator.clipboard.writeText(sdk_url);
+                clearTimeout();
+                setSdkCopied(true);
+                timeoutRef.current = setTimeout(() => {
+                  timeoutRef.current = null;
+                  setSdkCopied(false);
+                }, 3000);
+              }}
+              leftIcon={<Icons.BookOpen size="18px" />}
+            >
+              Javascript SDK
+            </Button>
+          </Tooltip>
+        ) : null}
       </HStack>
     </Flex>
   );
