@@ -51,13 +51,13 @@ export default function Logo({
     case LogoType.full:
       return (
         <Flex sx={styles.logo} {...props}>
-          <SVGLogo size={svgSize} sx={styles.logoIconWithText} />
+          <SVGLogo size={svgSize} />
         </Flex>
       );
     case LogoType.dynamic:
       return (
         <Flex sx={styles.logo} {...props}>
-          <SVGLogo size={svgSize} sx={styles.logoIconWithText} />
+          <SVGLogo size={svgSize} />
         </Flex>
       );
     case LogoType.icon:

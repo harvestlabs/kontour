@@ -168,7 +168,7 @@ function ProjectEditor({ version_id, page = EDITOR_PAGE.INTERACTIVE }: Props) {
                 <EditorLogView instance={projectVersion?.head_instance!} />
               ) : (
                 <EditorInteractionView
-                  instance={projectVersion?.head_instance}
+                  instance={projectVersion?.head_instance!}
                 />
               )}
             </Box>
@@ -177,7 +177,7 @@ function ProjectEditor({ version_id, page = EDITOR_PAGE.INTERACTIVE }: Props) {
               isPublished={projectVersion?.status === 2}
               versionId={currentVersionId}
               projectId={projectId}
-              instance={projectVersion?.head_instance}
+              instance={projectVersion?.head_instance!}
             />
           </Flex>
         </>

@@ -4,7 +4,6 @@ import Head from "next/head";
 import Image from "next/image";
 
 import { Container } from "@chakra-ui/react";
-import CreateProject from "@components/projects/CreateProject";
 import { gql, useQuery } from "@apollo/client";
 import ProjectList from "@components/projects/ProjectList";
 import { useAppSelector } from "@redux/hooks";
@@ -12,6 +11,7 @@ import { selectUserId } from "@redux/slices/userSlice";
 import { NextPageWithLayout } from "types/next";
 import Layout from "@layouts/Layout";
 import RequestApiKey from "@components/apiKey/RequestApiKey";
+import { useState } from "react";
 
 const AlphaPage: NextPageWithLayout = () => {
   const router = useRouter();
@@ -23,7 +23,7 @@ const AlphaPage: NextPageWithLayout = () => {
   return (
     <Container maxW="container.lg" variant="base">
       <Head>
-        <title>Request an alpha key</title>
+        <title>Request an alpha key:</title>
       </Head>
       <main>
         <RequestApiKey />

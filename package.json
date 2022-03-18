@@ -9,6 +9,7 @@
     "start": "pm2 start",
     "start:prod": "node ./build/app.js",
     "start:server": "pm2 start --name server node ./build/app.js",
+    "start:worker": "node ./worker/build/worker/main.js",
     "build": "tsc --project ./ && tsc --project ./worker",
     "build:server": "tsc --project ./",
     "build:worker": "tsc --project ./worker",

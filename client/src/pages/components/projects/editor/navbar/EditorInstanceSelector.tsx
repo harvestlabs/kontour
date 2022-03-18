@@ -12,15 +12,8 @@ import {
   InstancesSelectorQuery,
   InstancesSelectorQueryVariables,
 } from "@gql/__generated__/InstancesSelectorQuery";
-import {
-  ProjectQuery,
-  ProjectQueryVariables,
-} from "@gql/__generated__/ProjectQuery";
-import { PROJECT } from "@layouts/ProjectEditorNavbar";
-import { setSelectedVersionId } from "@redux/slices/projectSlice";
-import { versions } from "process";
+
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 
 type Props = {
   version_id: string;
@@ -32,7 +25,6 @@ export default function EditorInstanceSelector({
   instance_id,
 }: Props) {
   const [selectedInstanceName, setSelectedInstanceName] = useState(instance_id);
-  const dispatch = useDispatch();
   const { data, loading, error } = useQuery<
     InstancesSelectorQuery,
     InstancesSelectorQueryVariables

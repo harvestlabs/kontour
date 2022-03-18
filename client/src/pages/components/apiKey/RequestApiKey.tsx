@@ -5,7 +5,7 @@ import RequestApiKeyButton from "./RequestAPIKeyButton";
 
 interface RequestApiKeyProps {}
 
-function RequestApiKey({ onComplete }: RequestApiKeyProps) {
+function RequestApiKey() {
   const [key, setKey] = useState<string | null>(null);
   return (
     <VStack>

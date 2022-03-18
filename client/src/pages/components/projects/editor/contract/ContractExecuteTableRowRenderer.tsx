@@ -72,7 +72,7 @@ export default function ContractExecuteTableRowRenderer({
       console.log("error", e);
       setError("execute", { message: `${name}: ${e.message}` });
     } finally {
-      document.dispatchEvent(RefreshContractEvent);
+      document.dispatchEvent(RefreshContractEvent!);
     }
   }, [
     clearErrors,
