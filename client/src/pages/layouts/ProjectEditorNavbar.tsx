@@ -51,12 +51,12 @@ function ProjectEditorNavbar({ project_id, version_id, instance_id }: Props) {
           <Logo type="dynamic" />
         </Link>
       </NextLink>
-      <NextLink href={`${router.asPath}/api`} passHref>
+      <NextLink href={`/versions/${version_id}`} passHref>
         <Link ml="24px">
-          <Text fontSize="24px">API</Text>
+          <Text fontSize="24px">Sandbox</Text>
         </Link>
       </NextLink>
-      <NextLink href={`${router.asPath}/logs`} passHref>
+      <NextLink href={`/versions/${version_id}/logs`} passHref>
         <Link ml="24px">
           <Text fontSize="24px">Event Logs</Text>
         </Link>
