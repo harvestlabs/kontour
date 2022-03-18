@@ -114,7 +114,9 @@ export default function VersionContractsList({
       }}
     >
       <Flex>
-        <Heading fontSize="24px">Toolkit</Heading>
+        <Heading layerStyle="title" fontSize="24px">
+          Toolkit
+        </Heading>
 
         <Spacer />
         <MetamaskButton size="sm" />
@@ -136,25 +138,12 @@ export default function VersionContractsList({
         {instance.contracts.map((contract) => {
           return (
             <VersionDeployedContractListItem
-              icon={Icons.Circle}
               contract={contract}
               key={contract.id}
             />
           );
         })}
       </List>
-      <List>
-        {instance.contracts.map((contract) => {
-          return (
-            <VersionDeployedContractListItem
-              icon={Icons.Globe}
-              contract={contract}
-              key={contract.id}
-            />
-          );
-        })}
-      </List>
-
       <Heading
         mt="12px"
         mb="8px"
@@ -169,7 +158,6 @@ export default function VersionContractsList({
           Project API
         </Text>
       </Heading>
-
       <Box height="0" overflow="hidden">
         <List>
           {contract_sources.map((contract_source) => {
@@ -182,7 +170,6 @@ export default function VersionContractsList({
           })}
         </List>
       </Box>
-
       <Spacer />
       <Divider />
       <HStack mt="24px" flexShrink="0">

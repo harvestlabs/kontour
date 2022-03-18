@@ -171,6 +171,9 @@ const Table = {
 
 const theme = extendTheme({
   layerStyles: {
+    blue: {
+      color: "contourBlue.500",
+    },
     error: {
       color: "contourRed.500",
     },

@@ -15,11 +15,15 @@ import {
 } from "@chakra-ui/react";
 import { EditorLogViewInstanceFragment } from "@gql/__generated__/EditorLogViewInstanceFragment";
 import { parseEventReturnValues } from "@utils/event_parser";
+import React from "react";
 import { useEffect, useState } from "react";
 
 type Props = { instance: EditorLogViewInstanceFragment };
 
-type SubTableProps = { data: Record<string, any>; indents: number };
+type SubTableProps = {
+  data: Record<string, any>;
+  indents: number;
+};
 
 function isObject(variable: any) {
   return typeof variable === "object" && variable !== null;
@@ -29,10 +33,10 @@ function SubTable({ data, indents }: SubTableProps) {
   const indentMultiplier = 32;
   return (
     <>
-      {Object.keys(data).map((key) => {
+      {Object.keys(data).map((key, idx) => {
         if (key === "_kontour") return null;
         return (
-          <>
+          <React.Fragment key={idx}>
             <Tr>
               <Td pl={`${16 + indentMultiplier * indents}px`}>
                 <Text
@@ -58,7 +62,7 @@ function SubTable({ data, indents }: SubTableProps) {
             {isObject(data[key]) ? (
               <SubTable data={data[key]} indents={indents + 1} />
             ) : null}
-          </>
+          </React.Fragment>
         );
       })}
     </>
@@ -132,7 +136,6 @@ function EditorLogView({ instance }: Props) {
           return 1;
         } else return 0;
       });
-      console.log("setitng");
 
       setAllEvents(allContractEvents);
     }
@@ -143,12 +146,10 @@ function EditorLogView({ instance }: Props) {
 
   useEffect(() => {}, []);
 
-  console.log("vets", allEvents);
   return (
     <Flex width="100%" height="100%" flexDirection="column" position="relative">
       <Heading layerStyle="title">Event Log</Heading>
       {allEvents.map((evt) => {
-        console.log("evt", evt);
         return (
           <Box key={evt.blockHash}>
             <Table variant="simple" size="sm">
