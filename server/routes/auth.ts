@@ -112,44 +112,47 @@ authRouter.get("/twitter_callback", async (ctx: RouterContext, next: Next) => {
 
 authRouter.get("/github", passport.authenticate("github"));
 authRouter.get("/github_callback", async (ctx: RouterContext, next: Next) => {
-  return passport.authenticate(
-    "github",
-    async (err: Error, { id, email, handle, image_url }) => {
-      const maybeLogin = await LoginData.findOne({
-        where: {
-          github_id: id,
+  return passport.authenticate("github", async (err: Error, data) => {
+    console.log(data, err);
+
+    const { id, email, handle, image_url } = data || {};
+    console.log("did it succeed", err, id, email, handle, image_url);
+    const maybeLogin = await LoginData.findOne({
+      where: {
+        github_id: id,
+      },
+      include: [
+        {
+          model: User,
+          include: [Profile],
         },
-        include: [
-          {
-            model: User,
-            include: [Profile],
-          },
-        ],
+      ],
+    });
+    let user = maybeLogin?.user;
+    console.log("outside user", user);
+    if (!user) {
+      user = await User.create({});
+      console.log("no user", user);
+      await LoginData.create({
+        github_id: id,
+        github_handle: handle,
+        user_id: user.id,
       });
-      let user = maybeLogin?.user;
-      if (!user) {
-        user = await User.create({});
-        await LoginData.create({
-          github_id: id,
-          github_handle: handle,
+      const profile = await Profile.findOne({
+        where: {
           user_id: user.id,
-        });
-        const profile = await Profile.findOne({
-          where: {
-            user_id: user.id,
-          },
-        });
-        profile.image_url = image_url;
-        await profile.save();
-      } else {
-        user.profile.image_url = image_url;
-        await user.profile.save();
-      }
-      ctx.status = 200;
-      setJwtHeaderOnLogin(ctx, user);
-      return;
+        },
+      });
+      profile.image_url = image_url;
+      await profile.save();
+    } else {
+      user.profile.image_url = image_url;
+      await user.profile.save();
     }
-  )(ctx, next);
+    ctx.status = 200;
+    setJwtHeaderOnLogin(ctx, user);
+    ctx.redirect(config.app.CLIENT_HOSTNAME);
+  })(ctx, next);
 });
 authRouter.get(
   "/github/app_callback",
