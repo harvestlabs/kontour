@@ -112,7 +112,7 @@ export default function InteractableContract({
   }, [contract.methods, getters]);
 
   return contractSource != null ? (
-    <Flex width="100%" flexDirection="column" padding="40px">
+    <Flex width="100%" flexDirection="column">
       <Heading>{contractSource.name}.sol</Heading>
       <Flex mt="20px" px="16px" flexDirection="column">
         <Heading fontSize="14px" variant="nocaps">

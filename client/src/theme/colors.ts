@@ -10,6 +10,7 @@ const contourPurple = "rgb(198, 120, 221) ";
 const contourCyan = "rgb(86, 182, 194)";
 const contourGrey = "rgb(76, 82, 99)";
 const contourGreyLight = "rgb(92, 99, 112)";
+const contourBoxShadow = "rgb(220 220 220 / 20%) 0px 1px 12px !important";
 
 const discordPurple = " #7289da";
 
@@ -28,6 +29,7 @@ const colors = {
   contourCyan,
   contourGrey,
   contourGreyLight,
+  contourBoxShadow,
   discordPurple,
 };
 

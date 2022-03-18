@@ -162,7 +162,15 @@ function ProjectEditor({ version_id, page = EDITOR_PAGE.INTERACTIVE }: Props) {
             instance_id={projectVersion?.head_instance?.id}
             sdk_url={projectVersion?.sdk_url!}
           />
-          <Flex flexGrow="1" minHeight="1px">
+          <Flex
+            flexGrow="1"
+            minHeight="1px"
+            padding={{
+              base: "24px 32px 0 32px ",
+              md: "60px 80px 0 80px",
+            }}
+            overflow="scroll"
+          >
             <Box height="100%" flexGrow="1">
               {page === EDITOR_PAGE.LOGS ? (
                 <EditorLogView instance={projectVersion?.head_instance!} />

@@ -37,13 +37,7 @@ export default function EditorInteractionView({ instance }: Props) {
   }
 
   return (
-    <Flex
-      width="100%"
-      height="100%"
-      flexDirection="column"
-      overflow="scroll"
-      position="relative"
-    >
+    <Flex width="100%" height="100%" flexDirection="column" position="relative">
       <EditorPublishButton />
 
       <VStack>
