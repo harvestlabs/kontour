@@ -85,7 +85,7 @@ export default function GlobalContractView({
         }
       );
     });
-  }, []);
+  }, [contract.events, contractSource.name, dispatch, events]);
 
   return (
     <>

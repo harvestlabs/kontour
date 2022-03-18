@@ -123,7 +123,7 @@ function EditorLogView({ instance }: Props) {
     }
 
     findContractEvents();
-  }, [instance.contracts]);
+  }, [allEvents, instance.contracts]);
 
   useEffect(() => {}, []);
 
