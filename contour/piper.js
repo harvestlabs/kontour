@@ -2,6 +2,7 @@ const { redisClient, pubsub } = require("./redis");
 
 const FROM_ADDR_PATTERN = /From:\ +([0-9a-zA-z]+)$/;
 const TO_ADDR_PATTERN = /To:\ +([0-9a-zA-z]+)$/;
+const TX_PATTERN = /Transaction:\ +([0-9a-zA-z]+)$/;
 const CONSOLE_PATTERN = /console.log:$/;
 const BLOCK_PATTERN = /Block #([0-9]+):$/;
 
@@ -17,6 +18,7 @@ function resetGlobals() {
   GLOBALS.isConsole = false;
   GLOBALS.lastFrom = null;
   GLOBALS.lastTo = null;
+  GLOBALS.txId = null;
   GLOBALS.currMessages = [];
   GLOBALS.blockNum = null;
 }
@@ -34,6 +36,7 @@ process.stdin.on("readable", () => {
             message: GLOBALS.currMessages.join("\n"),
             from: GLOBALS.lastFrom,
             to: GLOBALS.lastTo,
+            txId: GLOBALS.txId,
             blockNum: GLOBALS.blockNum,
           });
           resetGlobals();
@@ -45,6 +48,7 @@ process.stdin.on("readable", () => {
         const isFrom = line.match(FROM_ADDR_PATTERN);
         const isTo = line.match(TO_ADDR_PATTERN);
         const isConsole = line.match(CONSOLE_PATTERN);
+        const isTx = line.match(TX_PATTERN);
         const isBlock = line.match(BLOCK_PATTERN);
         if (isFrom) {
           // set the from address for now
@@ -60,6 +64,9 @@ process.stdin.on("readable", () => {
         if (isConsole) {
           // beginning of a console log
           GLOBALS.isConsole = true;
+        }
+        if (isTx) {
+          GLOBALS.txId = isTx[1];
         }
       }
     });

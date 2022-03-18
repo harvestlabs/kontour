@@ -8,7 +8,10 @@ const HardhatSubscriptions = {
   subscribeToLogs: {
     type: GraphQLJSONObject,
     args: {
-      id: {
+      from: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+      to: {
         type: new GraphQLNonNull(GraphQLString),
       },
     },
@@ -19,7 +22,15 @@ const HardhatSubscriptions = {
           */
       if (
         payload.from &&
-        payload.from.toLowerCase() === args.id.toLowerCase()
+        args.from &&
+        payload.from.toLowerCase() === args.from.toLowerCase()
+      ) {
+        return payload;
+      }
+      if (
+        payload.to &&
+        args.to &&
+        payload.to.toLowerCase() === args.to.toLowerCase()
       ) {
         return payload;
       }
