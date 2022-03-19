@@ -33,6 +33,7 @@ import {
 import { useDispatch } from "react-redux";
 import EditorInteractionView from "./EditorInteractionView";
 import EditorLogView from "./EditorLogView";
+import ConsoleLogView from "./ConsoleLogView";
 
 const sizeOfGutter = "30px";
 
@@ -189,6 +190,7 @@ function ProjectEditor({ version_id, page = EDITOR_PAGE.INTERACTIVE }: Props) {
               instance={projectVersion?.head_instance!}
               sdk_url={projectVersion?.sdk_url!}
             />
+            <ConsoleLogView />
           </Flex>
         </>
       ) : null}

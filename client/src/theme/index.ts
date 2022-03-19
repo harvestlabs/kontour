@@ -67,6 +67,7 @@ const Text = {
     code: {
       fontFamily:
         "Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;",
+      fontSize: "0.9em",
     },
     ellipsis: {
       overflow: "hidden",

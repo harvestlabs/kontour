@@ -4,11 +4,13 @@ import { useDispatch } from "react-redux";
 import { NextPageWithLayout } from "types/next";
 import ProjectEditor from "@components/projects/editor/ProjectEditor";
 import ProjectEditorLayout from "@layouts/ProjectEditorLayout";
+import { withCookieAuth } from "@utils/auth";
 
 const ProjectVersionPage: NextPageWithLayout = () => {
   const router = useRouter();
   const { version_id } = router?.query;
 
+  console.log("auth");
   return (
     <>
       <Head>
@@ -27,4 +29,4 @@ const ProjectVersionPage: NextPageWithLayout = () => {
 ProjectVersionPage.getLayout = function getLayout(page) {
   return <ProjectEditorLayout>{page}</ProjectEditorLayout>;
 };
-export default ProjectVersionPage;
+export default withCookieAuth(ProjectVersionPage);

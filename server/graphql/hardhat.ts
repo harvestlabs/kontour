@@ -9,10 +9,10 @@ const HardhatSubscriptions = {
     type: GraphQLJSONObject,
     args: {
       from: {
-        type: new GraphQLNonNull(GraphQLString),
+        type: GraphQLString,
       },
       to: {
-        type: new GraphQLNonNull(GraphQLString),
+        type: GraphQLString,
       },
     },
     resolve: async (payload, args, ctx, _) => {
