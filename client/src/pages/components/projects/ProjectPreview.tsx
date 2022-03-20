@@ -19,7 +19,7 @@ export default function ProjectPreview({ project }: Props) {
             color: `${colors.contourBlue[1000]}`,
           }}
         >
-          {project.id}
+          {project.data.name || "Untitled Project"}
         </Box>
       </Link>
     </NextLink>
