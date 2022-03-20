@@ -132,14 +132,17 @@ const Link = {
 const Input = {
   baseStyle: {
     field: {
-      borderColor: "blue",
-      backgroundColor: `${colors.contourBlack["700"]} !important`,
+      border: `1px solid ${colors.contourBorder[500]}`,
+      backgroundColor: `${colors.contourBlack[700]}`,
+      _placeholder: {
+        color: `${colors.contourGreyLight[500]}`,
+      },
     },
   },
-  sizes: {
-    sm: {
-      field: {},
-    },
+  sizes: {},
+
+  defaultProps: {
+    variant: null, // null here
   },
 };
 
