@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { Box, Button, Flex, Link } from "@chakra-ui/react";
+import { Box, Text, Button, Flex, Link, Heading } from "@chakra-ui/react";
 
 import { withCookieAuth } from "@utils/auth";
 import Layout from "src/pages/layouts/Layout";
@@ -29,33 +29,60 @@ const Home: NextPageWithLayout = (props) => {
         flexDirection="column"
         height="100vh"
       >
-        <AnimatedSVGLogo size={300} />
-        <Flex
-          as={motion.div}
-          alignItems="center"
-          mt="60px"
-          initial={{ opacity: 0, translateY: "14px" }}
-          animate={{
-            opacity: 1,
-            translateY: 0,
-            transition: { delay: 1.5, duration: 1 },
-          }}
-        >
-          {user_id ? (
-            <NextLink href="/projects" passHref>
-              <Link>
-                <Button
-                  variant="ghost"
-                  iconSpacing="4px"
-                  rightIcon={<Icons.ArrowRight size={16} />}
-                >
-                  View Projects
-                </Button>
-              </Link>
-            </NextLink>
-          ) : (
-            <SignInButton variant="ghost" />
-          )}
+        <Flex width="300px" height="300px" position="relative">
+          <Box
+            as={motion.div}
+            position="relative"
+            initial={{ translateX: 0 }}
+            animate={{
+              opacity: 1,
+              translateX: "-100px",
+              transition: { delay: 1.5, duration: 1 },
+            }}
+          >
+            <AnimatedSVGLogo position="absolute" size={300} />
+          </Box>
+
+          <Flex
+            as={motion.div}
+            alignItems="center"
+            flexDirection="column"
+            justifyContent="center"
+            initial={{ opacity: 0, translateX: "175px" }}
+            animate={{
+              opacity: 1,
+              translateX: "225px",
+              transition: { delay: 1.5, duration: 1 },
+            }}
+          >
+            <Heading
+              fontSize="40px"
+              letterSpacing="10px"
+              layerStyle="yellowLight"
+              textAlign="center"
+              mt="32px"
+              mb="12px"
+            >
+              kontour
+            </Heading>
+            {user_id ? (
+              <NextLink href="/projects" passHref>
+                <Link>
+                  <Button
+                    variant="ghost"
+                    colorScheme="contourBlue"
+                    iconSpacing="4px"
+                    rightIcon={<Icons.ArrowRight size={16} />}
+                    size="xl"
+                  >
+                    View Projects
+                  </Button>
+                </Link>
+              </NextLink>
+            ) : (
+              <SignInButton variant="ghost" />
+            )}
+          </Flex>
         </Flex>
       </Flex>
     </main>

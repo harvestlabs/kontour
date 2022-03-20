@@ -1,15 +1,16 @@
 import { motion } from "framer-motion";
 import * as React from "react";
 
-type SVGProps = { size: number };
+type SVGProps = { size: number } & React.CSSProperties;
 
-const SvgComponent = ({ size }: SVGProps) => (
+const SvgComponent = ({ size, ...props }: SVGProps) => (
   <svg
     data-name="Layer 1"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 214 214"
     style={{
       height: size,
+      ...props,
     }}
   >
     <motion.circle
