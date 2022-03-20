@@ -8,6 +8,8 @@ import {
   Spinner,
   Flex,
   InputProps,
+  BoxProps,
+  LayoutProps,
 } from "@chakra-ui/react";
 import ImportGithubRepo from "@components/projects/editor/ImportGithubRepo";
 import { Repos } from "@gql/__generated__/Repos";
@@ -35,12 +37,18 @@ const fuseOptions = {
 type Props<T> = {
   data: T[];
   isLoading?: boolean;
+  searchTitle: string;
+  searchPlaceholder: string;
+  maxResultsHeight: LayoutProps["maxHeight"];
   children: React.FC<{ key: number; item: T }>;
-} & InputProps;
+} & BoxProps;
 export default function Search<T>({
   data,
   children,
   isLoading = false,
+  searchTitle,
+  searchPlaceholder,
+  maxResultsHeight = "200px",
   ...props
 }: Props<T>) {
   const [searchValue, setSearchValue] = useState("");
@@ -55,13 +63,14 @@ export default function Search<T>({
   }, [fuse, data, searchValue]);
 
   return (
-    <Box width="800px" alignSelf="center">
+    <Box alignSelf="center">
       <FormControl mb="12px">
         <FormLabel htmlFor="kontour-github" layerStyle="blue">
-          Search your repositories
+          {searchTitle}
         </FormLabel>
         <Input
           id="kontour-github"
+          placeholder={searchPlaceholder}
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           {...props}
@@ -92,7 +101,7 @@ export default function Search<T>({
       </FormControl>
       {!isLoading && (
         <Flex
-          maxHeight="200px"
+          maxHeight={maxResultsHeight}
           overflowY="scroll"
           border={`1px solid ${colors.contourBorder[500]}`}
           flexDirection="column"

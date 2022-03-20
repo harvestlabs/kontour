@@ -46,7 +46,10 @@ function ImportGithubRepo({ onCreated }: Props) {
       <Search
         data={repos?.searchGithubRepos || []}
         isLoading={loading}
-        placeholder="Find a repo..."
+        searchPlaceholder="Find a repo..."
+        searchTitle="Search your repositories"
+        maxResultsHeight="200px"
+        width="800px"
       >
         {({ key, item: repo }) => {
           return (

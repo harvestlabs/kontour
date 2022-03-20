@@ -23,15 +23,10 @@ const ProjectsPage: NextPageWithLayout = () => {
         <title>Create a Project</title>
       </Head>
       <Flex flexDirection="column" as="main" alignItems="center">
-        <Heading
-          fontSize="28px"
-          variant="nocaps"
-          mb="40px"
-          layerStyle="yellowLight"
-        >
-          Open existing
+        <Heading fontSize="28px" variant="nocaps" mb="16px" layerStyle="purple">
+          Import Project from Github
         </Heading>
-        <ProjectList user_id={user_id} />
+        <ImportGithubRepo onCreated={onCreated} />
         <Flex alignSelf="center" alignItems="center" width="80%" py="50px">
           <Divider />
           <Text fontSize="24px" px="24px">
@@ -41,10 +36,15 @@ const ProjectsPage: NextPageWithLayout = () => {
           </Text>
           <Divider />
         </Flex>
-        <Heading fontSize="28px" variant="nocaps" mb="16px" layerStyle="purple">
-          Import from Github
+        <Heading
+          fontSize="28px"
+          variant="nocaps"
+          mb="40px"
+          layerStyle="yellowLight"
+        >
+          Open Existing Project
         </Heading>
-        <ImportGithubRepo onCreated={onCreated} />
+        <ProjectList user_id={user_id} />
       </Flex>
     </Container>
   );
