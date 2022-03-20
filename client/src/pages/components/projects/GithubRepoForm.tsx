@@ -120,7 +120,7 @@ function GithubRepoForm({ repo }: Props) {
           <Input placeholder="./truffle-config.js" />
         </>
       ) : null}
-      {isDeploying !== 2 ? (
+      {isDeploying !== 1 ? (
         <Button
           isLoading={loading}
           isDisabled={loading}
