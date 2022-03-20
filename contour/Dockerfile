@@ -4,5 +4,5 @@ WORKDIR /usr/src/app
 RUN npm i hardhat dotenv ioredis graphql-redis-subscriptions
 COPY . /usr/src/app
 
-EXPOSE 8080
-ENTRYPOINT npx hardhat node --port 8080 | node piper.js
+EXPOSE 80
+ENTRYPOINT npx hardhat node --hostname 0.0.0.0 --port 80 | node piper.js
