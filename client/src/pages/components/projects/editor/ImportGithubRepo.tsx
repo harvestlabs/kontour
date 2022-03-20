@@ -1,21 +1,16 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
-import {
-  Box,
-  Button,
-  Link,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-} from "@chakra-ui/react";
-import { AddRepo, AddRepoVariables } from "@gql/__generated__/AddRepo";
+import Fuse from "fuse.js";
+import { Text, Box } from "@chakra-ui/react";
 import {
   AddRepoAndCreateProject,
   AddRepoAndCreateProjectVariables,
 } from "@gql/__generated__/AddRepoAndCreateProject";
 
 import { Repos } from "@gql/__generated__/Repos";
-import * as Icons from "react-feather";
+import { useMemo, useState } from "react";
+import colors from "src/theme/colors";
+import React from "react";
+import Search from "@components/lib/Search";
 
 const GITHUB_REPOS = gql`
   query Repos {
@@ -39,6 +34,7 @@ interface Props {
 }
 
 function ImportGithubRepo({ onCreated }: Props) {
+  const [searchValue, setSearchValue] = useState("");
   const { data: repos, loading, error } = useQuery<Repos>(GITHUB_REPOS);
   const [addRepo, e1] = useMutation<
     AddRepoAndCreateProject,
@@ -46,21 +42,20 @@ function ImportGithubRepo({ onCreated }: Props) {
   >(ADD_REPO_AND_CREATE_PROJECT);
 
   return (
-    <Menu>
-      <MenuButton
-        borderRadius="0"
-        as={Button}
-        rightIcon={<Icons.ChevronDown size="16" />}
+    <>
+      <Search
+        data={repos?.searchGithubRepos || []}
+        isLoading={loading}
+        placeholder="Find a repo..."
       >
-        New project
-      </MenuButton>
-
-      <MenuList>
-        {repos?.searchGithubRepos?.map((repo: any) => {
+        {({ key, item: repo }) => {
           return (
-            <MenuItem
-              value={repo.full_repo_name}
-              key={repo.full_repo_name}
+            <Box
+              key={key}
+              padding="10px"
+              borderBottom={`1px solid ${colors.contourBorder[500]}`}
+              _hover={{ bg: "contourBlue.100", color: "contourBlue.1000" }}
+              cursor="pointer"
               onClick={async () => {
                 const project = await addRepo({
                   variables: {
@@ -71,12 +66,12 @@ function ImportGithubRepo({ onCreated }: Props) {
                 onCreated(project.data?.addRepoAndCreateProject?.id!);
               }}
             >
-              {repo.full_repo_name}
-            </MenuItem>
+              <Text>{repo.repo_name}</Text>
+            </Box>
           );
-        })}
-      </MenuList>
-    </Menu>
+        }}
+      </Search>
+    </>
   );
 }
 

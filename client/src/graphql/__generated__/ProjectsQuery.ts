@@ -13,6 +13,7 @@ export interface ProjectsQuery_projects {
    * The uuid of this project
    */
   id: string;
+  data: any | null;
 }
 
 export interface ProjectsQuery {

@@ -13,4 +13,5 @@ export interface ProjectListFragment {
    * The uuid of this project
    */
   id: string;
+  data: any | null;
 }

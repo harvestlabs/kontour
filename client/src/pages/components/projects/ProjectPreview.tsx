@@ -19,6 +19,7 @@ ProjectPreview.fragments = {
   project: gql`
     fragment ProjectPreviewFragment on Project {
       id
+      data
     }
   `,
 };

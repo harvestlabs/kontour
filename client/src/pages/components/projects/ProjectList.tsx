@@ -26,6 +26,7 @@ function ProjectList({ user_id }: Props) {
   const { data, loading, error } = useQuery<ProjectsQuery>(PROJECTS);
 
   const { projects } = data || {};
+
   console.log("projects", data);
 
   return projects != null ? (
@@ -47,14 +48,6 @@ function ProjectList({ user_id }: Props) {
     </Flex>
   ) : null;
 }
-
-ProjectList.fragments = {
-  project: gql`
-    fragment ProjectListFragment on Project {
-      id
-    }
-  `,
-};
 
 export const PROJECTS = gql`
   query ProjectsQuery {
