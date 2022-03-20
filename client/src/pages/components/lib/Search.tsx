@@ -70,7 +70,8 @@ export default function Search<T>({
         </FormLabel>
         <Input
           id="kontour-github"
-          placeholder={searchPlaceholder}
+          isDisabled={isLoading}
+          placeholder={isLoading ? "Loading..." : searchPlaceholder}
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           {...props}
