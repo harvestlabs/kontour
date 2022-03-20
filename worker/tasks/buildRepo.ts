@@ -71,6 +71,15 @@ export default async function BuildRepoTasks(data: Request): Promise<Response> {
     if (data.buildDir) {
       cwd = path.resolve(cwd, data.buildDir);
     }
+    console.log("running npm install --production=false");
+    redis.pubsub.publish("build_task", {
+      message: `Running npm install --production=false`,
+      buildId: data.repoId,
+    });
+    execSync(`2>&1 npm install --production=false | ${pipeScript}`, {
+      cwd: cwd,
+      stdio: "inherit",
+    });
 
     if (data.buildCmd) {
       console.log("running build command", data.buildCmd);

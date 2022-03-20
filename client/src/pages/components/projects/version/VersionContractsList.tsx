@@ -116,6 +116,7 @@ export default function VersionContractsList({
       right="24px"
       top="104px"
       p="24px"
+      height={expanded ? "80%" : "auto"}
       transition="opacity .2s ease-in-out"
       boxShadow="0px 0px 20px rgba(0,0,0,0.12)"
       _hover={{
@@ -205,8 +206,8 @@ export default function VersionContractsList({
         overflow="hidden"
         as={motion.div}
         animate={{
-          height: expanded ? "auto" : 0,
-          marginBottom: expanded ? "24px" : 0,
+          height: expanded ? "auto" : "50px",
+          marginBottom: expanded ? "24px" : "6px",
         }}
       >
         <Heading

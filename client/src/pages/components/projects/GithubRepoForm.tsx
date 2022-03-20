@@ -3,6 +3,7 @@ import {
   Button,
   FormLabel,
   Heading,
+  Icon,
   Input,
   Link,
   Radio,
@@ -10,6 +11,7 @@ import {
   Spinner,
   Text,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import { useAppSelector } from "@redux/hooks";
 import { selectUserId } from "@redux/slices/userSlice";
 import {
@@ -21,9 +23,9 @@ import {
   DeployFromRepoVariables,
 } from "@gql/__generated__/DeployFromRepo";
 import { GithubRepoFormFragment } from "@gql/__generated__/GithubRepoFormFragment";
-import { useState } from "react";
 import BuildStatus from "./BuildStatus";
 import colors from "src/theme/colors";
+import { GitHub } from "react-feather";
 
 const DEPLOY_FROM_REPO = gql`
   mutation DeployFromRepo($id: String!) {
@@ -88,25 +90,17 @@ function GithubRepoForm({ repo }: Props) {
 
   return (
     <>
-      <Text fontWeight="300" fontSize="16px">
+      <Text fontWeight="400" fontSize="18px" mb="18px">
         from{" "}
         <Link
+          as="span"
           color={colors.contourRedLight[400]}
           fontWeight="700"
           href={`https://www.github.com/${repo.handle}/${repo.repo_name}`}
           target="_blank"
         >
-          {repo.repo_name}
-        </Link>
-        {", "}
-        by{" "}
-        <Link
-          color={colors.contourRedLight[400]}
-          href={`https://www.github.com/${repo.handle}`}
-          target="_blank"
-          fontWeight="700"
-        >
-          {repo.handle}
+          <Icon stroke={colors.white} as={GitHub} mx="6px" />
+          {repo.handle}/{repo.repo_name}
         </Link>
       </Text>
       <FormLabel mt="12px">Branch to build</FormLabel>
@@ -123,11 +117,23 @@ function GithubRepoForm({ repo }: Props) {
         placeholder="./"
         value={buildDir}
       />
-      <FormLabel mt="12px">Build command</FormLabel>
+      <FormLabel fontWeight="600" textAlign="center" fontSize="18px" my="30px">
+        Kontour runs{" "}
+        <Text
+          mx="6px"
+          as="span"
+          color={colors.contourGreen[600]}
+          variant="code"
+        >
+          npm install
+        </Text>{" "}
+        automatically
+      </FormLabel>
+      <FormLabel mt="0px">(Optional) Additional build command</FormLabel>
       <Input
         size="sm"
         onChange={(e) => setBuildCmd(e.target.value)}
-        placeholder="npm install"
+        placeholder="npm run prebuild"
         value={buildCmd}
       />
       <FormLabel mt="12px">(Optional) deploy script</FormLabel>

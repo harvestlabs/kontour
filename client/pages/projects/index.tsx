@@ -24,7 +24,7 @@ const ProjectsPage: NextPageWithLayout = () => {
       </Head>
       <Flex flexDirection="column" as="main" alignItems="center" mt="60px">
         <Heading fontSize="28px" variant="nocaps" mb="16px" layerStyle="purple">
-          Import Project from Github
+          Import from GitHub
         </Heading>
         <ImportGithubRepo onCreated={onCreated} />
         <Flex alignSelf="center" alignItems="center" width="80%" py="50px">
@@ -42,7 +42,7 @@ const ProjectsPage: NextPageWithLayout = () => {
           mb="40px"
           layerStyle="yellowLight"
         >
-          Browse Existing Projects
+          Select from existing projects
         </Heading>
         <ProjectList user_id={user_id} />
       </Flex>

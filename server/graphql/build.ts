@@ -13,7 +13,6 @@ const BuildSubscriptions = {
       },
     },
     resolve: async (payload, args, ctx, _) => {
-      console.log("payload", payload);
       if (payload.buildId == args.buildId) {
         return payload;
       }

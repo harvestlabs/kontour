@@ -10,10 +10,12 @@ import {
   InputProps,
   BoxProps,
   LayoutProps,
+  Icon,
 } from "@chakra-ui/react";
 import ImportGithubRepo from "@components/projects/editor/ImportGithubRepo";
 import { Repos } from "@gql/__generated__/Repos";
 import Fuse from "fuse.js";
+import * as Icons from "react-feather";
 import { useState, useMemo, PropsWithChildren } from "react";
 import colors from "src/theme/colors";
 
@@ -37,7 +39,6 @@ const fuseOptions = {
 type Props<T> = {
   data: T[];
   isLoading?: boolean;
-  searchTitle: string;
   searchPlaceholder: string;
   maxResultsHeight: LayoutProps["maxHeight"];
   children: React.FC<{ key: number; item: T }>;
@@ -46,7 +47,6 @@ export default function Search<T>({
   data,
   children,
   isLoading = false,
-  searchTitle,
   searchPlaceholder,
   maxResultsHeight = "200px",
   ...props
@@ -65,9 +65,12 @@ export default function Search<T>({
   return (
     <Box alignSelf="center">
       <FormControl mb="12px">
-        <FormLabel htmlFor="kontour-github" layerStyle="blue">
-          {searchTitle}
-        </FormLabel>
+        <Icon
+          stroke={colors.white}
+          as={Icons.Search}
+          strokeWidth="3px"
+          mr="12px"
+        />
         <Input
           id="kontour-github"
           isDisabled={isLoading}
@@ -91,11 +94,8 @@ export default function Search<T>({
           </FormHelperText>
         ) : (
           <FormHelperText>
-            <Text layerStyle="green800">
-              <Text layerStyle="green" as="b">
-                {data.length || 0} results
-              </Text>{" "}
-              to import from.
+            <Text layerStyle="green" as="b">
+              {data.length || 0} results
             </Text>
           </FormHelperText>
         )}

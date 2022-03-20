@@ -1,6 +1,6 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
 import Fuse from "fuse.js";
-import { Text, Box } from "@chakra-ui/react";
+import { Text, Box, Icon } from "@chakra-ui/react";
 import {
   AddRepoAndCreateProject,
   AddRepoAndCreateProjectVariables,
@@ -11,6 +11,7 @@ import { useMemo, useState } from "react";
 import colors from "src/theme/colors";
 import React from "react";
 import Search from "@components/lib/Search";
+import { GitHub } from "react-feather";
 
 const GITHUB_REPOS = gql`
   query Repos {
@@ -46,8 +47,7 @@ function ImportGithubRepo({ onCreated }: Props) {
       <Search
         data={repos?.searchGithubRepos || []}
         isLoading={loading}
-        searchPlaceholder="Find a repo..."
-        searchTitle="Search your repositories"
+        searchPlaceholder="Search for a repo"
         maxResultsHeight="200px"
         width="800px"
       >
@@ -69,7 +69,14 @@ function ImportGithubRepo({ onCreated }: Props) {
                 onCreated(project.data?.addRepoAndCreateProject?.id!);
               }}
             >
-              <Text>{repo.repo_name}</Text>
+              <Text
+                as="span"
+                color={colors.contourRedLight[500]}
+                fontWeight="700"
+              >
+                <Icon stroke={colors.white} as={GitHub} mx="6px" />
+                {repo.handle}/{repo.repo_name}
+              </Text>
             </Box>
           );
         }}

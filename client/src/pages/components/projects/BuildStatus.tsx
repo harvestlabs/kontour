@@ -57,7 +57,9 @@ function BuildLogMessage({ log }: { log: BuildLog }) {
     <>
       {log.message.split("\n").map((text, idx) => (
         <Box key={idx} width="100%" alignItems="center" px="24px">
-          <Text variant="code">... {text}</Text>
+          <Text variant="code" as="span">
+            ... {text}
+          </Text>
         </Box>
       ))}
     </>

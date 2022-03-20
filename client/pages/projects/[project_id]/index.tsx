@@ -66,8 +66,13 @@ const ProjectVersionListPage: NextPageWithLayout = () => {
             >
               {project.data.name || "Untitled project"}
             </Heading>
-            <Heading fontSize="28px" variant="nocaps" layerStyle="purple">
-              Deploy New Version from Github
+            <Heading
+              fontSize="28px"
+              mb="6px"
+              variant="nocaps"
+              layerStyle="purple"
+            >
+              Deploy New Version
             </Heading>
             {project.github_repo && (
               <GithubRepoForm repo={project.github_repo} />
