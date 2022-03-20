@@ -32,7 +32,7 @@ function BuildStatus({ repoId }: BuildStatusProps) {
       setLogs([...logs, data.subscribeToBuild as BuildLog]);
     }
     // do not add logs here, will cause infinite
-  }, [data]);
+  }, [data, logs]);
 
   return (
     <>

@@ -8,7 +8,15 @@ import {
 } from "@apollo/client";
 import NextLink from "next/link";
 
-import { Box, Flex, Link, StackProps, VStack, Wrap } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Link,
+  StackProps,
+  VStack,
+  Wrap,
+} from "@chakra-ui/react";
 import ProjectPreview from "./ProjectPreview";
 import { ProjectsQuery } from "@gql/__generated__/ProjectsQuery";
 import { ProjectVersionsListQuery } from "@gql/__generated__/ProjectVersionsListQuery";
@@ -37,10 +45,6 @@ function ProjectVersionsList({ project_id, versions }: Props) {
         alignItems="flex-start"
         justify="center"
       >
-        <CreateDraftVersionButton
-          project_id={project_id}
-          onComplete={onCreated}
-        />
         {versions.map((version) =>
           version ? (
             <ProjectVersionPreview key={project_id} version={version} />

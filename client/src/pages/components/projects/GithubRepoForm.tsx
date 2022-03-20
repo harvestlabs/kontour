@@ -84,31 +84,35 @@ function GithubRepoForm({ repo }: Props) {
 
   return (
     <>
-      <FormLabel pt="6">Branch to build</FormLabel>
+      <FormLabel mt="12px">Branch to build</FormLabel>
       <Input
+        size="sm"
         onChange={(e) => setBranch(e.target.value)}
         placeholder="master"
         value={branch}
       />
-      <FormLabel pt="6">Build directory</FormLabel>
+      <FormLabel mt="12px">Build directory</FormLabel>
       <Input
+        size="sm"
         onChange={(e) => setBuildDir(e.target.value)}
         placeholder="./"
         value={buildDir}
       />
-      <FormLabel pt="6">Build command</FormLabel>
+      <FormLabel mt="12px">Build command</FormLabel>
       <Input
+        size="sm"
         onChange={(e) => setBuildCmd(e.target.value)}
         placeholder="npm install"
         value={buildCmd}
       />
-      <FormLabel pt="6">(Optional) deploy script</FormLabel>
+      <FormLabel mt="12px">(Optional) deploy script</FormLabel>
       <Input
+        size="sm"
         onChange={(e) => setDeployScript(e.target.value)}
         placeholder="./deploy.js"
         value={deployScript}
       />
-      <RadioGroup py="6" onChange={setBuildType} value={buildType}>
+      <RadioGroup mt="12px" onChange={setBuildType} value={buildType} size="sm">
         <Radio pr="10" value="hardhat">
           Hardhat
         </Radio>
@@ -116,15 +120,19 @@ function GithubRepoForm({ repo }: Props) {
       </RadioGroup>
       {buildType === "truffle" ? (
         <>
-          <FormLabel>Truffle config file</FormLabel>
-          <Input placeholder="./truffle-config.js" />
+          <FormLabel mt="12px">Truffle config file</FormLabel>
+          <Input placeholder="./truffle-config.js" size="sm" />
         </>
       ) : null}
       {isDeploying !== 1 ? (
         <Button
+          mt="24px"
           isLoading={loading}
           isDisabled={loading}
           onClick={saveRepoFormAndDeploy}
+          width="250px"
+          alignSelf="center"
+          colorScheme="blue"
         >
           Save and Deploy
         </Button>

@@ -14,6 +14,10 @@ export default function ProjectPreview({ project }: Props) {
           border={`1px solid ${colors.contourBorder[500]}`}
           p="24px"
           borderRadius="8px"
+          _hover={{
+            backgroundColor: `${colors.contourBlue[300]}`,
+            color: `${colors.contourBlue[1000]}`,
+          }}
         >
           {project.id}
         </Box>
