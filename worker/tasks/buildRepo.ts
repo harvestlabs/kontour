@@ -96,9 +96,9 @@ export default async function BuildRepoTasks(data: Request): Promise<Response> {
         deploy: data.deployScript,
       })
     );
-    console.log("installing quikdraw", cwd);
+    console.log("installing quikdraw and hardhat-kontour", cwd);
     redis.pubsub.publish("build_task", {
-      message: `Writing .quikdrawconfig\nInstalling quikdraw`,
+      message: `Writing .quikdrawconfig\nInstalling quikdraw and hardhat-kontour`,
       buildId: data.repoId,
     });
     execSync(
