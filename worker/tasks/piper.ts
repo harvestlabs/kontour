@@ -31,5 +31,6 @@ process.stdin.on("end", () => {
     message: MSGS.join("\n"),
     buildId: buildId,
   });
+  MSGS = [];
   process.exit(0);
 });
