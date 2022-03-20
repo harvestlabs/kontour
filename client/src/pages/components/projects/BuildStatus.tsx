@@ -29,19 +29,18 @@ function BuildStatus({ repoId }: BuildStatusProps) {
 
   useEffect(() => {
     if (data?.subscribeToBuild) {
-      setLogs([...logs, data.subscribeToBuild as BuildLog]);
+      // reverse the data so that it flows to the bottom when we flip it
+      // with column-reverse
+      setLogs([data.subscribeToBuild as BuildLog, ...logs]);
     }
     // do not add logs here, will cause infinite
-  }, [data, logs]);
+  }, [data]);
 
   return (
     <>
-      <Text fontSize="24px" mb="12px">
-        Currently deploying build...
-      </Text>
       <Flex
-        flexFlow="column"
-        maxHeight="640px"
+        flexDirection="column-reverse"
+        maxHeight="350px"
         overflowY="scroll"
         bgColor={colors.contourBackgroundDarker}
       >
@@ -58,7 +57,7 @@ function BuildLogMessage({ log }: { log: BuildLog }) {
     <>
       {log.message.split("\n").map((text, idx) => (
         <Box key={idx} width="100%" alignItems="center" px="24px">
-          <Text>{text}</Text>
+          <Text variant="code">... {text}</Text>
         </Box>
       ))}
     </>

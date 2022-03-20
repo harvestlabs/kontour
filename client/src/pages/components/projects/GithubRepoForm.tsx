@@ -5,6 +5,7 @@ import {
   Input,
   Radio,
   RadioGroup,
+  Spinner,
   Text,
 } from "@chakra-ui/react";
 import { useAppSelector } from "@redux/hooks";
@@ -138,6 +139,18 @@ function GithubRepoForm({ repo }: Props) {
         </Button>
       ) : (
         <>
+          <Text
+            fontSize="20px"
+            fontWeight="bold"
+            my="12px"
+            display="flex"
+            alignItems="center"
+            alignSelf="center"
+            layerStyle="blue"
+          >
+            <Spinner size="sm" mr="8px" />
+            Deploying build...
+          </Text>
           <BuildStatus repoId={repo.id} />
         </>
       )}
