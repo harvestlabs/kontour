@@ -43,6 +43,8 @@ export default function SignInButton({ ...props }: Props) {
       size="lg"
       isLoading={loading}
       isDisabled={loading}
+      variant="outline"
+      colorScheme="contourBlue"
       onClick={async () => {
         window.location.assign(
           `${process.env.NEXT_PUBLIC_LINK_GITHUB_ENDPOINT}`
