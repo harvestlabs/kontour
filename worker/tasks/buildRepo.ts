@@ -101,10 +101,13 @@ export default async function BuildRepoTasks(data: Request): Promise<Response> {
       message: `Writing .quikdrawconfig\nInstalling quikdraw`,
       buildId: data.repoId,
     });
-    execSync(`2>&1 npm i quikdraw@${config.quikdraw.VERSION} | ${pipeScript}`, {
-      cwd: cwd,
-      stdio: "inherit",
-    });
+    execSync(
+      `2>&1 npm i quikdraw@${config.quikdraw.VERSION} hardhat-kontour | ${pipeScript}`,
+      {
+        cwd: cwd,
+        stdio: "inherit",
+      }
+    );
     execSync(`2>&1 npx quikdraw go | ${pipeScript}`, {
       cwd: cwd,
       stdio: "inherit",
