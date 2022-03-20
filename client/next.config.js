@@ -20,6 +20,7 @@ const nextConfig = {
   env: {
     templateJS: fs.readFileSync("./public/template.js").toString(),
   },
+  productionBrowserSourceMaps: false,
 };
 
 module.exports = nextConfig;

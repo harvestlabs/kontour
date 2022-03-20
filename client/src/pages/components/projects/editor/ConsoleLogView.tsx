@@ -50,7 +50,7 @@ function ConsoleFinalLogLine({ showBorder, log }: ConsoleFinalLogLineProps) {
         as={motion.div}
         width="100%"
         height="100%"
-        borderTop={showBorder ? "1px solid grey" : null}
+        borderTop={showBorder ? "1px solid grey" : "none"}
       >
         <Text
           fontWeight="700"
@@ -80,7 +80,7 @@ function ConsoleFinalLogLine({ showBorder, log }: ConsoleFinalLogLineProps) {
 }
 
 type Props = {
-  contract: ConsoleLogViewFragment;
+  contract?: ConsoleLogViewFragment;
 };
 
 type Log = {

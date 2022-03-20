@@ -21,7 +21,7 @@ export const CURRENT_USER = gql`
 `;
 
 type props = {} & ButtonProps;
-export default function SignInButton({ ...props }: Props) {
+export default function SignInButton({ ...props }: props) {
   const { data, loading, error } = useQuery<CurrentUserQuery>(CURRENT_USER, {
     fetchPolicy: "network-only",
   });

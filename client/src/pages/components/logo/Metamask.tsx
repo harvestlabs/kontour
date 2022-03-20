@@ -9,12 +9,11 @@ const SvgComponent = ({ size }: SVGProps) => (
     y={0}
     viewBox="0 0 318.6 318.6"
     style={{
+      // @ts-ignore
       enableBackground: "new 0 0 318.6 318.6",
-    }}
-    xmlSpace="preserve"
-    style={{
       height: size,
     }}
+    xmlSpace="preserve"
   >
     <style>
       {
