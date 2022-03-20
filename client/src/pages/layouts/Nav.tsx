@@ -36,7 +36,7 @@ const styles = {
     right: 0,
     alignItems: "center",
 
-    boxShadow: "rgb(0 0 0 / 8%) 0px 1px 12px !important",
+    boxShadow: colors.contourBoxShadow,
     padding: {
       base: "0 32px",
       md: "0 80px",
@@ -45,7 +45,7 @@ const styles = {
       base: "52px",
       md: "80px",
     },
-    backgroundColor: colors.contourBackground,
+    backgroundColor: colors.contourBackgroundDarker,
   },
 };
 

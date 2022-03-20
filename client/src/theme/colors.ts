@@ -2,13 +2,13 @@ import { theme } from "@chakra-ui/react";
 
 const contourBlackest = "rgb(20, 24, 32)";
 const contourBlacker = "rgb(35, 39, 45)";
-const contourBlack = "rgb(40, 44, 52)";
 const contourWhite = " rgb(171, 178, 191)";
 const contourRedLight = "rgb(224, 108, 117)";
 
 const contourGrey = "rgb(76, 82, 99)";
 const contourGreyLight = "rgb(92, 99, 112)";
-const contourBoxShadow = "rgb(40 40 40 / 20%) 0px 1px 12px !important";
+
+const contourBoxShadow = " 0px 5px 15px 0px rgba(17,18,24,0.7); !important";
 
 const contourBorderGrey = contourGreyLight;
 const contourBorderGreyDark = "rgb(56, 61, 70)";
@@ -18,9 +18,18 @@ const discordPurple = " #7289da";
 
 const colorSchemes = {
   contourBlack: {
-    500: contourBlack,
-    700: contourBlacker,
-    1000: contourBlackest,
+    0: "#555E6F",
+    50: "#4E5665",
+    100: "#464D5B",
+    200: "#3F4551",
+    300: "#373D48",
+    400: "#30343E",
+    500: "rgb(40, 44, 52)",
+    600: "#23272E",
+    700: "#1F2228",
+    800: "#1B1D23",
+    900: "#16181D",
+    1000: "#121417",
   },
   contourWhite: {
     500: contourWhite,
@@ -156,7 +165,7 @@ const colors = {
   contourLink: "contourBlue.500",
   contourBackground: "contourBlack.500",
   contourBackgroundMedium: "contourBlack.700",
-  contourBackgroundDarker: "contourBlack.1000",
+  contourBackgroundDarker: "contourBlack.800",
   contourText: "contourWhite.500",
   contourBoxShadow,
 

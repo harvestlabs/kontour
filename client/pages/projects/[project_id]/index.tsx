@@ -54,7 +54,7 @@ const ProjectVersionListPage: NextPageWithLayout = () => {
           <Head>
             <title>{project.data.name || "Untitled project"}</title>
           </Head>
-          <Flex flexDirection="column" as="main">
+          <Flex flexDirection="column" as="main" mt="60px">
             <Heading fontSize="28px" variant="nocaps" layerStyle="purple">
               Deploy New Version from Github
             </Heading>

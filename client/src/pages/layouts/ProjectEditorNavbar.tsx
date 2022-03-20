@@ -96,7 +96,7 @@ const styles = {
       base: "52px",
       md: "80px",
     },
-    backgroundColor: colors.contourBackgroundMedium,
+    backgroundColor: colors.contourBackgroundDarker,
   },
 };
 

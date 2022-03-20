@@ -22,7 +22,7 @@ const ProjectsPage: NextPageWithLayout = () => {
       <Head>
         <title>Create a Project</title>
       </Head>
-      <Flex flexDirection="column" as="main" alignItems="center">
+      <Flex flexDirection="column" as="main" alignItems="center" mt="60px">
         <Heading fontSize="28px" variant="nocaps" mb="16px" layerStyle="purple">
           Import Project from Github
         </Heading>
