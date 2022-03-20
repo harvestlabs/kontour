@@ -2,16 +2,23 @@ import { gql, useQuery } from "@apollo/client";
 import { Box, Button, Link } from "@chakra-ui/react";
 import { ProjectPreviewFragment } from "@gql/__generated__/ProjectPreviewFragment";
 import NextLink from "next/link";
+import colors from "src/theme/colors";
 
 type Props = { project: ProjectPreviewFragment };
 
 export default function ProjectPreview({ project }: Props) {
   return (
-    <Box>
-      <NextLink href={`/projects/${project.id}`} passHref>
-        <Link>{project.id}</Link>
-      </NextLink>
-    </Box>
+    <NextLink href={`/projects/${project.id}`} passHref>
+      <Link color="contourWhite.500">
+        <Box
+          border={`1px solid ${colors.contourBorder[500]}`}
+          p="24px"
+          borderRadius="8px"
+        >
+          {project.id}
+        </Box>
+      </Link>
+    </NextLink>
   );
 }
 

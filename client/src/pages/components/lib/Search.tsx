@@ -1,4 +1,5 @@
 import {
+  Text,
   Box,
   FormControl,
   FormLabel,
@@ -54,10 +55,10 @@ export default function Search<T>({
   }, [fuse, data, searchValue]);
 
   return (
-    <Box>
+    <Box width="800px" alignSelf="center">
       <FormControl mb="12px">
-        <FormLabel htmlFor="kontour-github">
-          Search Github repositories
+        <FormLabel htmlFor="kontour-github" layerStyle="blue">
+          Search your repositories
         </FormLabel>
         <Input
           id="kontour-github"
@@ -72,19 +73,26 @@ export default function Search<T>({
           </FormHelperText>
         ) : searchValue !== "" ? (
           <FormHelperText>
-            <b>{searchResults.length} results</b> found matching &quot;
-            {searchValue}
-            &quot;
+            <Text layerStyle="green">
+              <b>{searchResults.length} results</b> found matching &quot;
+              {searchValue}
+              &quot;
+            </Text>
           </FormHelperText>
         ) : (
           <FormHelperText>
-            <b>{data.length || 0} results</b> to import from.
+            <Text layerStyle="green800">
+              <Text layerStyle="green" as="b">
+                {data.length || 0} results
+              </Text>{" "}
+              to import from.
+            </Text>
           </FormHelperText>
         )}
       </FormControl>
       {!isLoading && (
         <Flex
-          maxHeight="400px"
+          maxHeight="200px"
           overflowY="scroll"
           border={`1px solid ${colors.contourBorder[500]}`}
           flexDirection="column"

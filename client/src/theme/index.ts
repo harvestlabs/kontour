@@ -178,10 +178,25 @@ const theme = extendTheme({
     purple: {
       color: "contourPurple.500",
     },
+    red: {
+      color: "contourRed.500",
+    },
+    cyan: {
+      color: "contourCyan.500",
+    },
+    redLight: {
+      color: "contourRedLight.500",
+    },
     green: {
       color: "contourGreen.500",
     },
+    green800: {
+      color: "contourGreen.800",
+    },
     yellow: {
+      color: "contourYellow.500",
+    },
+    yellowLight: {
       color: "contourYellowLight.500",
     },
     error: {

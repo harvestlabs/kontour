@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
-import { Container } from "@chakra-ui/react";
+import { Text, Container, Heading, Flex, Divider } from "@chakra-ui/react";
 import ProjectList from "@components/projects/ProjectList";
 import { useAppSelector } from "@redux/hooks";
 import { selectUserId } from "@redux/slices/userSlice";
@@ -22,10 +22,30 @@ const ProjectsPage: NextPageWithLayout = () => {
       <Head>
         <title>Create a Project</title>
       </Head>
-      <main>
+      <Flex flexDirection="column" as="main" alignItems="center">
+        <Heading
+          fontSize="28px"
+          variant="nocaps"
+          mb="40px"
+          layerStyle="yellowLight"
+        >
+          Open existing
+        </Heading>
         <ProjectList user_id={user_id} />
+        <Flex alignSelf="center" alignItems="center" width="80%" py="50px">
+          <Divider />
+          <Text fontSize="24px" px="24px">
+            <b>
+              <i>or </i>
+            </b>
+          </Text>
+          <Divider />
+        </Flex>
+        <Heading fontSize="28px" variant="nocaps" mb="16px" layerStyle="purple">
+          Import from Github
+        </Heading>
         <ImportGithubRepo onCreated={onCreated} />
-      </main>
+      </Flex>
     </Container>
   );
 };
