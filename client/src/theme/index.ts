@@ -143,6 +143,19 @@ const Input = {
   },
 };
 
+const AlertDialog = {
+  baseStyle: {
+    field: {
+      backgroundColor: `${colors.contourBlack["700"]} !important`,
+    },
+  },
+  sizes: {
+    sm: {
+      field: {},
+    },
+  },
+};
+
 const Code = {};
 
 // const TextColorScheme: {
@@ -276,6 +289,7 @@ const theme = extendTheme({
     Heading,
     Table,
     Input,
+    AlertDialog,
   },
   // mobile
   sm: "768px",

@@ -14,6 +14,7 @@ import {
   List,
   ListIcon,
   ListItem,
+  Tooltip,
 } from "@chakra-ui/react";
 import * as Icons from "react-feather";
 import { setSelectedContractData } from "@redux/slices/projectSlice";
@@ -26,9 +27,75 @@ import VersionContractDeployModal from "./VersionContractDeployModal";
 
 type Props = {
   contract_source: VersionContractsListItemFragment;
+  instance_id: string;
 };
-export default function VersionContractsListItem({ contract_source }: Props) {
-  return <ListItem>{contract_source.name}.sol</ListItem>;
+export default function VersionContractsListItem({
+  contract_source,
+  instance_id,
+}: Props) {
+  const { id, name, abi, bytecode, source_type } = contract_source;
+
+  const { functions, constructor, events } = contract_source as {
+    functions: ContractSourceFunction[];
+    constructor: ContractSourceConstructor;
+    events: ContractSourceEvent[];
+  };
+  const [isOpen, setIsOpen] = React.useState(false);
+  const onClose = () => setIsOpen(false);
+  const cancelRef = React.useRef<HTMLButtonElement>(null);
+
+  const [deployedContractToVersion, meta] = useMutation(
+    DEPLOY_CONTRACT_TO_INSTANCE
+  );
+
+  const openDeployModal = () => {
+    setIsOpen(true);
+  };
+  const deployContract = async (
+    abi: any,
+    bytecode: string,
+    args: any[] = []
+  ) => {
+    // @ts-ignore
+    const { web3, getAccount } = window.kontour;
+    const Contract = new web3.eth.Contract(abi);
+
+    const transaction = Contract.deploy({ arguments: args, data: bytecode });
+    const result = await transaction.send({
+      from: getAccount(),
+    });
+    const address = result.options.address;
+    await deployedContractToVersion({
+      variables: {
+        sourceId: id,
+        sourceType: source_type,
+        address: address,
+        instanceId: instance_id,
+        params: args,
+      },
+    });
+    onClose();
+    window.location.reload();
+  };
+  return (
+    <Tooltip
+      label={"Deploy " + contract_source.name}
+      closeOnClick={false}
+      placement="top"
+    >
+      <Flex onClick={openDeployModal} cursor="pointer">
+        <ListItem>{contract_source.name}.sol</ListItem>
+        <VersionContractDeployModal
+          cons={constructor}
+          contractName={name}
+          isOpen={isOpen}
+          cancelRef={cancelRef}
+          onClose={onClose}
+          onDeploy={(args) => deployContract(abi, bytecode!, args)}
+        />
+      </Flex>
+    </Tooltip>
+  );
 }
 
 VersionContractsListItem.fragments = {
@@ -40,6 +107,7 @@ VersionContractsListItem.fragments = {
       events
       functions
       bytecode
+      source_type
       ...EditorContractViewFragment
       ...EditorInteractionViewFragment
     }
@@ -47,3 +115,23 @@ VersionContractsListItem.fragments = {
     ${EditorInteractionView.fragments.contract}
   `,
 };
+
+const DEPLOY_CONTRACT_TO_INSTANCE = gql`
+  mutation DeployedContractToInstance(
+    $sourceId: String!
+    $sourceType: Int!
+    $instanceId: String!
+    $address: String!
+    $params: JSON!
+  ) {
+    deployedContractToInstance(
+      sourceId: $sourceId
+      sourceType: $sourceType
+      instanceId: $instanceId
+      address: $address
+      params: $params
+    ) {
+      id
+    }
+  }
+`;

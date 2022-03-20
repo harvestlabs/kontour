@@ -11,6 +11,7 @@ import {
   Input,
   AlertDialogFooter,
 } from "@chakra-ui/react";
+import colors from "src/theme/colors";
 
 type Props = {
   cons: ContractSourceConstructor;
@@ -33,12 +34,13 @@ export default function VersionContractDeployModal({
   const inputs = cons?.inputs.map((i, idx) => {
     return (
       <>
-        <FormLabel>
+        <FormLabel color={colors.contourGreen[600]}>
           {i.name}: {i.type}
         </FormLabel>
         <Input
           placeholder={i.type}
           onChange={(e) => (args[idx] = e.target.value)}
+          mb="12px"
         />
       </>
     );
@@ -51,8 +53,12 @@ export default function VersionContractDeployModal({
       onClose={onClose}
     >
       <AlertDialogOverlay />
-      <AlertDialogContent>
-        <AlertDialogHeader fontSize="lg" fontWeight="bold">
+      <AlertDialogContent backgroundColor={colors.contourBackground}>
+        <AlertDialogHeader
+          color={colors.contourPurple[600]}
+          fontSize="lg"
+          fontWeight="bold"
+        >
           Deploy {contractName}
         </AlertDialogHeader>
         <AlertDialogBody>{inputs}</AlertDialogBody>

@@ -1608,7 +1608,7 @@
             "deprecationReason": null
           },
           {
-            "name": "deployedContractToVersion",
+            "name": "deployedContractToInstance",
             "description": null,
             "args": [
               {
@@ -1644,7 +1644,7 @@
                 "deprecationReason": null
               },
               {
-                "name": "versionId",
+                "name": "instanceId",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
@@ -2372,6 +2372,31 @@
               },
               {
                 "name": "to",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "SCALAR",
+              "name": "JSONObject",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "subscribeToBuild",
+            "description": null,
+            "args": [
+              {
+                "name": "buildId",
                 "description": null,
                 "type": {
                   "kind": "SCALAR",

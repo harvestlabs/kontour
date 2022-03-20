@@ -12,5 +12,10 @@
     "useDefineForClassFields": false,
     "resolveJsonModule": true
   },
-  "include": ["../server/models/**/*", "../server/utils/**/*", "main.ts"]
+  "include": [
+    "../server/models/**/*",
+    "../server/utils/**/*",
+    "main.ts",
+    "./tasks/piper.ts"
+  ]
 }

@@ -49,7 +49,7 @@ const ContractMutations = {
       return toDeploy.write();
     },
   },
-  deployedContractToVersion: {
+  deployedContractToInstance: {
     type: ContractType,
     args: {
       sourceId: {
@@ -58,7 +58,7 @@ const ContractMutations = {
       sourceType: {
         type: new GraphQLNonNull(GraphQLInt),
       },
-      versionId: {
+      instanceId: {
         type: new GraphQLNonNull(GraphQLString),
       },
       address: {
@@ -69,14 +69,12 @@ const ContractMutations = {
       },
     },
     resolve: async (parent, args, ctx, info) => {
-      const [source, version] = await Promise.all([
+      const [source, instance] = await Promise.all([
         args.sourceType === ContractSourceType.LOCAL
           ? LocalContractSource.findByPk(args.sourceId)
           : RemoteContractSource.findByPk(args.sourceId),
-        ProjectVersion.findByPk(args.versionId),
+        Instance.findByPk(args.instanceId),
       ]);
-
-      const instance = await version.getHead();
 
       const contract = await Contract.create({
         address: args.address,

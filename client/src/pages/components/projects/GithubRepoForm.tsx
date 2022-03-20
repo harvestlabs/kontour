@@ -19,6 +19,7 @@ import {
 } from "@gql/__generated__/DeployFromRepo";
 import { GithubRepoFormFragment } from "@gql/__generated__/GithubRepoFormFragment";
 import { useState } from "react";
+import BuildStatus from "./BuildStatus";
 
 const DEPLOY_FROM_REPO = gql`
   mutation DeployFromRepo($id: String!) {
@@ -119,7 +120,7 @@ function GithubRepoForm({ repo }: Props) {
           <Input placeholder="./truffle-config.js" />
         </>
       ) : null}
-      {isDeploying !== 1 ? (
+      {isDeploying !== 2 ? (
         <Button
           isLoading={loading}
           isDisabled={loading}
@@ -128,7 +129,9 @@ function GithubRepoForm({ repo }: Props) {
           Save and Deploy
         </Button>
       ) : (
-        <Text>Currently Deploying...</Text>
+        <>
+          <BuildStatus repoId={repo.id} />
+        </>
       )}
     </>
   );

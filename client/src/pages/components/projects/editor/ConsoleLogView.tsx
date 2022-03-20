@@ -33,18 +33,45 @@ type ConsoleLogLineProps = { log: Log };
 
 function ConsoleLogLine({ log }: ConsoleLogLineProps) {
   return (
-    <Flex height="40px" width="100%" alignItems="center" px="24px">
-      <Icon as={Icons.ChevronRight} strokeWidth="3px" mr="12px" />
-      <Text variant="code">{log.message}</Text>
-    </Flex>
+    <>
+      {log.message.split("\n").map((l, idx) => (
+        <Flex
+          key={idx}
+          height="40px"
+          width="100%"
+          alignItems="center"
+          px="24px"
+        >
+          {idx === 0 ? (
+            <Icon
+              color={colors.contourGreen[500]}
+              as={Icons.ChevronRight}
+              strokeWidth="3px"
+              mr="12px"
+            />
+          ) : null}
+          <Text variant="code">{l}</Text>
+        </Flex>
+      ))}
+    </>
   );
 }
 
-type ConsoleFinalLogLineProps = { log?: Log; showBorder: boolean };
+type ConsoleFinalLogLineProps = { showBorder: boolean; onClick: () => void };
 
-function ConsoleFinalLogLine({ showBorder, log }: ConsoleFinalLogLineProps) {
+function ConsoleFinalLogLine({
+  showBorder,
+  onClick,
+}: ConsoleFinalLogLineProps) {
   return (
-    <Flex height="60px" width="100%" alignItems="center" px="24px">
+    <Flex
+      height="60px"
+      width="100%"
+      alignItems="center"
+      px="24px"
+      onClick={onClick}
+      cursor="pointer"
+    >
       <Flex
         alignItems="center"
         as={motion.div}
@@ -59,21 +86,13 @@ function ConsoleFinalLogLine({ showBorder, log }: ConsoleFinalLogLineProps) {
           display="flex"
           alignItems="center"
           mr="12px"
+          sx={{
+            fontSize: "20px",
+            fontWeight: 500,
+          }}
         >
           console.log
         </Text>
-        <Icon
-          layerStyle="blue"
-          as={Icons.ChevronRight}
-          stroke={colors.contourBlue[500]}
-          strokeWidth="3px"
-          mr="12px"
-        />
-        {log ? (
-          <Text variant="code"> {log.message}</Text>
-        ) : (
-          <Text variant="code"> Waiting for logs...</Text>
-        )}
       </Flex>
     </Flex>
   );
@@ -112,13 +131,19 @@ export default function ConsoleLogView({ contract }: Props) {
 
   return (
     <Flex
+      sx={{
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
+      }}
       alignItems="center"
       as={motion.div}
       opacity="80%"
       height="auto"
       width="1000px"
       maxWidth="80%"
-      maxHeight="60%"
+      maxHeight="30%"
+      overflowY="scroll"
       bgColor={colors.contourBackgroundDarker}
       position="fixed"
       left="48px"
@@ -141,10 +166,7 @@ export default function ConsoleLogView({ contract }: Props) {
             {
               // show all except last
               logs.map((log, idx) => {
-                if (idx !== logs.length - 1) {
-                  return <ConsoleLogLine log={log} />;
-                }
-                return null;
+                return <ConsoleLogLine key={idx} log={log} />;
               })
             }
           </Box>
@@ -161,7 +183,9 @@ export default function ConsoleLogView({ contract }: Props) {
         )}
         <ConsoleFinalLogLine
           showBorder={expanded}
-          log={logs.length > 0 ? logs[logs.length - 1] : undefined}
+          onClick={() => {
+            setExpanded(!expanded);
+          }}
         />
       </Flex>
       <Flex
@@ -176,9 +200,17 @@ export default function ConsoleLogView({ contract }: Props) {
         }}
       >
         {expanded ? (
-          <Icons.ChevronDown size="20px" strokeWidth="3px" />
+          <Icon
+            stroke={colors.contourBlue[500]}
+            as={Icons.Minimize2}
+            strokeWidth="3px"
+          />
         ) : (
-          <Icons.ChevronUp size="20px" strokeWidth="3px" />
+          <Icon
+            as={Icons.Maximize2}
+            stroke={colors.contourBlue[500]}
+            strokeWidth="3px"
+          />
         )}
       </Flex>
     </Flex>

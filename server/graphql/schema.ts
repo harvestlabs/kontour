@@ -9,6 +9,7 @@ import {
   ContractSourceMutations,
 } from "./contractSource";
 import { HardhatSubscriptions } from "./hardhat";
+import { BuildSubscriptions } from "./build";
 
 const rootQuery = new GraphQLObjectType({
   name: "RootQuery",
@@ -38,7 +39,7 @@ let schema = new GraphQLSchema({
   mutation: rootMutation,
   subscription: new GraphQLObjectType({
     name: "RootSubscription",
-    fields: Object.assign(HardhatSubscriptions),
+    fields: Object.assign(HardhatSubscriptions, BuildSubscriptions),
   }),
 });
 

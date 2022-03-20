@@ -1,6 +1,7 @@
 import fs from "fs";
 import { App } from "@octokit/app";
 import { exec, execSync } from "child_process";
+import redis from "../../server/utils/redis";
 import path from "path";
 import { v4 } from "uuid";
 import GithubRepo, { DeployStatus } from "../../server/models/GithubRepo.model";
@@ -45,15 +46,21 @@ export default async function BuildRepoTasks(data: Request): Promise<Response> {
   try {
     dir = v4();
     const currDir = process.cwd();
+    redis.pubsub.publish("build_task", {
+      message: `Starting build for ${data.repoId}\nDownloading from Github...\nFiles extracted`,
+      buildId: data.repoId,
+    });
+
+    const pipeScript = `node ${__dirname}/piper.js ${data.repoId}`;
     fs.mkdirSync(path.resolve(currDir, dir));
 
     let cwd = path.resolve(currDir, dir);
     fs.writeFileSync(`${cwd}/data.zip`, Buffer.from(zip as string));
-    execSync("unzip data.zip", {
+    execSync(`unzip data.zip | ${pipeScript}`, {
       cwd: cwd,
       stdio: "inherit",
     });
-    execSync("rm data.zip", {
+    execSync(`rm data.zip | ${pipeScript}`, {
       cwd: cwd,
       stdio: "inherit",
     });
@@ -67,7 +74,11 @@ export default async function BuildRepoTasks(data: Request): Promise<Response> {
 
     if (data.buildCmd) {
       console.log("running build command", data.buildCmd);
-      execSync(data.buildCmd, {
+      redis.pubsub.publish("build_task", {
+        message: `Running ${data.buildCmd}`,
+        buildId: data.repoId,
+      });
+      execSync(`2>&1 ${data.buildCmd} | ${pipeScript}`, {
         cwd: cwd,
         stdio: "inherit",
       });
@@ -86,16 +97,20 @@ export default async function BuildRepoTasks(data: Request): Promise<Response> {
       })
     );
     console.log("installing quikdraw", cwd);
-    execSync(`npm i quikdraw@${config.quikdraw.VERSION}`, {
+    redis.pubsub.publish("build_task", {
+      message: `Writing .quikdrawconfig\nInstalling quikdraw`,
+      buildId: data.repoId,
+    });
+    execSync(`2>&1 npm i quikdraw@${config.quikdraw.VERSION} | ${pipeScript}`, {
       cwd: cwd,
       stdio: "inherit",
     });
-    execSync("npx quikdraw go", {
+    execSync(`2>&1 npx quikdraw go | ${pipeScript}`, {
       cwd: cwd,
       stdio: "inherit",
     });
     if (data.deployScript) {
-      execSync("npx quikdraw deploy", {
+      execSync(`2>&1 npx quikdraw deploy | ${pipeScript}`, {
         cwd: cwd,
         stdio: "inherit",
       });
@@ -103,6 +118,7 @@ export default async function BuildRepoTasks(data: Request): Promise<Response> {
     repo = await GithubRepo.findByPk(data.repoId);
     repo.deploy_status = DeployStatus.SUCCESS;
   } catch (e) {
+    console.log("error", e);
     repo = await GithubRepo.findByPk(data.repoId);
     repo.deploy_status = DeployStatus.FAILED;
   } finally {

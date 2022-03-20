@@ -18,6 +18,8 @@ export interface DeployedContractToInstance {
 
 export interface DeployedContractToInstanceVariables {
   sourceId: string;
+  sourceType: number;
   instanceId: string;
   address: string;
+  params: any;
 }

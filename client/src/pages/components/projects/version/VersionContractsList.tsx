@@ -86,6 +86,12 @@ export default function VersionContractsList({
     },
   });
   const versions = data?.project?.versions || [];
+  const contracts = instance.contracts.filter(
+    (c) => c.contractSource.source_type !== 1
+  );
+  const libraries = instance.contracts.filter(
+    (c) => c.contractSource.source_type === 1
+  );
 
   useEffect(() => {
     setSelectedVersionName(
@@ -135,9 +141,9 @@ export default function VersionContractsList({
 
           <Spacer />
           {expanded ? (
-            <Icons.ChevronUp size="20px" strokeWidth="3px" />
+            <Icons.Minimize2 size="20px" strokeWidth="3px" />
           ) : (
-            <Icons.ChevronDown size="20px" strokeWidth="3px" />
+            <Icons.Maximize2 size="20px" strokeWidth="3px" />
           )}
           <Spacer />
           <MetamaskButton size="sm" ml="12px" />
@@ -161,12 +167,36 @@ export default function VersionContractsList({
           </Flex>
         </Heading>
         <List px="24px">
-          {instance.contracts.map((contract) => {
+          {contracts.map((contract) => {
             return (
               <VersionDeployedContractListItem
                 contract={contract}
                 key={contract.id}
               />
+            );
+          })}
+        </List>
+      </Box>
+      <Box mb="8px">
+        <Heading
+          fontSize="18px"
+          textAlign="left"
+          variant="nocaps"
+          alignItems="center"
+          display="flex"
+          mb="8px"
+        >
+          <Flex layerStyle="purple" alignItems="center">
+            <Icons.Cloud size="18px" />
+            <Text as="span" ml="8px">
+              Deployed Libraries
+            </Text>
+          </Flex>
+        </Heading>
+        <List px="24px">
+          {libraries.map((lib) => {
+            return (
+              <VersionDeployedContractListItem contract={lib} key={lib.id} />
             );
           })}
         </List>
@@ -200,6 +230,7 @@ export default function VersionContractsList({
               <VersionContractsListItem
                 contract_source={contract_source}
                 key={contract_source.id}
+                instance_id={instance.id}
               />
             );
           })}
