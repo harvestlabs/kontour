@@ -27,6 +27,7 @@ process.stdin.on("readable", () => {
   let chunk;
   while ((chunk = process.stdin.read()) !== null) {
     const lines = chunk.toString().split("\n");
+    console.log(lines);
     lines.forEach((line) => {
       if (GLOBALS.isConsole) {
         // We're in a console log, do stuff until end
