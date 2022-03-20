@@ -119,7 +119,7 @@ export default function InteractableContract({
       </Heading>
       {events.length > 0 ? (
         <Flex mt="20px" flexDirection="column">
-          <Heading layerStyle="info" fontSize="24px" variant="nocaps">
+          <Heading layerStyle="info" fontSize="24px" variant="nocaps" mb="18px">
             Events
           </Heading>
           {events.map((event) => {
@@ -155,7 +155,7 @@ export default function InteractableContract({
         <Box flex="1">
           <Table variant="simple" size="sm">
             <TableCaption textAlign="left" placement="top">
-              <Heading layerStyle="info" fontSize="26px" variant="nocaps">
+              <Heading layerStyle="info" fontSize="24px" variant="nocaps">
                 Functions
               </Heading>
             </TableCaption>
@@ -222,7 +222,7 @@ export default function InteractableContract({
             }}
           >
             <TableCaption textAlign="left" placement="top">
-              <Heading layerStyle="info" fontSize="24px" variant="nocaps">
+              <Heading layerStyle="info2" fontSize="24px" variant="nocaps">
                 State
               </Heading>
             </TableCaption>

@@ -182,7 +182,7 @@ const theme = extendTheme({
       color: "contourGreen.500",
     },
     yellow: {
-      color: "contourYellow.300",
+      color: "contourYellowLight.500",
     },
     error: {
       color: "contourRed.500",
@@ -199,6 +199,10 @@ const theme = extendTheme({
     info: {
       color: "contourGreen.500",
     },
+    info2: {
+      color: "contourRedLight.500",
+    },
+
     event: {
       color: "contourPurple.500",
     },
@@ -206,10 +210,10 @@ const theme = extendTheme({
       color: "contourCyan.500",
     },
     subtitle: {
-      color: "contourRed.300",
+      color: "contourRedLight.500",
     },
     type: {
-      color: "contourYellow.300",
+      color: "contourYellowLight.500",
     },
     function: {
       color: "contourBlue.500",
@@ -224,7 +228,7 @@ const theme = extendTheme({
       color: "contourBlue.500",
     },
     type2: {
-      color: "contourYellow.300",
+      color: "contourYellowLight.500",
     },
     function2: {
       color: "contourPurple.500",
