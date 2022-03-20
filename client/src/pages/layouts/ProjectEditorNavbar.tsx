@@ -53,18 +53,29 @@ function ProjectEditorNavbar({ project_id, version_id, instance_id }: Props) {
       </NextLink>
       <NextLink href={`/versions/${version_id}`} passHref>
         <Link ml="24px">
-          <Text fontSize="24px">Sandbox</Text>
+          <Text fontWeight="bold" fontSize="20px">
+            Sandbox
+          </Text>
         </Link>
       </NextLink>
       <NextLink href={`/versions/${version_id}/logs`} passHref>
         <Link ml="24px">
-          <Text fontSize="24px">Event Logs</Text>
+          <Text fontWeight="bold" fontSize="20px">
+            Event Log
+          </Text>
         </Link>
       </NextLink>
       <Spacer />
       <Spacer />
 
       <HStack gap="18px">
+        <NextLink href={`/projects`} passHref>
+          <Link ml="24px">
+            <Text fontWeight="bold" fontSize="20px">
+              Projects
+            </Text>
+          </Link>
+        </NextLink>
         <SignInButton />
       </HStack>
     </Flex>

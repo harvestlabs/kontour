@@ -42,7 +42,7 @@ const ProjectsPage: NextPageWithLayout = () => {
           mb="40px"
           layerStyle="yellowLight"
         >
-          Open Existing Project
+          Browse Existing Projects
         </Heading>
         <ProjectList user_id={user_id} />
       </Flex>

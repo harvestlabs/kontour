@@ -21,6 +21,13 @@ function StickyHeader({}: PropsWithChildren<{}>) {
       <Spacer />
 
       <HStack gap="18px">
+        <NextLink href={`/projects`} passHref>
+          <Link ml="24px">
+            <Text fontWeight="bold" fontSize="20px">
+              Projects
+            </Text>
+          </Link>
+        </NextLink>
         <SignInButton />
       </HStack>
     </Flex>

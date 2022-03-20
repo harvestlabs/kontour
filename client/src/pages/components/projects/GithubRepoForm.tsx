@@ -2,7 +2,9 @@ import { gql, useMutation } from "@apollo/client";
 import {
   Button,
   FormLabel,
+  Heading,
   Input,
+  Link,
   Radio,
   RadioGroup,
   Spinner,
@@ -21,6 +23,7 @@ import {
 import { GithubRepoFormFragment } from "@gql/__generated__/GithubRepoFormFragment";
 import { useState } from "react";
 import BuildStatus from "./BuildStatus";
+import colors from "src/theme/colors";
 
 const DEPLOY_FROM_REPO = gql`
   mutation DeployFromRepo($id: String!) {
@@ -85,6 +88,27 @@ function GithubRepoForm({ repo }: Props) {
 
   return (
     <>
+      <Text fontWeight="300" fontSize="16px">
+        from{" "}
+        <Link
+          color={colors.contourRedLight[400]}
+          fontWeight="700"
+          href={`https://www.github.com/${repo.handle}/${repo.repo_name}`}
+          target="_blank"
+        >
+          {repo.repo_name}
+        </Link>
+        {", "}
+        by{" "}
+        <Link
+          color={colors.contourRedLight[400]}
+          href={`https://www.github.com/${repo.handle}`}
+          target="_blank"
+          fontWeight="700"
+        >
+          {repo.handle}
+        </Link>
+      </Text>
       <FormLabel mt="12px">Branch to build</FormLabel>
       <Input
         size="sm"
@@ -135,7 +159,7 @@ function GithubRepoForm({ repo }: Props) {
           alignSelf="center"
           colorScheme="blue"
         >
-          Save and Deploy
+          Deploy from Github
         </Button>
       ) : (
         <>

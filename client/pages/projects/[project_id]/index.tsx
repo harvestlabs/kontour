@@ -22,6 +22,7 @@ export const PROJECT_VERSIONS = gql`
       user_id
       github_repo {
         id
+        handle
         repo_name
         ...GithubRepoFormFragment
       }
@@ -55,6 +56,16 @@ const ProjectVersionListPage: NextPageWithLayout = () => {
             <title>{project.data.name || "Untitled project"}</title>
           </Head>
           <Flex flexDirection="column" as="main" mt="60px">
+            <Heading
+              layerStyle="blue"
+              fontWeight="700"
+              variant="nocaps"
+              fontSize="60px"
+              alignSelf="center"
+              mb="24px"
+            >
+              {project.data.name || "Untitled project"}
+            </Heading>
             <Heading fontSize="28px" variant="nocaps" layerStyle="purple">
               Deploy New Version from Github
             </Heading>
