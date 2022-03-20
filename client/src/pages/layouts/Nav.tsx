@@ -22,7 +22,6 @@ function StickyHeader({}: PropsWithChildren<{}>) {
 
       <HStack gap="18px">
         <SignInButton />
-        <MetamaskButton />
       </HStack>
     </Flex>
   );

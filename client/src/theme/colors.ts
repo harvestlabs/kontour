@@ -44,6 +44,7 @@ const colorSchemes = {
   },
   contourBlue: {
     500: contourBlue,
+    600: contourBlue,
   },
   contourPurple: {
     500: contourPurple,

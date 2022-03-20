@@ -1,5 +1,5 @@
 import { gql, useQuery } from "@apollo/client";
-import { Button, Image } from "@chakra-ui/react";
+import { Button, ButtonProps, Image } from "@chakra-ui/react";
 import { CurrentUserQuery } from "@gql/__generated__/CurrentUserQuery";
 import { setUserIdTo } from "@redux/slices/userSlice";
 import { AuthContext } from "@utils/auth";
@@ -20,7 +20,8 @@ export const CURRENT_USER = gql`
   }
 `;
 
-export default function SignInButton() {
+type props = {} & ButtonProps;
+export default function SignInButton({ ...props }: Props) {
   const { data, loading, error } = useQuery<CurrentUserQuery>(CURRENT_USER, {
     fetchPolicy: "network-only",
   });
@@ -57,15 +58,20 @@ export default function SignInButton() {
             alt=""
             src={image_url}
           />
-        ) : (
+        ) : user_id ? (
           <Icons.User />
+        ) : (
+          <Icons.LogIn />
         )
       }
+      {...props}
     >
       {loading
         ? "Loading..."
         : github_handle
         ? github_handle
+        : user_id
+        ? "anonymous"
         : "Sign in with Github"}
     </Button>
   );

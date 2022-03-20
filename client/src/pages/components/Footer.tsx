@@ -2,7 +2,7 @@ import { Flex, CSSObject } from "@chakra-ui/react";
 import React, { PropsWithChildren, forwardRef } from "react";
 
 function StickyHeader({ children }: React.PropsWithChildren<{}>) {
-  return <Flex sx={styles.sticky}>{children}</Flex>;
+  return <Flex sx={styles.sticky}>{children}l </Flex>;
 }
 
 const styles = {
