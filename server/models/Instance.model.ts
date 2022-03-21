@@ -21,7 +21,7 @@ import Contract, { ContractSourceType } from "./Contract.model";
 import LocalContractSource from "./LocalContractSource.model";
 import Node from "./Node.model";
 import Project from "./Project.model";
-import ProjectVersion from "./ProjectVersion.model";
+import ProjectVersion, { ProjectVersionStatus } from "./ProjectVersion.model";
 import RemoteContractSource from "./RemoteContractSource.model";
 
 export enum InstanceStatus {
@@ -129,8 +129,11 @@ export default class Instance extends Model {
     }, {});
 
     const project = await this.$get("project", { include: Node });
+    const version = await this.$get("project_version");
     const kontour = generateKontour(
-      project.node.data?.chainId,
+      version.status === ProjectVersionStatus.MAINNET
+        ? 137
+        : project.node.data?.chainId,
       project.data?.name,
       contractsObject
     );
