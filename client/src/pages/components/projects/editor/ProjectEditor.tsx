@@ -189,6 +189,7 @@ function ProjectEditor({ version_id, page = EDITOR_PAGE.INTERACTIVE }: Props) {
               projectId={projectId}
               instance={projectVersion?.head_instance!}
               sdk_url={projectVersion?.sdk_url!}
+              mainnet_node={projectVersion?.mainnet_node}
             />
             <ConsoleLogView />
           </Flex>
@@ -207,6 +208,7 @@ export const PROJECT_VERSION = gql`
       project_id
       node_id
       sdk_url
+      mainnet_node
       contract_sources {
         ...VersionContractsListFragment
       }

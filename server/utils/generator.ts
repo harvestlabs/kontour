@@ -144,7 +144,7 @@ export function generateKontour(
     let accountAddress;
 
     const chainMetadata = {
-      id: "${chainId}",
+      id: "0x${chainId.toString(16)}",
       name: "Kontour Test Chain: ${projectName || "Untitled"}",
       symbol: "ETH",
       decimals: 18,

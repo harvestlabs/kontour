@@ -28,10 +28,12 @@ import VersionContractDeployModal from "./VersionContractDeployModal";
 type Props = {
   contract_source: VersionContractsListItemFragment;
   instance_id: string;
+  mainnet_node: any;
 };
 export default function VersionContractsListItem({
   contract_source,
   instance_id,
+  mainnet_node,
 }: Props) {
   const { id, name, abi, bytecode, source_type } = contract_source;
 
@@ -57,7 +59,13 @@ export default function VersionContractsListItem({
     args: any[] = []
   ) => {
     // @ts-ignore
-    const { web3, getAccount } = window.kontour;
+    const { web3, eth, getAccount } = window.kontour;
+    if (mainnet_node) {
+      await eth.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: `0x${mainnet_node.chainId.toString(16)}` }],
+      });
+    }
     const Contract = new web3.eth.Contract(JSON.parse(JSON.stringify(abi)));
 
     const transaction = Contract.deploy({ arguments: args, data: bytecode });

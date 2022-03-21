@@ -60,6 +60,7 @@ type Props = {
   versionId: string;
   instance: VersionContractsListInstanceFragment;
   sdk_url?: string;
+  mainnet_node?: any;
 };
 
 export default function VersionContractsList({
@@ -69,6 +70,7 @@ export default function VersionContractsList({
   isPublished,
   instance,
   sdk_url,
+  mainnet_node,
 }: Props) {
   const [expanded, setExpanded] = useState(false);
   const [sdkCopied, setSdkCopied] = useState(false);
@@ -232,6 +234,7 @@ export default function VersionContractsList({
                 contract_source={contract_source}
                 key={contract_source.id}
                 instance_id={instance.id}
+                mainnet_node={mainnet_node}
               />
             );
           })}

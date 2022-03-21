@@ -8,6 +8,7 @@ import {
 import GraphQLJSONObject from "graphql-type-json";
 import config from "../../../config";
 import LocalContractSource from "../../models/LocalContractSource.model";
+import { ProjectVersionStatus } from "../../models/ProjectVersion.model";
 import RemoteContractSource from "../../models/RemoteContractSource.model";
 import { encodeId, SdkIdType } from "../../routes/sdk";
 import ContractSourceType from "./contractSource";
@@ -86,6 +87,17 @@ const ProjectVersionType = new GraphQLObjectType({
       description: "The head revision instance of this version",
       resolve: async (parent, args, ctx, info) => {
         return await parent.getHead();
+      },
+    },
+    mainnet_node: {
+      type: GraphQLJSONObject,
+      resolve: async (parent, args, ctx, info) => {
+        if (parent.status === ProjectVersionStatus.MAINNET) {
+          return {
+            hostUrl: "https://rpc-mainnet.matic.network",
+            chainId: "137",
+          };
+        }
       },
     },
   },

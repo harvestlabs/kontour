@@ -88,6 +88,9 @@ const Config = {
   quikdraw: {
     VERSION: env.QUIKDRAW_VERSION,
   },
+  covalent: {
+    API_KEY: env.COVALENT_API_KEY,
+  },
 };
 
 export default Config;

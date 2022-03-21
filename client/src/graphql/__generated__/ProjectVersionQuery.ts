@@ -100,6 +100,7 @@ export interface ProjectVersionQuery_projectVersion {
    */
   node_id: string | null;
   sdk_url: string | null;
+  mainnet_node: any | null;
   /**
    * The contract sources for project version
    */
