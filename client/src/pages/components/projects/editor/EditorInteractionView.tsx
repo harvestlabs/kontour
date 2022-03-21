@@ -26,7 +26,7 @@ import EditorRequestAirdropButton from "./EditorRequestAirdropButton";
 import { ProjectVersionQuery_projectVersion_head_instance } from "@gql/__generated__/ProjectVersionQuery";
 import GlobalContractView from "./GlobalContractView";
 import { InstanceFragment } from "@gql/__generated__/InstanceFragment";
-import MainnetDeployButton from "./MainnetDeployButton";
+import MainnetButton from "./MainnetButton";
 
 type Props = {
   instance?: InstanceFragment | null;
@@ -39,8 +39,7 @@ export default function EditorInteractionView({ instance }: Props) {
 
   return (
     <Flex width="100%" height="100%" flexDirection="column" position="relative">
-      <EditorPublishButton />
-      <MainnetDeployButton contracts={instance.contracts} />
+      <MainnetButton projectVersionId={instance.project_version_id} />
 
       <VStack>
         {instance.contracts
