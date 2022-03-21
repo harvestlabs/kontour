@@ -201,6 +201,35 @@ export function generateKontour(
     };
 
     const switchToProperNode = async () => {
+
+      try {
+        kontour?.eth?.request({
+          method: "wallet_addEthereumChain",
+          params: [
+            {
+              chainId: chainMetadata.id,
+              chainName: chainMetadata.name,
+              nativeCurrency: {
+                name: "Kontour Eth",
+                symbol: chainMetadata.symbol,
+                decimals: 18,
+              },
+              rpcUrls: chainMetadata.rpcUrls,
+              blockExplorerUrls:
+                (chainMetadata.blockExplorerUrls &&
+                  chainMetadata.blockExplorerUrls.length > 0) ||
+                null,
+            },
+          ],
+        });
+      } catch (error) {
+        if (!(error instanceof Error)) {
+          throw \`Something went wrong when adding kontour network: \${error}\`;
+        }
+        alert(
+          \`Error \${error.code}. Something went wrong while trying to add kontour network: \${error && error.message}\`
+        );
+      }
       try {
         const r = await eth.request({
           method: "wallet_switchEthereumChain",
