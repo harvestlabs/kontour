@@ -4,11 +4,11 @@
   let account;
 
   const chainMetadata = {
-    id: "0x539",
-    name: "Kontour Test Chain: <PROJECT_NAME>",
+    id: "0x53A",
+    name: "Kontour Test Chain <blackjack>",
     symbol: "ETH",
     decimals: 18,
-    rpcUrls: ["http://localhost:8545"],
+    rpcUrls: ["https://kontour-node-1.onrender.com"],
     blockExplorerUrls: [],
   };
 
