@@ -128,7 +128,11 @@ export default class Instance extends Model {
       return memo;
     }, {});
 
-    const kontour = generateKontour(contractsObject);
+    const kontour = generateKontour(
+      this.project.node.data?.chainId,
+      this.project.data?.name,
+      contractsObject
+    );
 
     this.generated_lib = kontour;
 

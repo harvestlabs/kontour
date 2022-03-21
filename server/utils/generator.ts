@@ -124,27 +124,33 @@ export function generateOneContract({
     })()`;
 }
 
-export function generateKontour(contracts: {
-  [name: string]: {
-    name: string;
-    abi: string;
-    address: string;
-    functionASTs: any[];
-    constructorAST: any;
-    eventASTs: any[];
-  };
-}) {
+export function generateKontour(
+  chainId: number,
+  projectName: string,
+  contracts: {
+    [name: string]: {
+      name: string;
+      abi: string;
+      address: string;
+      functionASTs: any[];
+      constructorAST: any;
+      eventASTs: any[];
+    };
+  }
+) {
   return `(function () {
     let web3, eth, abi, address;
 
     let accountAddress;
 
     const chainMetadata = {
-      id: "0x539",
-      name: "Kontour Test Chain: <PROJECT_NAME>",
+      id: "${chainId}",
+      name: "Kontour Test Chain: ${projectName || "Untitled"}",
       symbol: "ETH",
       decimals: 18,
-      rpcUrls: ["http://localhost:8545"],
+      rpcUrls: ["${
+        process.env.GENERATOR_RPC_URL || "https://kontour-node-1.onrender.com"
+      }"],
       blockExplorerUrls: [],
     };
 
