@@ -63,7 +63,7 @@ export default function VersionContractsListItem({
     if (mainnet_node) {
       await eth.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: `0x${mainnet_node.chainId.toString(16)}` }],
+        params: [{ chainId: `0x${Number(mainnet_node.chainId).toString(16)}` }],
       });
     }
     const Contract = new web3.eth.Contract(JSON.parse(JSON.stringify(abi)));
