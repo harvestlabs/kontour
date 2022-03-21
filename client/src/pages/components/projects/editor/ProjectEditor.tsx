@@ -162,6 +162,7 @@ function ProjectEditor({ version_id, page = EDITOR_PAGE.INTERACTIVE }: Props) {
           <ProjectEditorNavbar
             project_id={projectId}
             version_id={currentVersionId}
+            title={projectVersion?.name}
             instance_id={projectVersion?.head_instance?.id}
           />
           <Flex

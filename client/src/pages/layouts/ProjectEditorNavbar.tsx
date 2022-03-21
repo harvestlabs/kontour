@@ -37,8 +37,14 @@ type Props = {
   project_id: string;
   version_id: string;
   instance_id?: string;
+  title?: string;
 };
-function ProjectEditorNavbar({ project_id, version_id, instance_id }: Props) {
+function ProjectEditorNavbar({
+  project_id,
+  version_id,
+  instance_id,
+  title,
+}: Props) {
   const [selectedVersionName, setSelectedVersionName] = useState("Loading...");
   const dispatch = useDispatch();
   const router = useRouter();
@@ -66,6 +72,9 @@ function ProjectEditorNavbar({ project_id, version_id, instance_id }: Props) {
         </Link>
       </NextLink>
       <Spacer />
+      <Heading justifySelf="center" variant="nocaps">
+        {title}
+      </Heading>
       <Spacer />
 
       <HStack gap="18px">
