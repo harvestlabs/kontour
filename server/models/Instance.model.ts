@@ -128,9 +128,10 @@ export default class Instance extends Model {
       return memo;
     }, {});
 
+    const project = await this.$get("project");
     const kontour = generateKontour(
-      this.project.node.data?.chainId,
-      this.project.data?.name,
+      project.node.data?.chainId,
+      project.data?.name,
       contractsObject
     );
 
