@@ -65,20 +65,22 @@ export default function Search<T>({
   return (
     <Box alignSelf="center">
       <FormControl mb="12px">
-        <Icon
-          stroke={colors.white}
-          as={Icons.Search}
-          strokeWidth="3px"
-          mr="12px"
-        />
-        <Input
-          id="kontour-github"
-          isDisabled={isLoading}
-          placeholder={isLoading ? "Loading..." : searchPlaceholder}
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          {...props}
-        />
+        <Flex display="flex" alignItems="center">
+          <Icon
+            stroke={colors.white}
+            as={Icons.Search}
+            strokeWidth="3px"
+            mr="12px"
+          />
+          <Input
+            id="kontour-github"
+            isDisabled={isLoading}
+            placeholder={isLoading ? "Loading..." : searchPlaceholder}
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            {...props}
+          />
+        </Flex>
         {isLoading ? (
           <FormHelperText display="flex" alignItems="center">
             <Spinner size="xs" mr="8px" />

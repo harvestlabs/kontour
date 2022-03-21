@@ -57,7 +57,19 @@ function ImportGithubRepo({ onCreated }: Props) {
               key={key}
               padding="10px"
               borderBottom={`1px solid ${colors.contourBorder[500]}`}
-              _hover={{ bg: "contourBlue.100", color: "contourBlue.1000" }}
+              color={colors.contourBlue[400]}
+              sx={{
+                "& .kontour_github_icon": {
+                  color: "contourPurple.300",
+                },
+              }}
+              _hover={{
+                bg: "contourBlue.100",
+                color: "contourBlue.1000",
+                "& .kontour_github_icon": {
+                  color: "purple",
+                },
+              }}
               cursor="pointer"
               onClick={async () => {
                 const project = await addRepo({
@@ -71,10 +83,17 @@ function ImportGithubRepo({ onCreated }: Props) {
             >
               <Text
                 as="span"
-                color={colors.contourRedLight[500]}
                 fontWeight="700"
+                display="flex"
+                alignItems="center"
               >
-                <Icon stroke={colors.white} as={GitHub} mx="6px" />
+                <Icon
+                  className="kontour_github_icon"
+                  as={GitHub}
+                  height="18px"
+                  ml="6px"
+                  mr="12px"
+                />
                 {repo.handle}/{repo.repo_name}
               </Text>
             </Box>
