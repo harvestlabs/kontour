@@ -22,6 +22,7 @@ export enum ProjectVersionStatus {
   UNKNOWN = 0,
   DRAFT = 1,
   PUBLISHED = 2,
+  MAINNET = 3,
 }
 
 export type ProjectVersionSourceData = {

@@ -36,6 +36,7 @@ export interface ProjectVersionQuery_projectVersion_head_instance_contracts {
   id: string;
   address: string;
   contractSource: ProjectVersionQuery_projectVersion_head_instance_contracts_contractSource;
+  constructor_params: any | null;
 }
 
 export interface ProjectVersionQuery_projectVersion_head_instance_global_contracts_contractSource {

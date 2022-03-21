@@ -105,4 +105,13 @@ export default class Project extends Model {
       name: "Untitled",
     });
   }
+
+  async getMainnet() {
+    return await ProjectVersion.findOne({
+      where: {
+        project_id: this.id,
+        status: ProjectVersionStatus.MAINNET,
+      },
+    });
+  }
 }

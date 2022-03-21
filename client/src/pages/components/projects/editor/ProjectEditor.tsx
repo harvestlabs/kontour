@@ -216,6 +216,7 @@ export const PROJECT_VERSION = gql`
         ...EditorLogViewInstanceFragment
         contracts {
           address
+          constructor_params
           contractSource {
             id
             name

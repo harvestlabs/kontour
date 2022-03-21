@@ -107,6 +107,30 @@ const ProjectMutations = {
       return newVersion;
     },
   },
+  createMainnetVersion: {
+    type: ProjectVersionType,
+    args: {
+      projectVersionId: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+    },
+    resolve: async (parent, args, ctx, info) => {
+      const version = await ProjectVersion.findByPk(args.projectVersionId, {
+        include: Project,
+      });
+      if (version.project.user_id !== ctx.state?.user?.id) {
+        throw new Error("Invalid user");
+      }
+      const newVersion = await ProjectVersion.create({
+        data: { ...version.data },
+        status: ProjectVersionStatus.MAINNET,
+        name: "Mainnet",
+        project_id: version.project_id,
+      });
+      await newVersion.createBlankHeadInstance();
+      return newVersion;
+    },
+  },
   updateProject: {
     type: ProjectType,
     args: {

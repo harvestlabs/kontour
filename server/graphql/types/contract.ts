@@ -48,6 +48,9 @@ const ContractType = new GraphQLObjectType({
         });
       },
     },
+    constructor_params: {
+      type: GraphQLJSON,
+    },
   },
 });
 
